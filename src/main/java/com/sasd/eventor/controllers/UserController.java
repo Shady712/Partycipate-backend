@@ -1,5 +1,6 @@
 package com.sasd.eventor.controllers;
 
+import com.sasd.eventor.model.dtos.Credentials;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
@@ -13,8 +14,8 @@ public class UserController {
 
     // TODO: receive dto instead of strings
     @PostMapping("/register")
-    public void register(String login, String name, String password) {
-        userService.register(login, name, password);
+    public void register(Credentials credentials) {
+        userService.register(credentials.getLogin(), credentials.getName(), credentials.getPassword());
     }
 
     @GetMapping("/getById")
