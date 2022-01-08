@@ -10,17 +10,8 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public void register(String login, String name, String password) {
-        validateUserCredentials(login, name, password);
-        User user = new User();
-        user.setLogin(login);
-        user.setName(name);
-        user.setPassword(password);
+    public void register(User user) {
         userRepository.save(user);
-    }
-
-    private void validateUserCredentials(String login, String name, String password) {
-        // TODO: implement validation
     }
 
     public User getById(Long id) {

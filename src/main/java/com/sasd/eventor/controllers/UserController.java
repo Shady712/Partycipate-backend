@@ -1,6 +1,6 @@
 package com.sasd.eventor.controllers;
 
-import com.sasd.eventor.model.dtos.Credentials;
+import com.sasd.eventor.model.dtos.UserCredentialsDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    // TODO: receive dto instead of strings
     @PostMapping("/register")
-    public void register(Credentials credentials) {
-        userService.register(credentials.getLogin(), credentials.getName(), credentials.getPassword());
+    public void register(@RequestBody UserCredentialsDto userCredentialsDto) {
+        User user = new User();
+        user.setLogin(userCredentialsDto.getLogin());
+        user.setName(userCredentialsDto.getName());
+        user.setPassword(userCredentialsDto.getPassword());
+        userService.register(user);
     }
 
     @GetMapping("/getById")
