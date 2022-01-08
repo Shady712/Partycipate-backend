@@ -4,6 +4,7 @@ import com.sasd.eventor.model.dtos.UserCredentialsDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,14 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
+    private final ConversionService conversionService;
 
     @PostMapping("/register")
     public void register(@RequestBody UserCredentialsDto userCredentialsDto) {
-        User user = new User();
-        user.setLogin(userCredentialsDto.getLogin());
-        user.setName(userCredentialsDto.getName());
-        user.setPassword(userCredentialsDto.getPassword());
-        userService.register(user);
+        userService.register(conversionService.convert(userCredentialsDto, User.class));
     }
 
     @GetMapping("/getById")
