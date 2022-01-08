@@ -22,4 +22,8 @@ public class UserService {
     private void validateUserCredentials(String login, String name, String password) {
         // TODO: implement validation
     }
+
+    public User getById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }
