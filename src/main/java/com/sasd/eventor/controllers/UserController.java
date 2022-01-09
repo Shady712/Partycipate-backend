@@ -1,6 +1,6 @@
 package com.sasd.eventor.controllers;
 
-import com.sasd.eventor.model.dtos.UserCredentialsDto;
+import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ public class UserController {
     private final ConversionService conversionService;
 
     @PostMapping("/register")
-    public void register(@RequestBody UserCredentialsDto userCredentialsDto) {
+    public void register(@RequestBody UserRegisterDto userCredentialsDto) {
         userService.register(conversionService.convert(userCredentialsDto, User.class));
     }
 
