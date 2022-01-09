@@ -5,6 +5,8 @@ import com.sasd.eventor.model.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -14,7 +16,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public boolean checkLoginVacancy(String login) {
+        return userRepository.findByLogin(login).isEmpty();
     }
 }

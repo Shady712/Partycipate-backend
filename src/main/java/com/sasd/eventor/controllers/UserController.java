@@ -18,11 +18,14 @@ public class UserController {
 
     @PostMapping("/register")
     public void register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
+        if (!userService.checkLoginVacancy(userRegisterDto.getLogin())) {
+            throw new EventorException("Provided login is already in use");
+        }
         userService.register(conversionService.convert(userRegisterDto, User.class));
     }
 
-    @GetMapping("/getById")
-    public User getById(@RequestParam Long id) {
-        return userService.getById(id);
+    @GetMapping("/findById")
+    public User findById(@RequestParam Long id) {
+        return userService.findById(id).orElseThrow(() -> new EventorException("User with provided id does not exist"));
     }
 }
