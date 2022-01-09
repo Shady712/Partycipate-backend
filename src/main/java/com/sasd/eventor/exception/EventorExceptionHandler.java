@@ -12,7 +12,7 @@ public class EventorExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EventorException.class)
-    public @ResponseBody EventorException handleException(EventorException e) {
-        return e;
+    public @ResponseBody String handleException(EventorException exception) {
+        return exception.getMessage();
     }
 }
