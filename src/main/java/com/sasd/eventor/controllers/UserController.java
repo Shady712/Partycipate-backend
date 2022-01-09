@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/user")
@@ -15,7 +17,7 @@ public class UserController {
     private final ConversionService conversionService;
 
     @PostMapping("/register")
-    public void register(@RequestBody UserRegisterDto userCredentialsDto) {
+    public void register(@RequestBody @Valid UserRegisterDto userCredentialsDto) {
         userService.register(conversionService.convert(userCredentialsDto, User.class));
     }
 
