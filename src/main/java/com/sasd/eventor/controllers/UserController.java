@@ -1,5 +1,6 @@
 package com.sasd.eventor.controllers;
 
+import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
