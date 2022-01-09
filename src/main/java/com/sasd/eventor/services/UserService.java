@@ -1,6 +1,7 @@
 package com.sasd.eventor.services;
 
 import com.sasd.eventor.model.daos.UserRepository;
+import com.sasd.eventor.model.dtos.UserCredentialsDto;
 import com.sasd.eventor.model.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,9 @@ public class UserService {
 
     public boolean checkLoginVacancy(String login) {
         return userRepository.findByLogin(login).isEmpty();
+    }
+
+    public Optional<User> getByLoginAndPassword(UserCredentialsDto userCredentialsDto){
+        return userRepository.findByLoginAndPassword(userCredentialsDto.getLogin(), userCredentialsDto.getPassword());
     }
 }

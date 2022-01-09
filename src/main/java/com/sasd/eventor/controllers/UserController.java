@@ -1,6 +1,7 @@
 package com.sasd.eventor.controllers;
 
 import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.dtos.UserCredentialsDto;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
@@ -28,5 +29,10 @@ public class UserController {
     @GetMapping("/findById")
     public User findById(@RequestParam Long id) {
         return userService.findById(id).orElseThrow(() -> new EventorException("User with provided id does not exist"));
+    }
+
+    public void enter(@RequestBody @Valid UserCredentialsDto userCredentialsDto){
+
+ //       return userService.getByLoginAndPassword(userCredentialsDto).orElseThrow() -> new EventorException("User with provided id does not exist"));
     }
 }
