@@ -17,8 +17,16 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public boolean checkLoginVacancy(String login) {
+        return userRepository.findByLogin(login).isEmpty();
+    }
+
+    public Optional<User> getByLoginAndPassword(UserCredentialsDto userCredentialsDto){
+        return userRepository.findByLoginAndPassword(userCredentialsDto.getLogin(), userCredentialsDto.getPassword());
     }
 
     public Optional<User> getByLoginAndPassword(UserCredentialsDto userCredentialsDto){

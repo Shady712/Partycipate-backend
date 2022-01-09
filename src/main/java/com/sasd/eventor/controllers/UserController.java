@@ -1,6 +1,8 @@
 package com.sasd.eventor.controllers;
 
 import com.sasd.eventor.model.dtos.UserCredentialsDto;
+import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.dtos.UserCredentialsDto;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
@@ -19,12 +21,15 @@ public class UserController {
 
     @PostMapping("/register")
     public void register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
+        if (!userService.checkLoginVacancy(userRegisterDto.getLogin())) {
+            throw new EventorException("Provided login is already in use");
+        }
         userService.register(conversionService.convert(userRegisterDto, User.class));
     }
 
-    @GetMapping("/getById")
-    public User getById(@RequestParam Long id) {
-        return userService.getById(id);
+    @GetMapping("/findById")
+    public User findById(@RequestParam Long id) {
+        return userService.findById(id).orElseThrow(() -> new EventorException("User with provided id does not exist"));
     }
 
     public void enter(@RequestBody @Valid UserCredentialsDto userCredentialsDto){
