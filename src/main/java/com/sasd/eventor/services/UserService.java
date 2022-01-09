@@ -23,4 +23,8 @@ public class UserService {
     public boolean checkLoginVacancy(String login) {
         return userRepository.findByLogin(login).isEmpty();
     }
+
+    public Optional<User> findByLoginAndPassword(String login, String password) {
+        return userRepository.findByLoginAndPassword(login, password);
+    }
 }
