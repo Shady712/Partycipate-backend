@@ -32,8 +32,9 @@ public class UserController {
         return userService.findById(id).orElseThrow(() -> new EventorException("User with provided id does not exist"));
     }
 
-    public void enter(@RequestBody @Valid UserCredentialsDto userCredentialsDto){
+    @GetMapping("/enter")
+    public User enter(@RequestParam String login, @RequestParam String password) {
 
- //       return userService.getByLoginAndPassword(userCredentialsDto).orElseThrow() -> new EventorException("User with provided id does not exist"));
+        return userService.getByLoginAndPassword(login, password).orElseThrow(() -> new EventorException("User with provided id does not exist"));
     }
 }

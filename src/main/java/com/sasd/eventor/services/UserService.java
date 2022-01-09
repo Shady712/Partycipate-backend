@@ -25,11 +25,7 @@ public class UserService {
         return userRepository.findByLogin(login).isEmpty();
     }
 
-    public Optional<User> getByLoginAndPassword(UserCredentialsDto userCredentialsDto){
-        return userRepository.findByLoginAndPassword(userCredentialsDto.getLogin(), userCredentialsDto.getPassword());
-    }
-
-    public Optional<User> getByLoginAndPassword(UserCredentialsDto userCredentialsDto){
-        return userRepository.findByLoginAndPassword(userCredentialsDto.getLogin(), userCredentialsDto.getPassword());
+    public Optional<User> getByLoginAndPassword(String login, String password) {
+        return userRepository.findByLoginAndPassword(login, password);
     }
 }
