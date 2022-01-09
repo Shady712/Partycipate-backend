@@ -29,9 +29,4 @@ public class UserController {
     public User findById(@RequestParam Long id) {
         return userService.findById(id).orElseThrow(() -> new EventorException("User with provided id does not exist"));
     }
-
-    @GetMapping("/enter")
-    public User enter(@RequestParam String login, @RequestParam String password) {
-        return userService.findByLoginAndPassword(login, password).orElseThrow(() -> new EventorException("Invalid login or password"));
-    }
 }
