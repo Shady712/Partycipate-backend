@@ -17,8 +17,8 @@ public class UserController {
     private final ConversionService conversionService;
 
     @PostMapping("/register")
-    public void register(@RequestBody @Valid UserRegisterDto userCredentialsDto) {
-        userService.register(conversionService.convert(userCredentialsDto, User.class));
+    public void register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
+        userService.register(conversionService.convert(userRegisterDto, User.class));
     }
 
     @GetMapping("/getById")
