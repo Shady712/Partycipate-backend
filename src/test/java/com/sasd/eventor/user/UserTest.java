@@ -17,7 +17,6 @@ public abstract class UserTest {
     protected static final String VALID_NAME = "Valid Name";
     protected static final String VALID_PASSWORD = "QWErty12345";
 
-
     protected void clearDb() {
         userRepository.deleteAll();
     }
