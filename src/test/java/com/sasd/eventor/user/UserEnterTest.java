@@ -26,6 +26,5 @@ public class UserEnterTest extends UserTest {
         userController.register(userRegisterDto);
         Assertions.assertThrows(EventorException.class, () -> userController.enter(VALID_LOGIN + VALID_LOGIN,
                 VALID_PASSWORD + VALID_PASSWORD));
-
     }
 }
