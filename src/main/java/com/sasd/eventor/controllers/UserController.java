@@ -21,8 +21,7 @@ public class UserController {
         if (!userService.checkLoginVacancy(userRegisterDto.getLogin())) {
             throw new EventorException("Provided login is already in use");
         }
-        userService.register(conversionService.convert(userRegisterDto, User.class));
-        return conversionService.convert(userRegisterDto, User.class);
+        return userService.register(conversionService.convert(userRegisterDto, User.class));
     }
 
     @GetMapping("/findById")

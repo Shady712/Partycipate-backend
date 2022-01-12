@@ -12,8 +12,8 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public void register(User user) {
-        userRepository.save(user);
+    public User register(User user) {
+        return userRepository.save(user);
     }
 
     public Optional<User> findById(Long id) {
