@@ -18,11 +18,13 @@ public class Event {
     private String location;
     private String description;
     private Integer price;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne
+    private User creator;
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "events_users",
             joinColumns = { @JoinColumn(name = "event_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
-    private List<User> users;
+    private List<User> guests;
 }

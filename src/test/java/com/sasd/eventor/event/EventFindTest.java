@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Random;
 
 public class EventFindTest extends EventTest {
@@ -23,7 +22,6 @@ public class EventFindTest extends EventTest {
         event.setDescription(VALID_DESCRIPTION);
         event.setLocation(VALID_LOCATION);
         event.setPrice(VALID_PRICE);
-        event.setUsers(List.of());
         var expectedEvent = eventRepository.save(event);
         var foundEvent = eventController.findById(expectedEvent.getId());
         assert foundEvent.getDate().equals(expectedEvent.getDate());
