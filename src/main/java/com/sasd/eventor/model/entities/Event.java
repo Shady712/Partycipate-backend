@@ -3,7 +3,7 @@ package com.sasd.eventor.model.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -14,7 +14,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "events_seq")
     @SequenceGenerator(name = "events_seq", sequenceName = "events_seq")
     private Long id;
-    private Instant date;
+    private LocalDateTime date;
     private String location;
     private String description;
     private Integer price;
