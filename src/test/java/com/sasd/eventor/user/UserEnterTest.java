@@ -14,17 +14,24 @@ public class UserEnterTest extends UserTest {
 
     @Test
     public void enterByLoginAndPassword() {
-        userController.register(validUserRegisterDto());
-        var enterUser = userController.enter(VALID_LOGIN, VALID_PASSWORD);
-        assert enterUser.getLogin().equals(VALID_LOGIN);
-        assert enterUser.getPassword().equals(VALID_PASSWORD);
+        var user = userController.register(validUserRegisterDto());
+        var jwt = userController.createJwt(user.getLogin(), user.getPassword());
+        var enteredUser = userController.enterByJwt(jwt);
+        assert user.getLogin().equals(enteredUser.getLogin());
+        assert user.getName().equals(enteredUser.getName());
+        assert user.getPassword().equals(enteredUser.getPassword());
     }
 
     @Test
     public void ensureBadRequestForInvalidLoginOrPassword() {
-        var userRegisterDto = validUserRegisterDto();
-        userController.register(userRegisterDto);
-        Assertions.assertThrows(EventorException.class, () -> userController.enter(VALID_LOGIN + VALID_LOGIN,
-                VALID_PASSWORD + VALID_PASSWORD));
+        userController.register(validUserRegisterDto());
+        Assertions.assertThrows(EventorException.class,
+                () -> userController.createJwt(VALID_LOGIN + VALID_LOGIN, VALID_PASSWORD + VALID_PASSWORD)
+        );
+    }
+
+    @Test
+    public void ensureBadRequestForInvalidJwtToken() {
+        Assertions.assertThrows(EventorException.class, () -> userController.enterByJwt("invalid jwt"));
     }
 }
