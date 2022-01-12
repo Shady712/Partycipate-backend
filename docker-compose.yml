@@ -2,14 +2,14 @@ version: '3.1'
 
 services:
   postgres-server:
-    image: postgres:13.1
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      APP_DB_USER: docker
-      APP_DB_PASS: docker
-      APP_DB_NAME: docker
+      APP_DB_USER: postgres
+      APP_DB_PASS: password
+      APP_DB_NAME: postgres
     #    volumes:
     #      - ./postgresql/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
     #      - ./postgresql/data.sql:/docker-entrypoint-initdb.d/2-data.sql
