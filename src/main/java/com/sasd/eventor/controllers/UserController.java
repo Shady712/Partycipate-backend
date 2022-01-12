@@ -17,11 +17,11 @@ public class UserController {
     private final ConversionService conversionService;
 
     @PostMapping("/register")
-    public void register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
+    public User register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
         if (!userService.checkLoginVacancy(userRegisterDto.getLogin())) {
             throw new EventorException("Provided login is already in use");
         }
-        userService.register(conversionService.convert(userRegisterDto, User.class));
+        return userService.register(conversionService.convert(userRegisterDto, User.class));
     }
 
     @GetMapping("/findById")
