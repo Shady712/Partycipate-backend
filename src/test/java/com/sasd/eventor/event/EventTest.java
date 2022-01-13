@@ -44,7 +44,7 @@ public abstract class EventTest {
         dto.setLogin(VALID_USER_LOGIN);
         dto.setName(VALID_USER_NAME);
         dto.setPassword(VALID_USER_PASSWORD);
-        var user = userController.register(dto);
+        userController.register(dto);
         return userController.createJwt(dto.getLogin(), dto.getPassword());
     }
 

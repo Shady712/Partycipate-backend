@@ -14,11 +14,12 @@ public class UserEnterTest extends UserTest {
 
     @Test
     public void enterByLoginAndPassword() {
-        var user = userController.register(validUserRegisterDto());
-        var jwt = userController.createJwt(validUserRegisterDto().getLogin(), validUserRegisterDto().getPassword());
+        var dto = validUserRegisterDto();
+        userController.register(dto);
+        var jwt = userController.createJwt(dto.getLogin(), dto.getPassword());
         var enteredUser = userController.enterByJwt(jwt);
-        assert user.getLogin().equals(enteredUser.getLogin());
-        assert user.getName().equals(enteredUser.getName());
+        assert dto.getLogin().equals(enteredUser.getLogin());
+        assert dto.getName().equals(enteredUser.getName());
     }
 
     @Test
