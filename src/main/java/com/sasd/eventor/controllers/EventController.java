@@ -2,6 +2,7 @@ package com.sasd.eventor.controllers;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.EventCreateDto;
+import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.services.EventService;
 import com.sasd.eventor.services.UserService;
@@ -36,10 +37,10 @@ public class EventController {
     }
 
     @GetMapping("/findAllByCreator")
-    public List<Event> findByCreator(@RequestParam String login) {
-        if (userService.checkLoginVacancy(login)) {
-            throw new EventorException("User with provided login doesn't exist");
-        }
-        return eventService.findAllByCreator(login);
+    public List<Event> findAllByCreator(@RequestParam String login) {
+        return eventService.findAllByCreator(
+                userService.findByLogin(login)
+                        .orElseThrow(() -> new EventorException("User with provided login does not exist"))
+        );
     }
 }
