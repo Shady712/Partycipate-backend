@@ -32,7 +32,6 @@ public class UserController {
                 userService.findById(id)
                         .orElseThrow(() -> new EventorException("User with provided id does not exist")),
                 UserResponseDto.class);
-
     }
 
     @GetMapping("/enter")
@@ -41,7 +40,6 @@ public class UserController {
                 userService.findByJwt(jwt)
                         .orElseThrow(() -> new EventorException("User with provided id does not exist")),
                 UserResponseDto.class);
-
     }
 
     @GetMapping("/createJwt")
