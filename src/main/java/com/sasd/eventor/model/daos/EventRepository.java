@@ -1,5 +1,6 @@
 package com.sasd.eventor.model.daos;
 
+import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.model.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;

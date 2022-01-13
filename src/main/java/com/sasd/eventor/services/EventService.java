@@ -1,6 +1,7 @@
 package com.sasd.eventor.services;
 
 import com.sasd.eventor.model.daos.EventRepository;
+import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.model.entities.User;
 import lombok.AllArgsConstructor;
