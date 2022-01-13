@@ -10,6 +10,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -21,7 +22,9 @@ public class EventController {
 
     @GetMapping("/findById")
     public Event findById(@RequestParam Long id) {
-        return eventService.findById(id).orElseThrow(() -> new EventorException("Event with provided id does not exist"));
+        return eventService.findById(id)
+                .orElseThrow(() -> new EventorException("Event with provided id does not exist")
+                );
     }
 
     @PostMapping("/create")
@@ -30,5 +33,13 @@ public class EventController {
             throw new EventorException("Creator does not exist");
         }
         return eventService.createEvent(conversionService.convert(eventCreateDto, Event.class));
+    }
+
+    @GetMapping("/findAllByCreator")
+    public List<Event> findByCreator(@RequestParam String login) {
+        if (userService.checkLoginVacancy(login)) {
+            throw new EventorException("User with provided login doesn't exist");
+        }
+        return eventService.findAllByCreator(login);
     }
 }
