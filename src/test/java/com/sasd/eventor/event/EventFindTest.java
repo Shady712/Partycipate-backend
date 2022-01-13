@@ -18,12 +18,14 @@ public class EventFindTest extends EventTest {
     @Test
     public void findExistingEvent() {
         var event = new Event();
+        event.setName(VALID_NAME);
         event.setDate(VALID_DATE);
         event.setDescription(VALID_DESCRIPTION);
         event.setLocation(VALID_LOCATION);
         event.setPrice(VALID_PRICE);
         var expectedEvent = eventRepository.save(event);
         var foundEvent = eventController.findById(expectedEvent.getId());
+        assert foundEvent.getName().equals(expectedEvent.getName());
         assert foundEvent.getDate().equals(expectedEvent.getDate());
         assert foundEvent.getDescription().equals(expectedEvent.getDescription());
         assert foundEvent.getLocation().equals(expectedEvent.getLocation());
