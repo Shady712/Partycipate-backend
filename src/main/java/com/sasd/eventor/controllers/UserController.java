@@ -38,6 +38,15 @@ public class UserController {
         );
     }
 
+    @GetMapping("/findByLogin")
+    public UserResponseDto findByLogin(@RequestParam String login) {
+        return conversionService.convert(
+                userService.findByLogin(login)
+                        .orElseThrow(() -> new EventorException("User with provided login does not exist")),
+                UserResponseDto.class
+        );
+    }
+
     @GetMapping("/enter")
     public UserResponseDto enterByJwt(@RequestParam String jwt) {
         return conversionService.convert(

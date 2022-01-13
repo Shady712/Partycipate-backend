@@ -23,6 +23,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Optional<User> findByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
     public Optional<User> findByJwt(String jwt) {
         return findById(jwtService.decodeJwtToId(jwt));
     }
