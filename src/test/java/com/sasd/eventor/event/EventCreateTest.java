@@ -1,24 +1,15 @@
 package com.sasd.eventor.event;
 
-import com.sasd.eventor.controllers.EventController;
 import com.sasd.eventor.exception.EventorException;
-import com.sasd.eventor.model.daos.EventRepository;
-import com.sasd.eventor.model.dtos.EventCreateDto;
-import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.services.UserService;
-import com.sasd.eventor.services.utils.JwtService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Random;
-
 public class EventCreateTest extends EventTest {
     @Autowired
     protected UserService userService;
-    @Autowired
-    protected JwtService jwtService;
 
     @BeforeEach
     public void init() {
@@ -31,7 +22,9 @@ public class EventCreateTest extends EventTest {
         eventCreateDto.setJwt(validJwt());
         var event = eventController.create(eventCreateDto);
         var creator = event.getCreator();
-        assert jwtService.decodeJwtToId(eventCreateDto.getJwt()).equals(creator.getId());
+        var foundCreator = userService.findByJwt(eventCreateDto.getJwt());
+        assert foundCreator.isPresent();
+        assert foundCreator.get().equals(creator);
         assert event.getName().equals(VALID_NAME);
         assert event.getDate().equals(VALID_DATE);
         assert event.getLocation().equals(VALID_LOCATION);

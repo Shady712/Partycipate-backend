@@ -4,7 +4,6 @@ import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
-import com.sasd.eventor.services.utils.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
-    private final JwtService jwtService;
     private final ConversionService conversionService;
 
     @PostMapping("/register")
@@ -35,15 +33,12 @@ public class UserController {
 
     @GetMapping("/enter")
     public User enterByJwt(@RequestParam String jwt) {
-        return userService.findById(jwtService.decodeJwtToId(jwt))
+        return userService.findByJwt(jwt)
                 .orElseThrow(() -> new EventorException("User with provided id does not exist"));
     }
 
     @GetMapping("/createJwt")
     public String createJwt(@RequestParam String login, @RequestParam String password) {
-        return jwtService.createJwtToken(userService
-                .findByLoginAndPassword(login, password)
-                .orElseThrow(() -> new EventorException("Invalid login or password"))
-        );
+        return userService.createJwtToken(login, password);
     }
 }
