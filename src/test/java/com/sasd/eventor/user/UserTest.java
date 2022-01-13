@@ -12,6 +12,8 @@ public abstract class UserTest {
     protected UserController userController;
     @Autowired
     protected UserRepository userRepository;
+    @Autowired
+    protected UserRepository userService;
 
     protected static final String VALID_LOGIN = "Valid12345";
     protected static final String VALID_NAME = "Valid Name";
