@@ -15,11 +15,10 @@ public class UserEnterTest extends UserTest {
     @Test
     public void enterByLoginAndPassword() {
         var user = userController.register(validUserRegisterDto());
-        var jwt = userController.createJwt(user.getLogin(), user.getPassword());
+        var jwt = userController.createJwt(validUserRegisterDto().getLogin(), validUserRegisterDto().getPassword());
         var enteredUser = userController.enterByJwt(jwt);
         assert user.getLogin().equals(enteredUser.getLogin());
         assert user.getName().equals(enteredUser.getName());
-        assert user.getPassword().equals(enteredUser.getPassword());
     }
 
     @Test
