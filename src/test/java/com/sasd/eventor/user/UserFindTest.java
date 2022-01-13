@@ -1,10 +1,12 @@
 package com.sasd.eventor.user;
 
 import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.entities.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.util.Pair;
 
 public class UserFindTest extends UserTest {
 
@@ -15,11 +17,7 @@ public class UserFindTest extends UserTest {
 
     @Test
     public void findExistingUserById() {
-        var user = new User();
-        user.setName(VALID_NAME);
-        user.setLogin(VALID_LOGIN);
-        user.setPassword(VALID_PASSWORD);
-        var expectedUser = userRepository.save(user);
+        var expectedUser = registerValidUser();
         var foundUser = userController.findById(expectedUser.getId());
         assert expectedUser.getLogin().equals(foundUser.getLogin());
         assert expectedUser.getName().equals(foundUser.getName());
@@ -27,11 +25,10 @@ public class UserFindTest extends UserTest {
 
     @Test
     public void findExistingUserByLogin() {
-        var dto = validUserRegisterDto();
-        userController.register(dto);
-        var foundUser = userController.findByLogin(dto.getLogin());
-        assert dto.getLogin().equals(foundUser.getLogin());
-        assert dto.getName().equals(foundUser.getName());
+        var expectedUser = registerValidUser();
+        var foundUser = userController.findByLogin(expectedUser.getLogin());
+        assert expectedUser.getLogin().equals(foundUser.getLogin());
+        assert expectedUser.getName().equals(foundUser.getName());
     }
 
     @Test
@@ -45,5 +42,9 @@ public class UserFindTest extends UserTest {
     @Test
     public void ensureBadRequestForInvalidJwtToken() {
         Assertions.assertThrows(EventorException.class, () -> userController.enterByJwt("invalid jwt"));
+    }
+
+    private UserResponseDto registerValidUser() {
+        return userController.register(validUserRegisterDto());
     }
 }

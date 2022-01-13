@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class UserEnterTest extends UserTest {
+
     @BeforeEach
     public void init() {
         clearDb();
