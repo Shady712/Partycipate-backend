@@ -1,7 +1,5 @@
 package com.sasd.eventor.services;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTCreationException;
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.entities.User;
@@ -14,8 +12,8 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
     public User register(User user) {
         return userRepository.save(user);
