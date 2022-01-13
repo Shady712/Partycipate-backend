@@ -2,7 +2,6 @@ package com.sasd.eventor.event;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.services.UserService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

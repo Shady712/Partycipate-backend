@@ -3,7 +3,6 @@ package com.sasd.eventor.event;
 import com.sasd.eventor.controllers.EventController;
 import com.sasd.eventor.controllers.UserController;
 import com.sasd.eventor.model.daos.EventRepository;
-import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.dtos.EventCreateDto;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import org.springframework.beans.factory.annotation.Autowired;
