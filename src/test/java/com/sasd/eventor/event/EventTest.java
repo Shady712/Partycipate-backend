@@ -19,8 +19,6 @@ public abstract class EventTest {
     protected EventRepository eventRepository;
     @Autowired
     protected UserController userController;
-    @Autowired
-    protected UserRepository userRepository;
 
     protected static final String VALID_NAME = "Existential flex";
     protected static final LocalDateTime VALID_DATE = LocalDateTime.parse("2022-01-15T10:15:30");
