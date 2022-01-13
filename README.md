@@ -8,7 +8,7 @@ TO BE DONE
 После этого в IDEA создайте базу данных PostgreSQL, все креды указаны в application.properties
 
 # Команда разработки
-Данил Крайнов Shady712
-Александр Ступников enotvtapke
-Антон Гонзов ElderEclair
-Александр Григорьев aleksgright
+Данил Крайнов Shady712\
+Александр Ступников enotvtapke\
+Антон Гонзов ElderEclair\
+Александр Григорьев aleksgright\
