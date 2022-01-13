@@ -2,6 +2,7 @@ package com.sasd.eventor.controllers;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
+import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
@@ -18,23 +19,29 @@ public class UserController {
     private final ConversionService conversionService;
 
     @PostMapping("/register")
-    public User register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
+    public UserResponseDto register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
         if (!userService.checkLoginVacancy(userRegisterDto.getLogin())) {
             throw new EventorException("Provided login is already in use");
         }
-        return userService.register(conversionService.convert(userRegisterDto, User.class));
+        return conversionService.convert(userService.register(conversionService.convert(userRegisterDto, User.class)), UserResponseDto.class);
     }
 
     @GetMapping("/findById")
-    public User findById(@RequestParam Long id) {
-        return userService.findById(id)
-                .orElseThrow(() -> new EventorException("User with provided id does not exist"));
+    public UserResponseDto findById(@RequestParam Long id) {
+        return conversionService.convert(
+                userService.findById(id)
+                        .orElseThrow(() -> new EventorException("User with provided id does not exist")),
+                UserResponseDto.class);
+
     }
 
     @GetMapping("/enter")
-    public User enterByJwt(@RequestParam String jwt) {
-        return userService.findByJwt(jwt)
-                .orElseThrow(() -> new EventorException("User with provided id does not exist"));
+    public UserResponseDto enterByJwt(@RequestParam String jwt) {
+        return conversionService.convert(
+                userService.findByJwt(jwt)
+                        .orElseThrow(() -> new EventorException("User with provided id does not exist")),
+                UserResponseDto.class);
+
     }
 
     @GetMapping("/createJwt")
