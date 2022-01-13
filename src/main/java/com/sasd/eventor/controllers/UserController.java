@@ -23,7 +23,10 @@ public class UserController {
         if (!userService.checkLoginVacancy(userRegisterDto.getLogin())) {
             throw new EventorException("Provided login is already in use");
         }
-        return conversionService.convert(userService.register(conversionService.convert(userRegisterDto, User.class)), UserResponseDto.class);
+        return conversionService.convert(
+                userService.register(conversionService.convert(userRegisterDto, User.class)),
+                UserResponseDto.class
+        );
     }
 
     @GetMapping("/findById")
@@ -31,7 +34,8 @@ public class UserController {
         return conversionService.convert(
                 userService.findById(id)
                         .orElseThrow(() -> new EventorException("User with provided id does not exist")),
-                UserResponseDto.class);
+                UserResponseDto.class
+        );
     }
 
     @GetMapping("/enter")
@@ -39,7 +43,8 @@ public class UserController {
         return conversionService.convert(
                 userService.findByJwt(jwt)
                         .orElseThrow(() -> new EventorException("User with provided id does not exist")),
-                UserResponseDto.class);
+                UserResponseDto.class
+        );
     }
 
     @GetMapping("/createJwt")
