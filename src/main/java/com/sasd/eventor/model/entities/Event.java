@@ -14,6 +14,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "events_seq")
     @SequenceGenerator(name = "events_seq", sequenceName = "events_seq")
     private Long id;
+    private String name;
     private LocalDateTime date;
     private String location;
     private String description;
