@@ -15,4 +15,8 @@ public class EventService {
     public Optional<Event> findById(Long id) {
         return eventRepository.findById(id);
     }
+
+    public Event createEvent(Event event) {
+        return eventRepository.save(event);
+    }
 }
