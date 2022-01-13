@@ -26,7 +26,7 @@ public class EventCreateDtoToEventEntityConverter implements Converter<EventCrea
         record.setPrice(source.getPrice());
         record.setLocation(source.getLocation());
         User creator = userService.findById(jwtService.decodeJwtToId(source.getJwt()))
-                        .orElseThrow(() -> new EventorException("Creator does not exists"));
+                        .orElseThrow(() -> new EventorException("Creator does not exist"));
         record.setCreator(creator);
         return record;
     }
