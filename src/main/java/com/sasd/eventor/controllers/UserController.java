@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/isLoginVacant")
-    public boolean isLoginVacant(@RequestParam String login) {
+    public Boolean isLoginVacant(@RequestParam String login) {
         return userService.checkLoginVacancy(login);
     }
 
