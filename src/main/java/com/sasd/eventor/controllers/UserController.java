@@ -47,6 +47,11 @@ public class UserController {
         );
     }
 
+    @GetMapping("/isLoginVacant")
+    public boolean isLoginVacant(@RequestParam String login) {
+        return userService.checkLoginVacancy(login);
+    }
+
     @GetMapping("/enter")
     public UserResponseDto enterByJwt(@RequestParam String jwt) {
         return conversionService.convert(
