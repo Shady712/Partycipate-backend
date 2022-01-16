@@ -4,13 +4,13 @@ on: [push]
 
 jobs:
   start-docker:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: docker up
         run: docker compose up -d
 
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
         run: mvn --batch-mode --update-snapshots verify
 
   end-docker:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: docker down
         run: docker compose down
