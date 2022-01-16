@@ -15,7 +15,7 @@ public class UserUpdateTest extends UserTest {
     public void updateWithChanges() {
         var dto = validUserRegisterDto();
         userController.register(dto);
-        var updateDto = makeUserUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
+        var updateDto = userUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
                 dto.getLogin() + 'q', dto.getName() + 'q');
         var updatedUser = userController.update(updateDto);
         assert updatedUser.getLogin().equals(dto.getLogin() + 'q');
@@ -26,7 +26,7 @@ public class UserUpdateTest extends UserTest {
     public void updateWithOneChange() {
         var dto = validUserRegisterDto();
         userController.register(dto);
-        var updateDto = makeUserUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
+        var updateDto = userUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
                 dto.getLogin() + 'q', dto.getName());
         var updatedUser = userController.update(updateDto);
         assert updatedUser.getLogin().equals(dto.getLogin() + 'q');
@@ -37,14 +37,14 @@ public class UserUpdateTest extends UserTest {
     public void updateWithoutChanges() {
         var dto = validUserRegisterDto();
         userController.register(dto);
-        var updateDto = makeUserUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
+        var updateDto = userUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
                 dto.getLogin(), dto.getName());
         var updatedUser = userController.update(updateDto);
         assert updatedUser.getLogin().equals(dto.getLogin());
         assert updatedUser.getName().equals(dto.getName());
     }
 
-    private UserUpdateDto makeUserUpdateDto(String jwt, String newLogin, String newName) {
+    private UserUpdateDto userUpdateDto(String jwt, String newLogin, String newName) {
         var userUpdateDto = new UserUpdateDto();
         userUpdateDto.setJwt(jwt);
         userUpdateDto.setLogin(newLogin);
