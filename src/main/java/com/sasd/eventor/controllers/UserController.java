@@ -3,6 +3,7 @@ package com.sasd.eventor.controllers;
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.dtos.UserResponseDto;
+import com.sasd.eventor.model.dtos.UserUpdateDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
@@ -64,5 +65,10 @@ public class UserController {
     @GetMapping("/createJwt")
     public String createJwt(@RequestParam String login, @RequestParam String password) {
         return userService.createJwtToken(login, password);
+    }
+
+    @GetMapping("/update")
+    public UserResponseDto update(@RequestParam UserUpdateDto userUpdateDto, @RequestParam String jwt){
+        return conversionService.convert(userService.update(userUpdateDto, jwt), UserResponseDto.class);
     }
 }

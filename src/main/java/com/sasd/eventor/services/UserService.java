@@ -2,6 +2,7 @@ package com.sasd.eventor.services;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.daos.UserRepository;
+import com.sasd.eventor.model.dtos.UserUpdateDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.utils.JwtService;
 import lombok.AllArgsConstructor;
@@ -42,5 +43,14 @@ public class UserService {
     public String createJwtToken(String login, String password) {
         return jwtService.createJwtToken(findByLoginAndPassword(login, password)
                 .orElseThrow(() -> new EventorException("Invalid login or password")));
+    }
+
+    public User update(UserUpdateDto userUpdateDto, String jwt){
+        User userToUpdate = userRepository.findById(jwtService.decodeJwtToId(jwt)).orElseThrow(() -> new EventorException("User with provided id does not exist"));
+        userToUpdate.setName(userUpdateDto.getName());
+        userToUpdate.setLogin(userUpdateDto.getLogin());
+        userToUpdate.setPassword(userUpdateDto.getPassword());
+        userRepository.save(userToUpdate);
+        return userToUpdate;
     }
 }
