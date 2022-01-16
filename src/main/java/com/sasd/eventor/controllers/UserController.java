@@ -67,8 +67,9 @@ public class UserController {
         return userService.createJwtToken(login, password);
     }
 
-    @GetMapping("/update")
-    public UserResponseDto update(@RequestParam UserUpdateDto userUpdateDto, @RequestParam String jwt){
-        return conversionService.convert(userService.update(userUpdateDto, jwt), UserResponseDto.class);
+    @PutMapping("/update")
+    public UserResponseDto update(@RequestBody @Valid UserUpdateDto userUpdateDto) {
+        return conversionService.convert(
+                userService.update(conversionService.convert(userUpdateDto, User.class)), UserResponseDto.class);
     }
 }
