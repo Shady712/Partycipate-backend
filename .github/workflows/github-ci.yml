@@ -4,13 +4,15 @@ on: [push]
 
 jobs:
   start-docker:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: docker up
+        with:
+          file: ./docker-compose.yml
         run: docker compose up
 
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +25,9 @@ jobs:
         run: mvn --batch-mode --update-snapshots verify
 
   end-docker:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: docker down
+        with:
+          file: ./docker-compose.yml
         run: docker compose down
