@@ -15,27 +15,21 @@ public class UserUpdateTest extends UserTest {
     public void updateWithChanges() {
         var dto = validUserRegisterDto();
         userController.register(dto);
-        var jwt = userController.createJwt(dto.getLogin(), dto.getPassword());
-        var updateDto = new UserUpdateDto();
-        updateDto.setJwt(jwt);
-        updateDto.setLogin(VALID_LOGIN + 'q');
-        updateDto.setName(VALID_NAME + 'q');
+        var updateDto = makeUserUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
+                dto.getLogin() + 'q', dto.getName() + 'q');
         var updatedUser = userController.update(updateDto);
-        assert updatedUser.getLogin().equals(VALID_LOGIN + 'q');
-        assert updatedUser.getName().equals(VALID_NAME + 'q');
+        assert updatedUser.getLogin().equals(dto.getLogin() + 'q');
+        assert updatedUser.getName().equals(dto.getName() + 'q');
     }
 
     @Test
     public void updateWithOneChange() {
         var dto = validUserRegisterDto();
         userController.register(dto);
-        var jwt = userController.createJwt(dto.getLogin(), dto.getPassword());
-        var updateDto = new UserUpdateDto();
-        updateDto.setJwt(jwt);
-        updateDto.setLogin(VALID_LOGIN + 'q');
-        updateDto.setName(VALID_NAME);
+        var updateDto = makeUserUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
+                dto.getLogin() + 'q', dto.getName());
         var updatedUser = userController.update(updateDto);
-        assert updatedUser.getLogin().equals(dto.getLogin()+'q');
+        assert updatedUser.getLogin().equals(dto.getLogin() + 'q');
         assert updatedUser.getName().equals(dto.getName());
     }
 
@@ -43,13 +37,18 @@ public class UserUpdateTest extends UserTest {
     public void updateWithoutChanges() {
         var dto = validUserRegisterDto();
         userController.register(dto);
-        var jwt = userController.createJwt(dto.getLogin(), dto.getPassword());
-        var updateDto = new UserUpdateDto();
-        updateDto.setJwt(jwt);
-        updateDto.setLogin(VALID_LOGIN);
-        updateDto.setName(VALID_NAME);
+        var updateDto = makeUserUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
+                dto.getLogin(), dto.getName());
         var updatedUser = userController.update(updateDto);
         assert updatedUser.getLogin().equals(dto.getLogin());
         assert updatedUser.getName().equals(dto.getName());
+    }
+
+    private UserUpdateDto makeUserUpdateDto(String jwt, String newLogin, String newName) {
+        var userUpdateDto = new UserUpdateDto();
+        userUpdateDto.setJwt(jwt);
+        userUpdateDto.setLogin(newLogin);
+        userUpdateDto.setName(newName);
+        return userUpdateDto;
     }
 }
