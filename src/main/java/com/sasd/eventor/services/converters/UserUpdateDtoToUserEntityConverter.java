@@ -1,6 +1,5 @@
 package com.sasd.eventor.services.converters;
 
-import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.dtos.UserUpdateDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
