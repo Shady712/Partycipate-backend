@@ -3,6 +3,12 @@ name: Java CI
 on: [push]
 
 jobs:
+  start-docker:
+    runs-on: windows-latest
+    steps:
+      - name: docker up
+        run: docker compose up -d
+
   build:
     runs-on: windows-latest
 
@@ -14,5 +20,10 @@ jobs:
           java-version: '16'
           distribution: 'adopt'
       - name: Build with Maven
-        run: docker compose up -d
-        mvn --batch-mode --update-snapshots verify
+        run: mvn --batch-mode --update-snapshots verify
+
+  end-docker:
+    runs-on: windows-latest
+    steps:
+      - name: docker down
+        run: docker compose down
