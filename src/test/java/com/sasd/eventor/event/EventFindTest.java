@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Random;
 
 public class EventFindTest extends EventTest {
@@ -76,6 +75,5 @@ public class EventFindTest extends EventTest {
         assert !secondList.contains(event);
         assert !secondList.contains(eventSecond);
         assert secondList.contains(eventThird);
-
     }
 }
