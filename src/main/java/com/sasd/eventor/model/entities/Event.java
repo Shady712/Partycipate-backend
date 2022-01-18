@@ -35,12 +35,12 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return Objects.equals(id, event.id) && Objects.equals(name, event.name) && Objects.equals(date, event.date) && Objects.equals(location, event.location) && Objects.equals(description, event.description) && Objects.equals(price, event.price) && Objects.equals(creator, event.creator) && Objects.equals(guests, event.guests);
+        return Objects.equals(id, event.id) && Objects.equals(name, event.name) && Objects.equals(date, event.date) && Objects.equals(location, event.location) && Objects.equals(description, event.description) && Objects.equals(price, event.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, date, location, description, price, creator, guests);
+        return Objects.hash(id, name, date, location, description, price);
     }
 
 }
