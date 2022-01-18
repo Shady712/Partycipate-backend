@@ -47,19 +47,23 @@ public class EventFindTest extends EventTest {
         var event = eventController.create(eventCreateDto);
         var creator = event.getCreator();
 
-        var eventCreateDtoSecond = validEventCreateDtoWithoutJwt(VALID_NAME + " Second",
+        var eventCreateDtoSecond = validEventCreateDtoWithoutJwt(
+                VALID_NAME + " Second",
                 VALID_DATE,
                 VALID_DESCRIPTION + " Second",
                 VALID_LOCATION + " Second",
-                VALID_PRICE + 2);
+                VALID_PRICE + 2
+        );
         eventCreateDtoSecond.setJwt(eventCreateDto.getJwt());
         var eventSecond = eventController.create(eventCreateDtoSecond);
         var creatorSecond = eventSecond.getCreator();
 
         var eventCreateDtoThird = validEventCreateDtoWithoutJwt();
-        eventCreateDtoThird.setJwt(validJwt(VALID_USER_LOGIN + " Second",
-                                            VALID_NAME + " Second",
-                                            VALID_USER_PASSWORD + " Second"));
+        eventCreateDtoThird.setJwt(validJwt(
+                VALID_USER_LOGIN + " Second",
+                VALID_USER_NAME + " Second",
+                VALID_USER_PASSWORD + " Second")
+        );
         var eventThird = eventController.create(eventCreateDtoThird);
         var creatorThird = eventThird.getCreator();
         var firstList = eventController.findAllByCreator(creator.getLogin());
