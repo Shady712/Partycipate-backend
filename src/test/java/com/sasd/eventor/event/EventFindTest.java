@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Random;
 
 public class EventFindTest extends EventTest {
@@ -46,25 +47,29 @@ public class EventFindTest extends EventTest {
         var event = eventController.create(eventCreateDto);
         var creator = event.getCreator();
 
-        var eventCreateDtoSnd = validEventCreateDtoWithoutJwtSnd();
-        eventCreateDtoSnd.setJwt(eventCreateDto.getJwt());
-        var eventSnd = eventController.create(eventCreateDtoSnd);
-        var creatorSnd = eventSnd.getCreator();
+        var eventCreateDtoSecond = validEventCreateDtoWithoutJwt(VALID_NAME+" Second", VALID_DATE,
+                VALID_DESCRIPTION+" Second", VALID_LOCATION+" Second", VALID_PRICE+2);
+        eventCreateDtoSecond.setJwt(validJwt());
+        var eventSecond = eventController.create(eventCreateDtoSecond);
+        var creatorSecond = eventSecond.getCreator();
 
-        var eventCreateDtoTrd = validEventCreateDtoWithoutJwt();
-        eventCreateDtoTrd.setJwt(validJwtSnd());
-        var eventTrd = eventController.create(eventCreateDtoTrd);
-        var creatorTrd = eventTrd.getCreator();
-
-        assert eventController.findAllByCreator(creator.getLogin()).contains(event);
-        assert eventController.findAllByCreator(creator.getLogin()).contains(eventSnd);
-        assert !eventController.findAllByCreator(creator.getLogin()).contains(eventTrd);
-        assert eventController.findAllByCreator(creatorSnd.getLogin()).contains(event);
-        assert eventController.findAllByCreator(creatorSnd.getLogin()).contains(eventSnd);
-        assert !eventController.findAllByCreator(creatorSnd.getLogin()).contains(eventTrd);
-        assert !eventController.findAllByCreator(creatorTrd.getLogin()).contains(event);
-        assert !eventController.findAllByCreator(creatorTrd.getLogin()).contains(eventSnd);
-        assert eventController.findAllByCreator(creatorTrd.getLogin()).contains(eventTrd);
+        var eventCreateDtoThird = validEventCreateDtoWithoutJwt();
+        eventCreateDtoThird.setJwt(validJwt(VALID_USER_LOGIN+" Second", VALID_NAME+ " Second",
+                VALID_USER_PASSWORD+" Second"));
+        var eventThird = eventController.create(eventCreateDtoThird);
+        var creatorThird = eventThird.getCreator();
+        List<Event> firstList = eventController.findAllByCreator(creator.getLogin());
+        List<Event> secondList = eventController.findAllByCreator(creatorSecond.getLogin());
+        List<Event> thirdList = eventController.findAllByCreator(creatorThird.getLogin());
+        assert firstList.contains(event);
+        assert firstList.contains(eventSecond);
+        assert !firstList.contains(eventThird);
+        assert secondList.contains(event);
+        assert secondList.contains(eventSecond);
+        assert !secondList.contains(eventThird);
+        assert !thirdList.contains(event);
+        assert !thirdList.contains(eventSecond);
+        assert thirdList.contains(eventThird);
 
     }
 }

@@ -30,42 +30,36 @@ public abstract class EventTest {
     protected static final String VALID_USER_PASSWORD = "QWErty12345";
 
     protected static EventCreateDto validEventCreateDtoWithoutJwt() {
+        return validEventCreateDtoWithoutJwt(VALID_NAME, VALID_DATE, VALID_DESCRIPTION, VALID_LOCATION, VALID_PRICE);
+    }
+
+    protected static EventCreateDto validEventCreateDtoWithoutJwt(String name, LocalDateTime date, String description,
+                                                                  String location, Integer price){
         var dto = new EventCreateDto();
-       dto.setName(VALID_NAME);
-        dto.setDate(VALID_DATE);
-        dto.setDescription(VALID_DESCRIPTION);
-        dto.setLocation(VALID_LOCATION);
-        dto.setPrice(VALID_PRICE);
+        dto.setName(name);
+        dto.setDate(date);
+        dto.setDescription(description);
+        dto.setLocation(location);
+        dto.setPrice(price);
         return dto;
     }
 
-    protected static EventCreateDto validEventCreateDtoWithoutJwtSnd() {
-        var dto = new EventCreateDto();
-        dto.setName(VALID_NAME+'1');
-        dto.setDate(VALID_DATE);
-        dto.setDescription(VALID_DESCRIPTION+'1');
-        dto.setLocation(VALID_LOCATION+'1');
-        dto.setPrice(VALID_PRICE+1);
-        return dto;
-    }
 
     protected String validJwt() {
-        var dto = new UserRegisterDto();
-        dto.setLogin(VALID_USER_LOGIN);
-        dto.setName(VALID_USER_NAME);
-        dto.setPassword(VALID_USER_PASSWORD);
-        userController.register(dto);
-        return userController.createJwt(dto.getLogin(), dto.getPassword());
+        return validJwt(VALID_USER_LOGIN, VALID_USER_NAME, VALID_USER_PASSWORD);
     }
 
-    protected String validJwtSnd() {
+    protected String validJwt(String login, String name, String password){
         var dto = new UserRegisterDto();
-        dto.setLogin(VALID_USER_LOGIN+"Snd");
-        dto.setName(VALID_USER_NAME+"Snd");
-        dto.setPassword(VALID_USER_PASSWORD+"Snd");
-        userController.register(dto);
-        return userController.createJwt(dto.getLogin(), dto.getPassword());
+        dto.setLogin(login);
+        dto.setName(name);
+        dto.setPassword(password);
+        if(userController.isLoginVacant(login)) {
+            userController.register(dto);
+        }
+        return userController.createJwt(login, password);
     }
+
 
     protected void clearDb() {
         eventRepository.deleteAll();
