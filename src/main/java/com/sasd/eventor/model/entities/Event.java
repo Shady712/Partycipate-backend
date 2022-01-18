@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -28,4 +29,19 @@ public class Event {
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
     private List<User> guests;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(id, event.id) && Objects.equals(name, event.name) && Objects.equals(date, event.date) && Objects.equals(location, event.location) && Objects.equals(description, event.description) && Objects.equals(price, event.price) && Objects.equals(creator, event.creator) && Objects.equals(guests, event.guests);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, date, location, description, price, creator, guests);
+    }
+
 }
+
