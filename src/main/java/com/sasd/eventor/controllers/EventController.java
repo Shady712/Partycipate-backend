@@ -2,7 +2,6 @@ package com.sasd.eventor.controllers;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.EventCreateDto;
-import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.services.EventService;
 import com.sasd.eventor.services.UserService;
