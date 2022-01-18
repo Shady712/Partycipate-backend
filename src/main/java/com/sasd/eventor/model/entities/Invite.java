@@ -20,6 +20,7 @@ public class Invite {
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
+    @Enumerated(EnumType.STRING)
     private InviteStatus status;
 
     public enum InviteStatus {
