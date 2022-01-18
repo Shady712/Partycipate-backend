@@ -36,7 +36,7 @@ public class EventFindTest extends EventTest {
     @Test
     public void ensureBadRequestForInvalidId() {
         Assertions.assertThrows(EventorException.class, () ->
-           eventController.findById(new Random().nextLong())
+                eventController.findById(new Random().nextLong())
         );
     }
 
@@ -47,29 +47,31 @@ public class EventFindTest extends EventTest {
         var event = eventController.create(eventCreateDto);
         var creator = event.getCreator();
 
-        var eventCreateDtoSecond = validEventCreateDtoWithoutJwt(VALID_NAME+" Second", VALID_DATE,
-                VALID_DESCRIPTION+" Second", VALID_LOCATION+" Second", VALID_PRICE+2);
-        eventCreateDtoSecond.setJwt(validJwt());
+        var eventCreateDtoSecond = validEventCreateDtoWithoutJwt(VALID_NAME + " Second",
+                VALID_DATE,
+                VALID_DESCRIPTION + " Second",
+                VALID_LOCATION + " Second",
+                VALID_PRICE + 2);
+        eventCreateDtoSecond.setJwt(eventCreateDto.getJwt());
         var eventSecond = eventController.create(eventCreateDtoSecond);
         var creatorSecond = eventSecond.getCreator();
 
         var eventCreateDtoThird = validEventCreateDtoWithoutJwt();
-        eventCreateDtoThird.setJwt(validJwt(VALID_USER_LOGIN+" Second", VALID_NAME+ " Second",
-                VALID_USER_PASSWORD+" Second"));
+        eventCreateDtoThird.setJwt(validJwt(VALID_USER_LOGIN + " Second",
+                                            VALID_NAME + " Second",
+                                            VALID_USER_PASSWORD + " Second"));
         var eventThird = eventController.create(eventCreateDtoThird);
         var creatorThird = eventThird.getCreator();
-        List<Event> firstList = eventController.findAllByCreator(creator.getLogin());
-        List<Event> secondList = eventController.findAllByCreator(creatorSecond.getLogin());
-        List<Event> thirdList = eventController.findAllByCreator(creatorThird.getLogin());
+        var firstList = eventController.findAllByCreator(creator.getLogin());
+        var secondList = eventController.findAllByCreator(creatorThird.getLogin());
+
         assert firstList.contains(event);
         assert firstList.contains(eventSecond);
+        assert firstList.equals(eventController.findAllByCreator(creatorSecond.getLogin()));
         assert !firstList.contains(eventThird);
-        assert secondList.contains(event);
-        assert secondList.contains(eventSecond);
-        assert !secondList.contains(eventThird);
-        assert !thirdList.contains(event);
-        assert !thirdList.contains(eventSecond);
-        assert thirdList.contains(eventThird);
+        assert !secondList.contains(event);
+        assert !secondList.contains(eventSecond);
+        assert secondList.contains(eventThird);
 
     }
 }
