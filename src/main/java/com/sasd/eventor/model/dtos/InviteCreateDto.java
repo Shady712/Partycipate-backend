@@ -14,7 +14,6 @@ public class InviteCreateDto {
     private Long receiverId;
     @NotNull
     private Long eventId;
-    @Size(max = 65000)
-    @Lob
+    @Size(max = 600)
     private String message;
 }

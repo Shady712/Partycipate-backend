@@ -29,13 +29,9 @@ public class InviteController {
 
     @PostMapping("/create")
     public Invite create(@RequestBody @Valid InviteCreateDto inviteCreateDto) {
-        if (userService.findById(inviteCreateDto.getReceiverId()).isEmpty() &&
+        if (userService.findById(inviteCreateDto.getReceiverId()).isEmpty() ||
                 eventService.findById(inviteCreateDto.getEventId()).isEmpty()) {
-            throw new EventorException("Invalid receiver and event id");
-        } else if (userService.findById(inviteCreateDto.getReceiverId()).isEmpty()) {
-            throw new EventorException("Invalid receiver id");
-        } else if (eventService.findById(inviteCreateDto.getEventId()).isEmpty()) {
-            throw new EventorException(("Invalid event id"));
+            throw new EventorException("Invalid receiver id or event id");
         }
         return inviteService.create(conversionService.convert(inviteCreateDto, Invite.class));
     }

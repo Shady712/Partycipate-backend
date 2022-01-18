@@ -14,10 +14,10 @@ public class InviteCreateDtoToInviteEntityConverter implements Converter<InviteC
     private final UserService userService;
     private final EventService eventService;
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public Invite convert(InviteCreateDto source) {
-        Invite record = new Invite();
+        var record = new Invite();
         record.setEvent(eventService.findById(source.getEventId()).get());
         record.setReceiver(userService.findById(source.getReceiverId()).get());
         record.setStatus(Invite.InviteStatus.WAITING);
