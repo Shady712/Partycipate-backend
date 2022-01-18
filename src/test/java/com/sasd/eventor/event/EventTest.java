@@ -54,9 +54,7 @@ public abstract class EventTest {
         dto.setLogin(login);
         dto.setName(name);
         dto.setPassword(password);
-        if(userController.isLoginVacant(login)) {
-            userController.register(dto);
-        }
+        userController.register(dto);
         return userController.createJwt(login, password);
     }
 
