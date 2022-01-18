@@ -7,14 +7,14 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name="invites")
+@Table(name = "invites")
 public class Invite {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invites_seq")
     @SequenceGenerator(name = "invites_seq", sequenceName = "invites_seq")
     private Long id;
     private String message;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "receiver_id")
     private User receiver;
     @ManyToOne
