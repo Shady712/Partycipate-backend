@@ -33,8 +33,13 @@ public abstract class EventTest {
         return validEventCreateDtoWithoutJwt(VALID_NAME, VALID_DATE, VALID_DESCRIPTION, VALID_LOCATION, VALID_PRICE);
     }
 
-    protected static EventCreateDto validEventCreateDtoWithoutJwt(String name, LocalDateTime date, String description,
-                                                                  String location, Integer price){
+    protected static EventCreateDto validEventCreateDtoWithoutJwt(
+            String name,
+            LocalDateTime date,
+            String description,
+            String location,
+            Integer price
+    ) {
         var dto = new EventCreateDto();
         dto.setName(name);
         dto.setDate(date);
@@ -49,7 +54,7 @@ public abstract class EventTest {
         return validJwt(VALID_USER_LOGIN, VALID_USER_NAME, VALID_USER_PASSWORD);
     }
 
-    protected String validJwt(String login, String name, String password){
+    protected String validJwt(String login, String name, String password) {
         var dto = new UserRegisterDto();
         dto.setLogin(login);
         dto.setName(name);
