@@ -38,4 +38,33 @@ public class EventFindTest extends EventTest {
            eventController.findById(new Random().nextLong())
         );
     }
+
+    @Test
+    public void findAllEventsByOneCreator() {
+        var eventCreateDto = validEventCreateDtoWithoutJwt();
+        eventCreateDto.setJwt(validJwt());
+        var event = eventController.create(eventCreateDto);
+        var creator = event.getCreator();
+
+        var eventCreateDtoSnd = validEventCreateDtoWithoutJwtSnd();
+        eventCreateDtoSnd.setJwt(eventCreateDto.getJwt());
+        var eventSnd = eventController.create(eventCreateDtoSnd);
+        var creatorSnd = eventSnd.getCreator();
+
+        var eventCreateDtoTrd = validEventCreateDtoWithoutJwt();
+        eventCreateDtoTrd.setJwt(validJwtSnd());
+        var eventTrd = eventController.create(eventCreateDtoTrd);
+        var creatorTrd = eventTrd.getCreator();
+
+        assert eventController.findAllByCreator(creator.getLogin()).contains(event);
+        assert eventController.findAllByCreator(creator.getLogin()).contains(eventSnd);
+        assert !eventController.findAllByCreator(creator.getLogin()).contains(eventTrd);
+        assert eventController.findAllByCreator(creatorSnd.getLogin()).contains(event);
+        assert eventController.findAllByCreator(creatorSnd.getLogin()).contains(eventSnd);
+        assert !eventController.findAllByCreator(creatorSnd.getLogin()).contains(eventTrd);
+        assert !eventController.findAllByCreator(creatorTrd.getLogin()).contains(event);
+        assert !eventController.findAllByCreator(creatorTrd.getLogin()).contains(eventSnd);
+        assert eventController.findAllByCreator(creatorTrd.getLogin()).contains(eventTrd);
+
+    }
 }

@@ -1,7 +1,6 @@
 package com.sasd.eventor.services;
 
 import com.sasd.eventor.model.daos.EventRepository;
-import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.model.entities.User;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
-    private final UserService userService;
 
     public Optional<Event> findById(Long id) {
         return eventRepository.findById(id);
