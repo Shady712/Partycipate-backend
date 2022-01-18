@@ -1,0 +1,20 @@
+package com.sasd.eventor.model.dtos;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Lob;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+@Getter
+@Setter
+public class InviteCreateDto {
+    @NotNull
+    private Long receiverId;
+    @NotNull
+    private Long eventId;
+    @Size(max = 65000)
+    @Lob
+    private String message;
+}
