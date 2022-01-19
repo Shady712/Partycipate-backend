@@ -1,15 +1,11 @@
 package com.sasd.eventor.user;
 
 import com.sasd.eventor.model.dtos.UserUpdateDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserUpdateTest extends UserTest {
+import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
-    @BeforeEach
-    public void init() {
-        clearDb();
-    }
+public class UserUpdateTest extends UserTest {
 
     @Test
     public void updateWithChanges() {
