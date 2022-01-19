@@ -3,17 +3,14 @@ package com.sasd.eventor.event;
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.entities.Event;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-public class EventFindTest extends EventTest {
+import static com.sasd.eventor.utils.EventUtils.*;
+import static com.sasd.eventor.utils.UserUtils.*;
 
-    @BeforeEach
-    public void init() {
-        clearDb();
-    }
+public class EventFindTest extends EventTest {
 
     @Test
     public void findExistingEvent() {
@@ -58,11 +55,7 @@ public class EventFindTest extends EventTest {
         var creatorSecond = eventSecond.getCreator();
 
         var eventCreateDtoThird = validEventCreateDtoWithoutJwt();
-        eventCreateDtoThird.setJwt(validJwt(
-                VALID_USER_LOGIN + " Second",
-                VALID_USER_NAME + " Second",
-                VALID_USER_PASSWORD + " Second")
-        );
+        eventCreateDtoThird.setJwt(validJwt(validUserRegisterDto()));
         var eventThird = eventController.create(eventCreateDtoThird);
         var creatorThird = eventThird.getCreator();
         var firstList = eventController.findAllByCreator(creator.getLogin());
@@ -70,8 +63,8 @@ public class EventFindTest extends EventTest {
 
         assert firstList.contains(event);
         assert firstList.contains(eventSecond);
-        assert firstList.equals(eventController.findAllByCreator(creatorSecond.getLogin()));
         assert !firstList.contains(eventThird);
+        assert firstList.equals(eventController.findAllByCreator(creatorSecond.getLogin()));
         assert !secondList.contains(event);
         assert !secondList.contains(eventSecond);
         assert secondList.contains(eventThird);

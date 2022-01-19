@@ -2,15 +2,11 @@ package com.sasd.eventor.user;
 
 import com.sasd.eventor.exception.EventorException;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserRegistrationTest extends UserTest {
+import static com.sasd.eventor.utils.UserUtils.*;
 
-    @BeforeEach
-    public void init() {
-        clearDb();
-    }
+public class UserRegistrationTest extends UserTest {
 
     @Test
     public void registerValidUser() {
@@ -19,21 +15,21 @@ public class UserRegistrationTest extends UserTest {
         var foundUser = userRepository
                 .findAll()
                 .stream()
-                .filter(user -> user.getLogin().equals(VALID_LOGIN))
+                .filter(user -> user.getLogin().equals(userRegisterDto.getLogin()))
                 .findFirst();
         assert foundUser.isPresent();
         var user = foundUser.get();
-        assert user.getLogin().equals(VALID_LOGIN);
-        assert user.getName().equals(VALID_NAME);
-        assert user.getPassword().equals(VALID_PASSWORD);
+        assert user.getLogin().equals(userRegisterDto.getLogin());
+        assert user.getName().equals(userRegisterDto.getName());
+        assert user.getPassword().equals(userRegisterDto.getPassword());
     }
 
     @Test
     public void ensureBadRequestForUsedLogin() {
         var userRegisterDto = validUserRegisterDto();
         userController.register(userRegisterDto);
-        userRegisterDto.setName(VALID_NAME + VALID_NAME);
-        userRegisterDto.setPassword(VALID_PASSWORD + VALID_PASSWORD);
+        userRegisterDto.setName(validUserName());
+        userRegisterDto.setPassword(validUserPassword());
         Assertions.assertThrows(EventorException.class, () ->
                 userController.register(userRegisterDto)
         );

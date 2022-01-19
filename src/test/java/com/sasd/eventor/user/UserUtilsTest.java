@@ -1,14 +1,11 @@
 package com.sasd.eventor.user;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserUtilsTest extends UserTest {
+import static com.sasd.eventor.utils.UserUtils.validUserLogin;
+import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
-    @BeforeEach
-    public void init() {
-        clearDb();
-    }
+public class UserUtilsTest extends UserTest {
 
     @Test
     public void checkExistingUserLoginVacancy() {
@@ -17,6 +14,6 @@ public class UserUtilsTest extends UserTest {
 
     @Test
     public void checkNonExistingUserLoginVacancy() {
-        assert userController.isLoginVacant("VacantLogin");
+        assert userController.isLoginVacant(validUserLogin());
     }
 }

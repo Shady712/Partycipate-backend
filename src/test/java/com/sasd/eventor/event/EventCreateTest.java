@@ -3,18 +3,14 @@ package com.sasd.eventor.event;
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.services.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static com.sasd.eventor.utils.EventUtils.*;
 
 public class EventCreateTest extends EventTest {
     @Autowired
     protected UserService userService;
-
-    @BeforeEach
-    public void init() {
-        clearDb();
-    }
 
     @Test
     public void createValidEvent() {
