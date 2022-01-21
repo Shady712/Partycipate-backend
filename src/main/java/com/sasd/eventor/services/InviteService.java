@@ -19,4 +19,8 @@ public class InviteService {
     public Invite create(Invite invite) {
         return inviteRepository.save(invite);
     }
+
+    public void deleteById(Long id){
+        inviteRepository.deleteById(id);
+    }
 }

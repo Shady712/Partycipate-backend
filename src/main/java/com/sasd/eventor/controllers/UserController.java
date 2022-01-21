@@ -81,4 +81,9 @@ public class UserController {
                 .map(user -> conversionService.convert(user, UserResponseDto.class))
                 .toList();
     }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id) {
+        userService.deleteById(id);
+    }
 }

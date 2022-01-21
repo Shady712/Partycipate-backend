@@ -35,4 +35,9 @@ public class InviteController {
         }
         return inviteService.create(conversionService.convert(inviteCreateDto, Invite.class));
     }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id) {
+        inviteService.deleteById(id);
+    }
 }

@@ -58,4 +58,9 @@ public class EventController {
                 .map(event -> conversionService.convert(event, EventResponseDto.class))
                 .toList();
     }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id) {
+        eventService.deleteById(id);
+    }
 }

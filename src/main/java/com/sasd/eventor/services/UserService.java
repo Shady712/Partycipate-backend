@@ -52,4 +52,8 @@ public class UserService {
     public List<User> findAllByLoginPrefix(String prefix) {
         return userRepository.findByLoginStartingWith(prefix);
     }
+
+    public void deleteById(Long id){
+        userRepository.deleteById(id);
+    }
 }
