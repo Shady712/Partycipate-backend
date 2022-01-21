@@ -42,4 +42,9 @@ public class EventController {
                         .orElseThrow(() -> new EventorException("User with provided login does not exist"))
         );
     }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id) {
+        eventService.deleteById(id);
+    }
 }

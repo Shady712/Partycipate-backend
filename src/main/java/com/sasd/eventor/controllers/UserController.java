@@ -72,4 +72,9 @@ public class UserController {
         return conversionService.convert(
                 userService.update(conversionService.convert(userUpdateDto, User.class)), UserResponseDto.class);
     }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id) {
+        userService.deleteById(id);
+    }
 }
