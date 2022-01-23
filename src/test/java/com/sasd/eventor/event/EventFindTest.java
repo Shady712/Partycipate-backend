@@ -5,6 +5,7 @@ import com.sasd.eventor.model.entities.Event;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.Random;
 
 import static com.sasd.eventor.utils.EventUtils.*;
@@ -20,6 +21,10 @@ public class EventFindTest extends EventTest {
         event.setDescription(VALID_DESCRIPTION);
         event.setLocation(VALID_LOCATION);
         event.setPrice(VALID_PRICE);
+        event.setGuests(Collections.emptyList());
+        event.setCreator(userRepository.findById(userController.register(validUserRegisterDto()).getId())
+                .orElseThrow(() -> new EventorException("Registration does not work"))
+        );
         var expectedEvent = eventRepository.save(event);
         var foundEvent = eventController.findById(expectedEvent.getId());
         assert foundEvent.getName().equals(expectedEvent.getName());
