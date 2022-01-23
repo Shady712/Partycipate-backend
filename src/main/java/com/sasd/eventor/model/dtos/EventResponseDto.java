@@ -35,5 +35,4 @@ public class EventResponseDto {
         return Objects.hash(id, name, date, location, description, price, creator, guests);
     }
 
-    //add other next time if necessary
 }
