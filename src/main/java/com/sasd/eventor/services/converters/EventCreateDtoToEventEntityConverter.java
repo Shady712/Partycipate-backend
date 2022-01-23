@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+
 @Component
 @AllArgsConstructor
 public class EventCreateDtoToEventEntityConverter implements Converter<EventCreateDto, Event> {
@@ -25,6 +27,7 @@ public class EventCreateDtoToEventEntityConverter implements Converter<EventCrea
         User creator = userService.findByJwt(source.getJwt())
                         .orElseThrow(() -> new EventorException("Creator does not exist"));
         record.setCreator(creator);
+        record.setGuests(Collections.emptyList());
         return record;
     }
 }

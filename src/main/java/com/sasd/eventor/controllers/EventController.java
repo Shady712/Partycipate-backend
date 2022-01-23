@@ -2,6 +2,7 @@ package com.sasd.eventor.controllers;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.EventCreateDto;
+import com.sasd.eventor.model.dtos.EventResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.services.EventService;
 import com.sasd.eventor.services.UserService;
@@ -21,25 +22,33 @@ public class EventController {
     private final ConversionService conversionService;
 
     @GetMapping("/findById")
-    public Event findById(@RequestParam Long id) {
-        return eventService.findById(id)
-                .orElseThrow(() -> new EventorException("Event with provided id does not exist")
-                );
+    public EventResponseDto findById(@RequestParam Long id) {
+        return conversionService.convert(
+                eventService.findById(id)
+                        .orElseThrow(() -> new EventorException("Event with provided id does not exist")),
+                EventResponseDto.class
+        );
     }
 
     @PostMapping("/create")
-    public Event create(@RequestBody @Valid EventCreateDto eventCreateDto) {
+    public EventResponseDto create(@RequestBody @Valid EventCreateDto eventCreateDto) {
         if (userService.findByJwt(eventCreateDto.getJwt()).isEmpty()) {
             throw new EventorException("Creator does not exist");
         }
-        return eventService.createEvent(conversionService.convert(eventCreateDto, Event.class));
+        return conversionService.convert(
+                eventService.createEvent(conversionService.convert(eventCreateDto, Event.class)),
+                EventResponseDto.class
+        );
+
     }
 
     @GetMapping("/findAllByCreator")
-    public List<Event> findAllByCreator(@RequestParam String login) {
+    public List<EventResponseDto> findAllByCreator(@RequestParam String login) {
         return eventService.findAllByCreator(
                 userService.findByLogin(login)
-                        .orElseThrow(() -> new EventorException("User with provided login does not exist"))
-        );
+                   .orElseThrow(() -> new EventorException("User with provided login does not exist")))
+                .stream()
+                .map(event -> conversionService.convert(event, EventResponseDto.class))
+                .toList();
     }
 }

@@ -3,6 +3,7 @@ package com.sasd.eventor.model.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,7 @@ public class Event {
     private Integer price;
     @ManyToOne
     private User creator;
+    @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "events_users",
