@@ -3,7 +3,6 @@ package com.sasd.eventor.event;
 import com.sasd.eventor.controllers.EventController;
 import com.sasd.eventor.controllers.UserController;
 import com.sasd.eventor.model.daos.EventRepository;
-import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +23,6 @@ public abstract class EventTest {
     protected UserController userController;
     @Autowired
     protected ConversionService conversionService;
-    @Autowired
-    protected UserRepository userRepository;
 
     protected String validJwt() {
         return validJwt(validUserRegisterDto());
