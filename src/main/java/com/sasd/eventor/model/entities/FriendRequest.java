@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "friend_requests")
-public class FriendRequst {
+public class FriendRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "friend_requests_seq")
     @SequenceGenerator(name = "friend_requests_seq", sequenceName = "friend_requests_seq")
