@@ -22,11 +22,11 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public void deleteById(Long id){
-        eventRepository.deleteById(id);
-    }
-
     public List<Event> findAllByCreator(User user) {
         return eventRepository.findAllByCreator(user);
+    }
+
+    public void deleteById(Long id){
+        eventRepository.deleteById(id);
     }
 }

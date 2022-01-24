@@ -37,7 +37,12 @@ public class InviteController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteById(@RequestParam Long id) {
-        inviteService.deleteById(id);
+    public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
+        if (userService.findByJwt(jwt).isEmpty()) {
+            throw new EventorException("You need to be authorized");
+        } else {
+            findById(id);
+            inviteService.deleteById(id);
+        }
     }
 }

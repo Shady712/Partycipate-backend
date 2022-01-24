@@ -3,7 +3,7 @@ package com.sasd.eventor.invite;
 import com.sasd.eventor.model.entities.Invite;
 import org.junit.jupiter.api.Test;
 
-import static com.sasd.eventor.utils.InviteUtils.makeInviteCreateDto;
+import static com.sasd.eventor.utils.InviteUtils.validInviteCreateDto;
 
 public class InviteCreateTest extends InviteTest {
 
@@ -11,7 +11,7 @@ public class InviteCreateTest extends InviteTest {
     public void createValidInvite() {
         var jwt = registerValidUserAndGetJwt();
         var createdEvent = createEvent(jwt);
-        var inviteCreateDto = makeInviteCreateDto(
+        var inviteCreateDto = validInviteCreateDto(
                 jwtService.decodeJwtToId(jwt), createdEvent.getId());
         var createdInvite = inviteController.create(inviteCreateDto);
         assert inviteRepository.findById(createdInvite.getId()).isPresent();
