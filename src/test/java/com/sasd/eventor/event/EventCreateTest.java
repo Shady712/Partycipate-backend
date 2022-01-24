@@ -21,6 +21,7 @@ public class EventCreateTest extends EventTest {
         assert event.getLocation().equals(VALID_LOCATION);
         assert event.getDescription().equals(VALID_DESCRIPTION);
         assert event.getPrice().equals(VALID_PRICE);
+        assert event.getGuests().isEmpty();
     }
 
     @Test

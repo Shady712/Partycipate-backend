@@ -22,6 +22,7 @@ public class EventFindTest extends EventTest {
         event.setLocation(VALID_LOCATION);
         event.setPrice(VALID_PRICE);
         event.setGuests(Collections.emptyList());
+        // TODO
         event.setCreator(userRepository.findById(userController.register(validUserRegisterDto()).getId())
                 .orElseThrow(() -> new EventorException("Registration does not work"))
         );
@@ -32,6 +33,7 @@ public class EventFindTest extends EventTest {
         assert foundEvent.getDescription().equals(expectedEvent.getDescription());
         assert foundEvent.getLocation().equals(expectedEvent.getLocation());
         assert foundEvent.getPrice().equals(expectedEvent.getPrice());
+        assert foundEvent.getGuests().equals(Collections.emptyList());
     }
 
     @Test

@@ -32,7 +32,7 @@ public class EventResponseDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, date, location, description, price, creator, guests);
+        return Objects.hash(id, name, date, location, description, price, creator.getId(), guests);
     }
 
 }
