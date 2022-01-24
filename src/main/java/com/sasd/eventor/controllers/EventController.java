@@ -39,7 +39,6 @@ public class EventController {
                 eventService.createEvent(conversionService.convert(eventCreateDto, Event.class)),
                 EventResponseDto.class
         );
-
     }
 
     @GetMapping("/findAllByCreator")

@@ -7,10 +7,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-@AllArgsConstructor
 @Component
+@AllArgsConstructor
 public class EventEntityToEventResponseDtoConverter implements Converter<Event, EventResponseDto> {
-
     private final UserEntityToUserResponseDtoConverter userEntityToUserResponseDtoConverter;
 
     @Override

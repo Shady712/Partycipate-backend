@@ -23,9 +23,8 @@ public class EventCreateDtoToEventEntityConverter implements Converter<EventCrea
         record.setDescription(source.getDescription());
         record.setPrice(source.getPrice());
         record.setLocation(source.getLocation());
-        @SuppressWarnings("OptionalGetWithoutIsPresent")
-        User creator = userService.findByJwt(source.getJwt()).get();
-        record.setCreator(creator);
+        // noinspection OptionalGetWithoutIsPresent
+        record.setCreator(userService.findByJwt(source.getJwt()).get());
         record.setGuests(Collections.emptyList());
         return record;
     }

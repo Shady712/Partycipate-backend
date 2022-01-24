@@ -34,5 +34,4 @@ public class EventResponseDto {
     public int hashCode() {
         return Objects.hash(id, name, date, location, description, price, creator.getId(), guests);
     }
-
 }
