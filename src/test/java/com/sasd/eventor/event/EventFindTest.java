@@ -2,10 +2,11 @@ package com.sasd.eventor.event;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.entities.Event;
+import com.sasd.eventor.model.entities.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import static com.sasd.eventor.utils.EventUtils.*;
@@ -21,8 +22,7 @@ public class EventFindTest extends EventTest {
         event.setDescription(VALID_DESCRIPTION);
         event.setLocation(VALID_LOCATION);
         event.setPrice(VALID_PRICE);
-        event.setGuests(Collections.emptyList());
-        // TODO
+        event.setGuests(List.of(validUser(), validUser(), validUser()));
         event.setCreator(userRepository.findById(userController.register(validUserRegisterDto()).getId())
                 .orElseThrow(() -> new EventorException("Registration does not work"))
         );
@@ -33,7 +33,10 @@ public class EventFindTest extends EventTest {
         assert foundEvent.getDescription().equals(expectedEvent.getDescription());
         assert foundEvent.getLocation().equals(expectedEvent.getLocation());
         assert foundEvent.getPrice().equals(expectedEvent.getPrice());
-        assert foundEvent.getGuests().equals(Collections.emptyList());
+        assert foundEvent.getGuests().equals(expectedEvent.getGuests()
+                .stream()
+                .map(User::getLogin)
+                .toList());
     }
 
     @Test
