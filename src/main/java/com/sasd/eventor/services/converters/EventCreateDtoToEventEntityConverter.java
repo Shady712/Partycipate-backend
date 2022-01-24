@@ -1,6 +1,5 @@
 package com.sasd.eventor.services.converters;
 
-import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.EventCreateDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.model.entities.User;
@@ -24,8 +23,8 @@ public class EventCreateDtoToEventEntityConverter implements Converter<EventCrea
         record.setDescription(source.getDescription());
         record.setPrice(source.getPrice());
         record.setLocation(source.getLocation());
-        User creator = userService.findByJwt(source.getJwt())
-                        .orElseThrow(() -> new EventorException("Creator does not exist"));
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
+        User creator = userService.findByJwt(source.getJwt()).get();
         record.setCreator(creator);
         record.setGuests(Collections.emptyList());
         return record;
