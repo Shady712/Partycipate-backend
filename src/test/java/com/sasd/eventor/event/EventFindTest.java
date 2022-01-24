@@ -23,9 +23,7 @@ public class EventFindTest extends EventTest {
         event.setLocation(VALID_LOCATION);
         event.setPrice(VALID_PRICE);
         event.setGuests(List.of(validUser(), validUser(), validUser()));
-        event.setCreator(userRepository.findById(userController.register(validUserRegisterDto()).getId())
-                .orElseThrow(() -> new EventorException("Registration does not work"))
-        );
+        event.setCreator(validUser());
         var expectedEvent = eventRepository.save(event);
         var foundEvent = eventController.findById(expectedEvent.getId());
         assert foundEvent.getName().equals(expectedEvent.getName());
