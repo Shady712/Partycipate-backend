@@ -60,7 +60,12 @@ public class EventController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteById(@RequestParam Long id) {
-        eventService.deleteById(id);
+    public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
+        if (userService.findByJwt(jwt).isEmpty()) {
+            throw new EventorException("You need to be authorized");
+        } else {
+            findById(id); // проверяем есть ли такой, выкинет исключение, если такого нет
+            eventService.deleteById(id);
+        }
     }
 }

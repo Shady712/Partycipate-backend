@@ -53,7 +53,7 @@ public class UserService {
         return userRepository.findByLoginStartingWith(prefix);
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
 }

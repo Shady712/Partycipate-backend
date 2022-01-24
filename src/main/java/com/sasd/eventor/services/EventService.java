@@ -33,4 +33,8 @@ public class EventService {
     public List<Event> findAllByNamePrefix(String prefix) {
         return eventRepository.findByNameStartingWith(prefix);
     }
+
+    public void deleteById(Long id){
+        eventRepository.deleteById(id);
+    }
 }
