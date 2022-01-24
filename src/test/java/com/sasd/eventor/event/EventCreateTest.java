@@ -14,8 +14,7 @@ public class EventCreateTest extends EventTest {
         eventCreateDto.setJwt(validJwt());
         var event = eventController.create(eventCreateDto);
         var creator = event.getCreator();
-        var foundCreator = userController.enterByJwt(eventCreateDto.getJwt());
-        assert creator.equals(foundCreator);
+        assert creator.equals(userController.enterByJwt(eventCreateDto.getJwt()));
         assert event.getName().equals(VALID_NAME);
         assert event.getDate().equals(VALID_DATE);
         assert event.getLocation().equals(VALID_LOCATION);
