@@ -24,8 +24,8 @@ public class EventDeleteTest extends EventTest {
         var eventCreateDto = validEventCreateDtoWithoutJwt();
         eventCreateDto.setJwt(validJwt());
         var createdEvent = eventController.create(eventCreateDto);
-        eventController.deleteById(createdEvent.getId()+100, getJwt());
-        Assertions.assertThrows(EventorException.class, () -> eventController.findById(createdEvent.getId()));
+        Assertions.assertThrows(EventorException.class,
+                () -> eventController.deleteById(createdEvent.getId() + 100, getJwt()));
     }
 
     private String getJwt() {
