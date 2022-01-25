@@ -11,7 +11,7 @@ public class UserUtils {
     }
 
     public static String validUserName() {
-        return randomAlphabetic(2, 23) + randomAlphabetic(2, 23);
+        return randomAlphabetic(2, 23) + ' ' + randomAlphabetic(2, 23);
     }
 
     public static String validUserPassword() {

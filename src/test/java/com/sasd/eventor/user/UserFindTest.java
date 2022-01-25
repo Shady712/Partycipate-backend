@@ -34,12 +34,12 @@ public class UserFindTest extends UserTest {
     public void findAllByLoginPrefix() {
         var login = validUserLogin();
         var firstUser = userController.register(validUserRegisterDto(
-                login+'a',
+                login + 'a',
                 validUserName(),
                 validUserPassword()
         ));
         var secondUser = userController.register(validUserRegisterDto(
-                login+'b',
+                login + 'b',
                 validUserName(),
                 validUserPassword()
         ));
