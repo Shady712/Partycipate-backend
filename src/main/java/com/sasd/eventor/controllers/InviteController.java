@@ -59,4 +59,16 @@ public class InviteController {
         }
         return inviteService.findAllByEventId(event.get());
     }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
+        if (userService.findByJwt(jwt).isEmpty()
+                || !(findById(id).getEvent().getCreator().getId().equals(userService.findByJwt(jwt).get().getId())
+                || findById(id).getReceiver().getId().equals(userService.findByJwt(jwt).get().getId()))) {
+            throw new EventorException("You have no permission");
+        } else {
+            findById(id);
+            inviteService.deleteById(id);
+        }
+    }
 }

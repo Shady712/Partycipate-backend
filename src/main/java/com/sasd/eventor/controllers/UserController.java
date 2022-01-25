@@ -99,4 +99,14 @@ public class UserController {
                 .map(user -> conversionService.convert(user, UserResponseDto.class))
                 .toList();
     }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
+        if (userService.findByJwt(jwt).isEmpty() || !(userService.findByJwt(jwt).get().getId().equals(id))) {
+            throw new EventorException("You have no permission");
+        } else {
+            findById(id);
+            userService.deleteById(id);
+        }
+    }
 }
