@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
 @SpringBootTest
-public class FriendRequestTest {
+public abstract class FriendRequestTest {
     @Autowired
     protected FriendRequestController friendRequestController;
     @Autowired

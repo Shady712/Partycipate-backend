@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -82,6 +83,19 @@ public class UserController {
     @GetMapping("/findAllByLoginPrefix")
     public List<UserResponseDto> findAllByLoginPrefix(@RequestParam String prefix) {
         return userService.findAllByLoginPrefix(prefix)
+                .stream()
+                .map(user -> conversionService.convert(user, UserResponseDto.class))
+                .toList();
+    }
+
+    // TODO: test this
+    @Transactional
+    @GetMapping("/findAllFriends")
+    public List<UserResponseDto> findAllFriends(@RequestParam String login) {
+        if (userService.findByLogin(login).isEmpty()) {
+            throw new EventorException("User with provided login does not exist");
+        }
+        return userService.findAllFriends(login)
                 .stream()
                 .map(user -> conversionService.convert(user, UserResponseDto.class))
                 .toList();

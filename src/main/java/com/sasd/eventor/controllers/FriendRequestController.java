@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class FriendRequestController {
     private final FriendRequestService friendRequestService;
     private final ConversionService conversionService;
 
+    @Transactional
     @PostMapping("/create")
     public FriendRequestResponseDto createRequest(@RequestBody @Valid FriendRequestCreateDto friendRequestCreateDto) {
         var reverseRequest = findAllIncoming(friendRequestCreateDto.getSenderJwt())
@@ -84,6 +86,7 @@ public class FriendRequestController {
                 .toList();
     }
 
+    @Transactional
     @PutMapping("/accept")
     public FriendRequestResponseDto acceptRequest(@RequestParam Long id, @RequestParam String receiverJwt) {
         return conversionService.convert(
@@ -92,6 +95,7 @@ public class FriendRequestController {
         );
     }
 
+    @Transactional
     @PutMapping("/reject")
     public FriendRequestResponseDto rejectRequest(@RequestParam Long id, @RequestParam String receiverJwt) {
         return conversionService.convert(
@@ -100,6 +104,7 @@ public class FriendRequestController {
         );
     }
 
+    // TODO: test this
     @DeleteMapping("/delete")
     public void deleteRequest(@RequestParam Long id, @RequestParam String senderJwt) {
         var foundRequest = friendRequestService.findById(id);
