@@ -27,6 +27,14 @@ public class FriendRequestController {
                 || userService.findByLogin(friendRequestCreateDto.getReceiverLogin()).isEmpty()) {
             throw new EventorException("Invalid sender or receiver");
         }
+        if (findAllOutgoing(friendRequestCreateDto.getSenderJwt())
+                .stream()
+                .anyMatch(friendRequestResponseDto ->
+                        friendRequestResponseDto.getReceiverLogin().equals(friendRequestCreateDto.getReceiverLogin()))
+        ) {
+            throw new EventorException("You have already sent a friend request to user "
+                    + friendRequestCreateDto.getReceiverLogin());
+        }
         return conversionService.convert(
                 friendRequestService.create(conversionService.convert(friendRequestCreateDto, FriendRequest.class)),
                 FriendRequestResponseDto.class

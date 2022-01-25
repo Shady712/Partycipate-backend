@@ -20,6 +20,16 @@ public class FriendRequestCreateTest extends FriendRequestTest {
     }
 
     @Test
+    public void ensureBadRequestForRepeatedRequest() {
+        var senderDto = validUserRegisterDto();
+        var receiverDto = validUserRegisterDto();
+        friendRequestController.createRequest(validFriendRequestCreateDto(senderDto, receiverDto));
+        Assertions.assertThrows(EventorException.class,
+                () -> friendRequestController.createRequest(validFriendRequestCreateDto(senderDto, receiverDto))
+        );
+    }
+
+    @Test
     public void ensureBadRequestForInvalidJwt() {
         var dto = validFriendRequestCreateDto();
         dto.setSenderJwt("Invalid jwt");

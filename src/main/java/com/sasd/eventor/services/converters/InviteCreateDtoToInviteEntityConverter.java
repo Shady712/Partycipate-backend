@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import static com.sasd.eventor.model.enums.RequestStatus.WAITING;
+
 @Component
 @AllArgsConstructor
 public class InviteCreateDtoToInviteEntityConverter implements Converter<InviteCreateDto, Invite> {
@@ -20,7 +22,7 @@ public class InviteCreateDtoToInviteEntityConverter implements Converter<InviteC
         var record = new Invite();
         record.setEvent(eventService.findById(source.getEventId()).get());
         record.setReceiver(userService.findById(source.getReceiverId()).get());
-        record.setStatus(Invite.InviteStatus.WAITING);
+        record.setStatus(WAITING);
         record.setMessage(source.getMessage());
         return record;
     }
