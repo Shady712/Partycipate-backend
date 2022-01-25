@@ -19,30 +19,14 @@ public class UserUtils {
     }
 
     public static UserRegisterDto validUserRegisterDto() {
-        var dto = new UserRegisterDto();
-        dto.setLogin(validUserLogin());
-        dto.setName(validUserName());
-        dto.setPassword(validUserPassword());
-        return dto;
+        return validUserRegisterDto(validUserLogin(), validUserName(), validUserPassword());
     }
 
-    public static UserRegisterDto validUserRegisterDto(String field, String value) {
+    public static UserRegisterDto validUserRegisterDto(String login, String name, String password) {
         var dto = new UserRegisterDto();
-        if (field.equals("login")) {
-            dto.setLogin(value);
-        } else {
-            dto.setLogin(validUserLogin());
-        }
-        if (field.equals("name")) {
-            dto.setLogin(value);
-        } else {
-            dto.setName(validUserName());
-        }
-        if (field.equals("password")) {
-            dto.setLogin(value);
-        } else {
-            dto.setPassword(validUserPassword());
-        }
+        dto.setLogin(login);
+        dto.setName(name);
+        dto.setPassword(password);
         return dto;
     }
 }

@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findAllByCreator(User creator);
-    List<Event> findByNameContaining(String prefix);
+    List<Event> findByNameStartingWith(String prefix);
 }

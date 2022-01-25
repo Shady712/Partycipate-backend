@@ -80,16 +80,9 @@ public class EventFindTest extends EventTest {
 
     @Test
     public void findAllEventsByNamePrefix() {
-        var eventCreateDto = validEventCreateDtoWithoutJwt();
-        eventCreateDto.setName(VALID_NAME + "a");
-        eventCreateDto.setJwt(validJwt());
-        var firstEvent = eventController.create(eventCreateDto);
-        eventCreateDto.setName(VALID_NAME + "b");
-        eventCreateDto.setJwt(validJwt());
-        var secondEvent = eventController.create(eventCreateDto);
-        eventCreateDto.setName("Nonexistential flex");
-        eventCreateDto.setJwt(validJwt());
-        var thirdEvent = eventController.create(eventCreateDto);
+        var firstEvent = eventController.create(validEventCreateDto(VALID_NAME + "a"));
+        var secondEvent = eventController.create(validEventCreateDto(VALID_NAME + "b"));
+        var thirdEvent = eventController.create(validEventCreateDto("prefix" + VALID_NAME));
 
         var firstList = eventController.findAllByNamePrefix("");
         var secondList = eventController.findAllByNamePrefix(VALID_NAME);

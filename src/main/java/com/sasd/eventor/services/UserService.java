@@ -49,7 +49,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> findByLoginPrefix(String prefix) {
+    public List<User> findAllByLoginPrefix(String prefix) {
         return userRepository.findByLoginStartingWith(prefix);
     }
 }
