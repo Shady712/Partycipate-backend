@@ -11,6 +11,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -71,5 +72,13 @@ public class UserController {
     public UserResponseDto update(@RequestBody @Valid UserUpdateDto userUpdateDto) {
         return conversionService.convert(
                 userService.update(conversionService.convert(userUpdateDto, User.class)), UserResponseDto.class);
+    }
+
+    @GetMapping("/findAllByLoginPrefix")
+    public List<UserResponseDto> findAllByLoginPrefix(@RequestParam String prefix) {
+        return userService.findByLoginPrefix(prefix)
+                .stream()
+                .map(user -> conversionService.convert(user, UserResponseDto.class))
+                .toList();
     }
 }

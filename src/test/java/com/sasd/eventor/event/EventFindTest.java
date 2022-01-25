@@ -77,4 +77,32 @@ public class EventFindTest extends EventTest {
         assert !secondList.contains(eventSecond);
         assert secondList.contains(eventThird);
     }
+
+    @Test
+    public void findAllEventsByNamePrefix() {
+        var eventCreateDto = validEventCreateDtoWithoutJwt();
+        eventCreateDto.setName(VALID_NAME + "a");
+        eventCreateDto.setJwt(validJwt());
+        var firstEvent = eventController.create(eventCreateDto);
+        eventCreateDto.setName(VALID_NAME + "b");
+        eventCreateDto.setJwt(validJwt());
+        var secondEvent = eventController.create(eventCreateDto);
+        eventCreateDto.setName("Nonexistential flex");
+        eventCreateDto.setJwt(validJwt());
+        var thirdEvent = eventController.create(eventCreateDto);
+
+        var firstList = eventController.findAllByNamePrefix("");
+        var secondList = eventController.findAllByNamePrefix(VALID_NAME);
+        var thirdList = eventController.findAllByNamePrefix(VALID_NAME + "a");
+
+        assert firstList.contains(firstEvent);
+        assert firstList.contains(secondEvent);
+        assert firstList.contains(thirdEvent);
+        assert secondList.contains(firstEvent);
+        assert secondList.contains(secondEvent);
+        assert !secondList.contains(thirdEvent);
+        assert thirdList.contains(firstEvent);
+        assert !thirdList.contains(secondEvent);
+        assert !thirdList.contains(thirdEvent);
+    }
 }
