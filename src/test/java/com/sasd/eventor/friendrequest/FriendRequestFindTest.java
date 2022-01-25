@@ -1,8 +1,10 @@
 package com.sasd.eventor.friendrequest;
 
+import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.FriendRequestResponseDto;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.utils.UserUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,6 +20,15 @@ public class FriendRequestFindTest extends FriendRequestTest {
         var foundRequest = friendRequestController.findById(expectedRequest.getId());
         assert expectedRequest.getSenderLogin().equals(foundRequest.getSenderLogin());
         assert expectedRequest.getReceiverLogin().equals(foundRequest.getReceiverLogin());
+    }
+
+    @Test
+    public void ensureBadRequestForInvalidId() {
+        var request = friendRequestController.createRequest(validFriendRequestCreateDto());
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> friendRequestController.findById(request.getId() + 100)
+        );
     }
 
     @Test
@@ -37,6 +48,19 @@ public class FriendRequestFindTest extends FriendRequestTest {
                 UserUtils::validUserRegisterDto,
                 () -> receiverDto,
                 () -> friendRequestController.findAllIncoming(getJwt(receiverDto))
+        );
+    }
+
+    @Test
+    public void ensureBadRequestForInvalidJwt() {
+        friendRequestController.createRequest(validFriendRequestCreateDto());
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> friendRequestController.findAllIncoming("Invalid jwt")
+        );
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> friendRequestController.findAllOutgoing("Invalid jwt")
         );
     }
 

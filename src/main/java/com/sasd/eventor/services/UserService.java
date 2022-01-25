@@ -59,4 +59,9 @@ public class UserService {
         userRepository.save(first);
         userRepository.save(second);
     }
+
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    public List<User> findAllFriends(String login) {
+        return userRepository.findByLogin(login).get().getFriends();
+    }
 }
