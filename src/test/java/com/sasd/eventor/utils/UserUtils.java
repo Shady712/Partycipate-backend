@@ -7,11 +7,11 @@ import static org.apache.commons.lang3.RandomStringUtils.*;
 public class UserUtils {
 
     public static String validUserLogin() {
-        return randomAlphanumeric(4, 33);
+        return randomAlphanumeric(4, 23);
     }
 
     public static String validUserName() {
-        return randomAlphabetic(2, 33) + randomAlphabetic(2, 33);
+        return randomAlphabetic(2, 3) + randomAlphabetic(2, 33);
     }
 
     public static String validUserPassword() {
@@ -23,6 +23,26 @@ public class UserUtils {
         dto.setLogin(validUserLogin());
         dto.setName(validUserName());
         dto.setPassword(validUserPassword());
+        return dto;
+    }
+
+    public static UserRegisterDto validUserRegisterDto(String field, String value) {
+        var dto = new UserRegisterDto();
+        if (field.equals("login")) {
+            dto.setLogin(value);
+        } else {
+            dto.setLogin(validUserLogin());
+        }
+        if (field.equals("name")) {
+            dto.setLogin(value);
+        } else {
+            dto.setName(validUserName());
+        }
+        if (field.equals("password")) {
+            dto.setLogin(value);
+        } else {
+            dto.setPassword(validUserPassword());
+        }
         return dto;
     }
 }

@@ -7,6 +7,7 @@ import com.sasd.eventor.services.utils.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,5 +47,9 @@ public class UserService {
 
     public User update(User user) {
         return userRepository.save(user);
+    }
+
+    public List<User> findByLoginPrefix(String prefix) {
+        return userRepository.findByLoginStartingWith(prefix);
     }
 }

@@ -7,6 +7,7 @@ import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.services.EventService;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.event.EventListenerMethodProcessor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +47,14 @@ public class EventController {
         return eventService.findAllByCreator(
                 userService.findByLogin(login)
                    .orElseThrow(() -> new EventorException("User with provided login does not exist")))
+                .stream()
+                .map(event -> conversionService.convert(event, EventResponseDto.class))
+                .toList();
+    }
+
+    @GetMapping("/findAllByNamePrefix")
+    public List<EventResponseDto> findAllByNamePrefix(@RequestParam String prefix) {
+        return eventService.findAllByNamePrefix(prefix)
                 .stream()
                 .map(event -> conversionService.convert(event, EventResponseDto.class))
                 .toList();

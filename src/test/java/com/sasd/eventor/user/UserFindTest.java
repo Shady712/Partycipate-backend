@@ -5,6 +5,7 @@ import com.sasd.eventor.model.dtos.UserResponseDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static com.sasd.eventor.utils.UserUtils.validUserLogin;
 import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
 public class UserFindTest extends UserTest {
@@ -28,6 +29,28 @@ public class UserFindTest extends UserTest {
     @Test
     public void ensureBadRequestForInvalidJwtToken() {
         Assertions.assertThrows(EventorException.class, () -> userController.enterByJwt("invalid jwt"));
+    }
+
+    @Test
+    public void findAllByLoginPrefix() {
+        var login = validUserLogin();
+        var firstUser = userController.register(validUserRegisterDto("login", login + "a"));
+        var secondUser = userController.register(validUserRegisterDto("login", login + "b"));
+        var thirdUser = userController.register(validUserRegisterDto());
+
+        var firstList = userController.findAllByLoginPrefix("");
+        var secondList = userController.findAllByLoginPrefix(login);
+        var thirdList = userController.findAllByLoginPrefix(login + "a");
+
+        assert firstList.contains(firstUser);
+        assert firstList.contains(secondUser);
+        assert firstList.contains(thirdUser);
+        assert secondList.contains(firstUser);
+        assert secondList.contains(secondUser);
+        assert !secondList.contains(thirdUser);
+        assert thirdList.contains(firstUser);
+        assert !thirdList.contains(secondUser);
+        assert !thirdList.contains(thirdUser);
     }
 
     private UserResponseDto registerValidUser() {

@@ -25,4 +25,8 @@ public class EventService {
     public List<Event> findAllByCreator(User user) {
         return eventRepository.findAllByCreator(user);
     }
+
+    public List<Event> findAllByNamePrefix(String prefix) {
+        return eventRepository.findByNameContaining(prefix);
+    }
 }
