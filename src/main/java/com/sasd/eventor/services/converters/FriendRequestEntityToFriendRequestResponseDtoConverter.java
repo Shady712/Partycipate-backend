@@ -15,6 +15,7 @@ public class FriendRequestEntityToFriendRequestResponseDtoConverter
         record.setId(source.getId());
         record.setSenderLogin(source.getSender().getLogin());
         record.setReceiverLogin(source.getReceiver().getLogin());
+        record.setStatus(source.getStatus());
         return record;
     }
 }

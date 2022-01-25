@@ -1,6 +1,7 @@
 package com.sasd.eventor.model.entities;
 
 
+import com.sasd.eventor.model.enums.RequestStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,11 +22,5 @@ public class Invite {
     @JoinColumn(name = "event_id")
     private Event event;
     @Enumerated(EnumType.STRING)
-    private InviteStatus status;
-
-    public enum InviteStatus {
-        ACCEPTED,
-        WAITING,
-        DECLINED
-    }
+    private RequestStatus status;
 }

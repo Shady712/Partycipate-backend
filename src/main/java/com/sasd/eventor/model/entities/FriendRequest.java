@@ -1,8 +1,10 @@
 package com.sasd.eventor.model.entities;
 
+import com.sasd.eventor.model.enums.RequestStatus;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -18,4 +20,7 @@ public class FriendRequest {
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     private User receiver;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
 }
