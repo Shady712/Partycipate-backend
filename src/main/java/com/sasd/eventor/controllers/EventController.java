@@ -44,8 +44,8 @@ public class EventController {
     @GetMapping("/findAllByCreator")
     public List<EventResponseDto> findAllByCreator(@RequestParam String login) {
         return eventService.findAllByCreator(
-                userService.findByLogin(login)
-                   .orElseThrow(() -> new EventorException("User with provided login does not exist")))
+                        userService.findByLogin(login)
+                                .orElseThrow(() -> new EventorException("User with provided login does not exist")))
                 .stream()
                 .map(event -> conversionService.convert(event, EventResponseDto.class))
                 .toList();
@@ -61,10 +61,10 @@ public class EventController {
 
     @DeleteMapping("/delete")
     public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
-        if (userService.findByJwt(jwt).isEmpty()) {
-            throw new EventorException("You need to be authorized");
+        if (userService.findByJwt(jwt).isEmpty()
+                || !(findById(id).getCreator().getId().equals(userService.findByJwt(jwt).get().getId()))) {
+            throw new EventorException("You have no permission");
         } else {
-            findById(id); // проверяем есть ли такой, выкинет исключение, если такого нет
             eventService.deleteById(id);
         }
     }

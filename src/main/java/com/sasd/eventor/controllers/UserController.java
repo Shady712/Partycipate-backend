@@ -84,8 +84,8 @@ public class UserController {
 
     @DeleteMapping("/delete")
     public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
-        if (userService.findByJwt(jwt).isEmpty()) {
-            throw new EventorException("You need to be authorized");
+        if (userService.findByJwt(jwt).isEmpty() || !(userService.findByJwt(jwt).get().getId().equals(id))) {
+            throw new EventorException("You have no permission");
         } else {
             findById(id);
             userService.deleteById(id);

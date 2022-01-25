@@ -38,8 +38,10 @@ public class InviteController {
 
     @DeleteMapping("/delete")
     public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
-        if (userService.findByJwt(jwt).isEmpty()) {
-            throw new EventorException("You need to be authorized");
+        if (userService.findByJwt(jwt).isEmpty()
+                || !(findById(id).getEvent().getCreator().getId().equals(userService.findByJwt(jwt).get().getId())
+                    || findById(id).getReceiver().getId().equals(userService.findByJwt(jwt).get().getId()))) {
+            throw new EventorException("You have no permission");
         } else {
             findById(id);
             inviteService.deleteById(id);

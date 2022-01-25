@@ -9,7 +9,7 @@ public class InviteCreateTest extends InviteTest {
 
     @Test
     public void createValidInvite() {
-        var jwt = registerValidUserAndGetJwt();
+        var jwt = validJwt();
         var createdEvent = createEvent(jwt);
         var inviteCreateDto = validInviteCreateDto(
                 jwtService.decodeJwtToId(jwt), createdEvent.getId());

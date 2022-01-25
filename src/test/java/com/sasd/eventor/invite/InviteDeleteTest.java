@@ -11,29 +11,23 @@ public class InviteDeleteTest extends InviteTest {
 
     @Test
     public void ensureBadRequestForFindingDeletedInvite() {
-        var jwt = registerValidUserAndGetJwt();
+        var jwt = validJwt();
         var createdEvent = createEvent(jwt);
         var inviteCreateDto = validInviteCreateDto(
                 jwtService.decodeJwtToId(jwt), createdEvent.getId());
         var createdInvite = inviteController.create(inviteCreateDto);
-        inviteController.deleteById(createdInvite.getId(), getJwt());
+        inviteController.deleteById(createdInvite.getId(), validJwt());
         Assertions.assertThrows(EventorException.class, () -> eventController.findById(createdInvite.getId()));
     }
 
     @Test
     public void ensureBadRequestForDeletingUncreatedInvite() {
-        var jwt = registerValidUserAndGetJwt();
+        var jwt = validJwt();
         var createdEvent = createEvent(jwt);
         var inviteCreateDto = validInviteCreateDto(
                 jwtService.decodeJwtToId(jwt), createdEvent.getId());
         var createdInvite = inviteController.create(inviteCreateDto);
         Assertions.assertThrows(EventorException.class,
-                () -> inviteController.deleteById(createdInvite.getId() + 100, getJwt()));
-    }
-
-    private String getJwt() {
-        var userRegisterDto = validUserRegisterDto();
-        userController.register(userRegisterDto);
-        return userController.createJwt(userRegisterDto.getLogin(), userRegisterDto.getPassword());
+                () -> inviteController.deleteById(createdInvite.getId() + 100, validJwt()));
     }
 }

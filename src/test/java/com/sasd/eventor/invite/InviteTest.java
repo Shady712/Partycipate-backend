@@ -6,7 +6,8 @@ import com.sasd.eventor.controllers.UserController;
 import com.sasd.eventor.model.daos.InviteRepository;
 import static com.sasd.eventor.utils.EventUtils.validEventCreateDtoWithoutJwt;
 import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
-import com.sasd.eventor.model.entities.Event;
+
+import com.sasd.eventor.model.dtos.EventResponseDto;
 import com.sasd.eventor.services.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,15 +25,15 @@ public abstract class InviteTest {
     @Autowired
     protected JwtService jwtService;
 
-    public String registerValidUserAndGetJwt() {
-        var dto = validUserRegisterDto();
-        userController.register(dto);
-        return userController.createJwt(dto.getLogin(), dto.getPassword());
-    }
-
-    public Event createEvent(String jwt) {
+    public EventResponseDto createEvent(String jwt) {
         var eventCreateDto = validEventCreateDtoWithoutJwt();
         eventCreateDto.setJwt(jwt);
         return eventController.create(eventCreateDto);
+    }
+
+    protected String validJwt() {
+        var userRegisterDto = validUserRegisterDto();
+        userController.register(userRegisterDto);
+        return userController.createJwt(userRegisterDto.getLogin(), userRegisterDto.getPassword());
     }
 }
