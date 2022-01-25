@@ -4,33 +4,36 @@ import com.sasd.eventor.exception.EventorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
 import static com.sasd.eventor.utils.EventUtils.*;
-import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
 public class EventDeleteTest extends EventTest {
 
     @Test
+    public void ensureBadRequestForDeniedPermission() {
+        var eventCreateDto = validEventCreateDtoWithoutJwt();
+        var jwt = validJwt();
+        eventCreateDto.setJwt(jwt);
+        var createdEvent = eventController.create(eventCreateDto);
+        Assertions.assertThrows(EventorException.class, () -> eventController.deleteById(createdEvent.getId(), validJwt()));
+    }
+
+    @Test
     public void ensureBadRequestForFindingDeletedEvent() {
         var eventCreateDto = validEventCreateDtoWithoutJwt();
-        eventCreateDto.setJwt(validJwt());
+        var jwt = validJwt();
+        eventCreateDto.setJwt(jwt);
         var createdEvent = eventController.create(eventCreateDto);
-        eventController.deleteById(createdEvent.getId(), getJwt());
+        eventController.deleteById(createdEvent.getId(), jwt);
         Assertions.assertThrows(EventorException.class, () -> eventController.findById(createdEvent.getId()));
     }
 
     @Test
     public void ensureBadRequestForDeletingUncreatedEvent() {
         var eventCreateDto = validEventCreateDtoWithoutJwt();
-        eventCreateDto.setJwt(validJwt());
+        var jwt = validJwt();
+        eventCreateDto.setJwt(jwt);
         var createdEvent = eventController.create(eventCreateDto);
         Assertions.assertThrows(EventorException.class,
-                () -> eventController.deleteById(createdEvent.getId() + 100, getJwt()));
-    }
-
-    private String getJwt() {
-        var userRegisterDto = validUserRegisterDto();
-        userController.register(userRegisterDto);
-        return userController.createJwt(userRegisterDto.getLogin(), userRegisterDto.getPassword());
+                () -> eventController.deleteById(createdEvent.getId() + 100, jwt));
     }
 }
