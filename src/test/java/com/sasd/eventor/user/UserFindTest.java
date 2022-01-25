@@ -5,8 +5,7 @@ import com.sasd.eventor.model.dtos.UserResponseDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static com.sasd.eventor.utils.UserUtils.validUserLogin;
-import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
+import static com.sasd.eventor.utils.UserUtils.*;
 
 public class UserFindTest extends UserTest {
 
@@ -34,8 +33,16 @@ public class UserFindTest extends UserTest {
     @Test
     public void findAllByLoginPrefix() {
         var login = validUserLogin();
-        var firstUser = userController.register(validUserRegisterDto("login", login + "a"));
-        var secondUser = userController.register(validUserRegisterDto("login", login + "b"));
+        var firstUser = userController.register(validUserRegisterDto(
+                login+'a',
+                validUserName(),
+                validUserPassword()
+        ));
+        var secondUser = userController.register(validUserRegisterDto(
+                login+'b',
+                validUserName(),
+                validUserPassword()
+        ));
         var thirdUser = userController.register(validUserRegisterDto());
 
         var firstList = userController.findAllByLoginPrefix("");

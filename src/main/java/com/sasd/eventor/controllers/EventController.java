@@ -7,7 +7,6 @@ import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.services.EventService;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.event.EventListenerMethodProcessor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 

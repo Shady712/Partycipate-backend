@@ -27,6 +27,6 @@ public class EventService {
     }
 
     public List<Event> findAllByNamePrefix(String prefix) {
-        return eventRepository.findByNameContaining(prefix);
+        return eventRepository.findByNameStartingWith(prefix);
     }
 }

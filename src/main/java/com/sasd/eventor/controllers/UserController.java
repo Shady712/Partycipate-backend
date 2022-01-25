@@ -76,7 +76,7 @@ public class UserController {
 
     @GetMapping("/findAllByLoginPrefix")
     public List<UserResponseDto> findAllByLoginPrefix(@RequestParam String prefix) {
-        return userService.findByLoginPrefix(prefix)
+        return userService.findAllByLoginPrefix(prefix)
                 .stream()
                 .map(user -> conversionService.convert(user, UserResponseDto.class))
                 .toList();
