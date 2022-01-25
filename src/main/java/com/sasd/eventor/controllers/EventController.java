@@ -74,4 +74,14 @@ public class EventController {
                 EventResponseDto.class
         );
     }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
+        if (userService.findByJwt(jwt).isEmpty()
+                || !(findById(id).getCreator().getId().equals(userService.findByJwt(jwt).get().getId()))) {
+            throw new EventorException("You have no permission");
+        } else {
+            eventService.deleteById(id);
+        }
+    }
 }
