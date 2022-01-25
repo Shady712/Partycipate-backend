@@ -52,4 +52,11 @@ public class UserService {
     public List<User> findAllByLoginPrefix(String prefix) {
         return userRepository.findByLoginStartingWith(prefix);
     }
+
+    public void befriend(User first, User second) {
+        first.getFriends().add(second);
+        second.getFriends().add(first);
+        userRepository.save(first);
+        userRepository.save(second);
+    }
 }
