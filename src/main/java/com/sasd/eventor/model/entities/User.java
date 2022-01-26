@@ -2,6 +2,8 @@ package com.sasd.eventor.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -32,5 +34,7 @@ public class User {
             joinColumns = { @JoinColumn(name = "first_user_id") },
             inverseJoinColumns = { @JoinColumn(name = "second_user_id") }
     )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<User> friends;
 }

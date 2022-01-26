@@ -14,14 +14,15 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
 
     @Test
     public void acceptValidRequest() {
-        var request = abstractHappyPathTest(
-                ((id, receiverJwt) -> friendRequestController.acceptRequest(id, receiverJwt)),
-                ACCEPTED
-        );
-        assert userController.findAllFriends(request.getSenderLogin()).stream()
-                .anyMatch(userResponseDto -> userResponseDto.getLogin().equals(request.getReceiverLogin()));
-        assert userController.findAllFriends(request.getReceiverLogin()).stream()
-                .anyMatch(userResponseDto -> userResponseDto.getLogin().equals(request.getSenderLogin()));
+        abstractAcceptRequestTest(((id, receiverJwt) -> friendRequestController.acceptRequest(id, receiverJwt)));
+    }
+
+    @Test
+    public void acceptRejectedRequest() {
+        abstractAcceptRequestTest((id, receiverJwt) ->  {
+            friendRequestController.rejectRequest(id, receiverJwt);
+            return friendRequestController.acceptRequest(id, receiverJwt);
+        });
     }
 
     @Test
@@ -79,15 +80,36 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
         var request = friendRequestController.createRequest(
                 validFriendRequestCreateDto(validUserRegisterDto(), receiverDto)
         );
-        friendRequestController.acceptRequest(request.getId(), getJwt(receiverDto));
+        var rejectedRequest = friendRequestController.createRequest(
+                validFriendRequestCreateDto(validUserRegisterDto(), receiverDto)
+        );
+        var receiverJwt = getJwt(receiverDto);
+        friendRequestController.rejectRequest(rejectedRequest.getId(), receiverJwt);
+        friendRequestController.acceptRequest(request.getId(), receiverJwt);
+
         Assertions.assertThrows(
                 EventorException.class,
-                () -> friendRequestController.acceptRequest(request.getId(), getJwt(receiverDto))
+                () -> friendRequestController.acceptRequest(request.getId(), receiverJwt)
         );
         Assertions.assertThrows(
                 EventorException.class,
-                () -> friendRequestController.rejectRequest(request.getId(), getJwt(receiverDto))
+                () -> friendRequestController.rejectRequest(request.getId(), receiverJwt)
         );
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> friendRequestController.rejectRequest(rejectedRequest.getId(), receiverJwt)
+        );
+    }
+
+    private void abstractAcceptRequestTest(RequestHandler requestHandler) {
+        var request = abstractHappyPathTest(
+                requestHandler,
+                ACCEPTED
+        );
+        assert userController.findAllFriends(request.getSenderLogin()).stream()
+                .anyMatch(userResponseDto -> userResponseDto.getLogin().equals(request.getReceiverLogin()));
+        assert userController.findAllFriends(request.getReceiverLogin()).stream()
+                .anyMatch(userResponseDto -> userResponseDto.getLogin().equals(request.getSenderLogin()));
     }
 
     private FriendRequestResponseDto abstractHappyPathTest(RequestHandler requestHandler, RequestStatus status) {
@@ -104,7 +126,6 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
 
         return updatedRequest;
     }
-
     private interface RequestHandler {
         FriendRequestResponseDto handleRequest(Long id, String receiverJwt);
     }
