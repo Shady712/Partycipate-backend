@@ -126,6 +126,7 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
 
         return updatedRequest;
     }
+
     private interface RequestHandler {
         FriendRequestResponseDto handleRequest(Long id, String receiverJwt);
     }
