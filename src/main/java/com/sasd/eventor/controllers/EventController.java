@@ -3,6 +3,7 @@ package com.sasd.eventor.controllers;
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.EventCreateDto;
 import com.sasd.eventor.model.dtos.EventResponseDto;
+import com.sasd.eventor.model.dtos.EventUpdateDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.services.EventService;
 import com.sasd.eventor.services.UserService;
@@ -57,5 +58,20 @@ public class EventController {
                 .stream()
                 .map(event -> conversionService.convert(event, EventResponseDto.class))
                 .toList();
+    }
+
+    @PutMapping("/update")
+    public EventResponseDto update(@RequestBody @Valid EventUpdateDto eventUpdateDto) {
+        if (!userService.findByJwt(eventUpdateDto.getJwt())
+                .orElseThrow(() -> new EventorException("You are not authorized")).
+                equals(eventService.findById(eventUpdateDto.getId())
+                        .orElseThrow(() -> new EventorException("Event with provided id does not exist")).getCreator())
+        ) {
+            throw new EventorException("You do not have such permission");
+        }
+        return conversionService.convert(
+                eventService.update(conversionService.convert(eventUpdateDto, Event.class)),
+                EventResponseDto.class
+        );
     }
 }

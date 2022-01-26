@@ -26,6 +26,10 @@ public class EventService {
         return eventRepository.findAllByCreator(user);
     }
 
+    public Event update(Event event) {
+        return eventRepository.save(event);
+    }
+
     public List<Event> findAllByNamePrefix(String prefix) {
         return eventRepository.findByNameStartingWith(prefix);
     }

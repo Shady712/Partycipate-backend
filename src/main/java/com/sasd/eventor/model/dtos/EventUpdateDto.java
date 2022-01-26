@@ -3,13 +3,15 @@ package com.sasd.eventor.model.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Lob;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class EventCreateDto {
+public class EventUpdateDto {
+    @NotNull
+    private Long id;
     @NotNull
     @NotEmpty
     @Size(min = 4, max = 100)
