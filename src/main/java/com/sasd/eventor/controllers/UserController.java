@@ -70,8 +70,13 @@ public class UserController {
 
     @PutMapping("/update")
     public UserResponseDto update(@RequestBody @Valid UserUpdateDto userUpdateDto) {
+        if (userService.findByJwt(userUpdateDto.getJwt()).isEmpty()) {
+            throw new EventorException("You are not authorized");
+        }
         return conversionService.convert(
-                userService.update(conversionService.convert(userUpdateDto, User.class)), UserResponseDto.class);
+                userService.update(conversionService.convert(userUpdateDto, User.class)),
+                UserResponseDto.class
+        );
     }
 
     @GetMapping("/findAllByLoginPrefix")
