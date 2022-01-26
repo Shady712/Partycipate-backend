@@ -88,7 +88,6 @@ public class UserController {
                 .toList();
     }
 
-    // TODO: test this
     @Transactional
     @GetMapping("/findAllFriends")
     public List<UserResponseDto> findAllFriends(@RequestParam String login) {
