@@ -110,7 +110,7 @@ public class FriendRequestController {
         var foundRequest = friendRequestService.findById(id);
         var foundSender = userService.findByJwt(senderJwt);
         if (foundRequest.isEmpty() || foundSender.isEmpty()
-                || foundRequest.get().getSender().getLogin().equals(foundSender.get().getLogin())
+                || !foundRequest.get().getSender().getLogin().equals(foundSender.get().getLogin())
         ) {
             throw new EventorException("You do not have such permission");
         }

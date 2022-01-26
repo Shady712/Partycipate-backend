@@ -1,9 +1,12 @@
 package com.sasd.eventor.user;
 
 import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.dtos.FriendRequestCreateDto;
 import com.sasd.eventor.model.dtos.UserResponseDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.stream.Stream;
 
 import static com.sasd.eventor.utils.UserUtils.*;
 
@@ -58,6 +61,42 @@ public class UserFindTest extends UserTest {
         assert thirdList.contains(firstUser);
         assert !thirdList.contains(secondUser);
         assert !thirdList.contains(thirdUser);
+    }
+
+    @Test
+    public void findAllFriendsByValidLogin() {
+        var sender = validUserRegisterDto();
+        var firstFriend = validUserRegisterDto();
+        var secondFriend = validUserRegisterDto();
+        userController.register(sender);
+        var friendRequestCreateDto = new FriendRequestCreateDto();
+        friendRequestCreateDto.setSenderJwt(userController.createJwt(sender.getLogin(), sender.getPassword()));
+        Stream.of(firstFriend, secondFriend).forEach(friend -> {
+            userController.register(friend);
+            friendRequestCreateDto.setReceiverLogin(friend.getLogin());
+            friendRequestController.acceptRequest(
+                    friendRequestController.createRequest(friendRequestCreateDto).getId(),
+                    userController.createJwt(friend.getLogin(), friend.getPassword())
+            );
+        });
+
+        var friends = userController.findAllFriends(sender.getLogin());
+
+        assert Stream.of(
+                        firstFriend.getLogin(),
+                        secondFriend.getLogin()
+                ).map(login -> userController.findByLogin(login)).toList()
+                .equals(friends);
+        assert !friends.contains(registerValidUser());
+    }
+
+    @Test
+    public void ensureBadRequestOnFindAllFriendsByInvalidLogin() {
+        registerValidUser();
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> userController.findAllFriends(validUserLogin())
+        );
     }
 
     private UserResponseDto registerValidUser() {
