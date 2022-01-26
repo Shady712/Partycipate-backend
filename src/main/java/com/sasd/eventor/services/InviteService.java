@@ -5,6 +5,7 @@ import com.sasd.eventor.model.entities.Invite;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,5 +19,13 @@ public class InviteService {
 
     public Invite create(Invite invite) {
         return inviteRepository.save(invite);
+    }
+
+    public List<Invite> findAllIncoming(Long receiverId) {
+        return inviteRepository.findAllByReceiverId(receiverId);
+    }
+
+    public List<Invite> findAllByEventId(Long inviteId) {
+        return inviteRepository.findAllByEventId(inviteId);
     }
 }
