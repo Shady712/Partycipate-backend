@@ -1,7 +1,9 @@
 package com.sasd.eventor.services;
 
 import com.sasd.eventor.model.daos.InviteRepository;
+import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.model.entities.Invite;
+import com.sasd.eventor.model.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +23,11 @@ public class InviteService {
         return inviteRepository.save(invite);
     }
 
-    public List<Invite> findAllIncoming(Long receiverId) {
-        return inviteRepository.findAllByReceiverId(receiverId);
+    public List<Invite> findAllIncoming(User receiver) {
+        return inviteRepository.findAllByReceiver(receiver);
     }
 
-    public List<Invite> findAllByEventId(Long inviteId) {
-        return inviteRepository.findAllByEventId(inviteId);
+    public List<Invite> findAllByEventId(Event event) {
+        return inviteRepository.findAllByEvent(event);
     }
 }
