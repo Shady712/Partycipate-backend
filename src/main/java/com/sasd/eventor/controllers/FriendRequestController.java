@@ -28,7 +28,7 @@ public class FriendRequestController {
     private final ConversionService conversionService;
 
     private static final Set<RequestStatus> ACCEPTABLE_STATUSES = Set.of(WAITING, REJECTED);
-    private static final Set<RequestStatus> REJECTABLE_STATUSES =Set.of(WAITING);
+    private static final Set<RequestStatus> REJECTABLE_STATUSES = Set.of(WAITING);
 
     @Transactional
     @PostMapping("/create")
