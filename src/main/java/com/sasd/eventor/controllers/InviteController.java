@@ -47,15 +47,16 @@ public class InviteController {
 
     @GetMapping("/findAllByEventId")
     public List<Invite> findAllByEventId(@RequestParam Long eventId, String creatorJwt) {
+        var event = eventService.findById(eventId);
         if (!userService.findByJwt(creatorJwt)
                 .orElseThrow(() -> new EventorException("You are not authorized"))
-                .equals(eventService.findById(eventId)
+                .equals(event
                         .orElseThrow(() -> new EventorException("Event with provided id does not exist"))
                         .getCreator()
                 )
         ) {
             throw new EventorException("You do not have such permission");
         }
-        return inviteService.findAllByEventId(eventService.findById(eventId).get());
+        return inviteService.findAllByEventId(event.get());
     }
 }
