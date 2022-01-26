@@ -11,6 +11,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -34,5 +35,28 @@ public class InviteController {
             throw new EventorException("Invalid receiver id or event id");
         }
         return inviteService.create(conversionService.convert(inviteCreateDto, Invite.class));
+    }
+
+    @GetMapping("/findAllIncoming")
+    public List<Invite> findAllIncoming(@RequestParam String jwt) {
+        return inviteService.findAllIncoming(
+                userService.findByJwt(jwt)
+                        .orElseThrow(() -> new EventorException("You are not Authorized"))
+                        .getId()
+        );
+    }
+
+    @GetMapping("/findAllByEventId")
+    public List<Invite> findAllByEventId(@RequestParam Long eventId, String creatorJwt) {
+        if (!userService.findByJwt(creatorJwt)
+                .orElseThrow(() -> new EventorException("You are not Authorized"))
+                .equals(eventService.findById(eventId)
+                        .orElseThrow(() -> new EventorException("Event does not exist"))
+                        .getCreator()
+                )
+        ) {
+            throw new EventorException("You do not have permission");
+        }
+        return inviteService.findAllByEventId(eventId);
     }
 }
