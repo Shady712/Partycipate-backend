@@ -27,6 +27,9 @@ public class FriendRequestController {
     private final FriendRequestService friendRequestService;
     private final ConversionService conversionService;
 
+    private static final Set<RequestStatus> ACCEPTABLE_STATUSES = Set.of(WAITING, REJECTED);
+    private static final Set<RequestStatus> REJECTABLE_STATUSES =Set.of(WAITING);
+
     @Transactional
     @PostMapping("/create")
     public FriendRequestResponseDto createRequest(@RequestBody @Valid FriendRequestCreateDto friendRequestCreateDto) {
@@ -42,28 +45,7 @@ public class FriendRequestController {
                                 reverseRequest.getId(),
                                 friendRequestCreateDto.getSenderJwt()
                         ),
-                        () -> {
-                            if (userService.findByLogin(friendRequestCreateDto.getReceiverLogin()).isEmpty()) {
-                                throw new EventorException("Invalid receiver");
-                            }
-
-                            if (findAllOutgoing(friendRequestCreateDto.getSenderJwt())
-                                    .stream()
-                                    .anyMatch(friendRequestResponseDto ->
-                                            friendRequestResponseDto.getReceiverLogin()
-                                                    .equals(friendRequestCreateDto.getReceiverLogin()))
-                            ) {
-                                throw new EventorException("You have already sent a friend request to user "
-                                        + friendRequestCreateDto.getReceiverLogin());
-                            }
-
-                            ref.response = conversionService.convert(
-                                    friendRequestService.create(conversionService.convert(
-                                            friendRequestCreateDto, FriendRequest.class
-                                    )),
-                                    FriendRequestResponseDto.class
-                            );
-                        }
+                        () -> ref.response = createValidatedRequest(friendRequestCreateDto)
                 );
         return ref.response;
     }
@@ -101,7 +83,7 @@ public class FriendRequestController {
     @PutMapping("/accept")
     public FriendRequestResponseDto acceptRequest(@RequestParam Long id, @RequestParam String receiverJwt) {
         return conversionService.convert(
-                friendRequestService.acceptRequest(getValidatedRequest(id, receiverJwt, Set.of(WAITING, REJECTED))),
+                friendRequestService.acceptRequest(getValidatedRequest(id, receiverJwt, ACCEPTABLE_STATUSES)),
                 FriendRequestResponseDto.class
         );
     }
@@ -110,7 +92,7 @@ public class FriendRequestController {
     @PutMapping("/reject")
     public FriendRequestResponseDto rejectRequest(@RequestParam Long id, @RequestParam String receiverJwt) {
         return conversionService.convert(
-                friendRequestService.rejectRequest(getValidatedRequest(id, receiverJwt, Set.of(WAITING))),
+                friendRequestService.rejectRequest(getValidatedRequest(id, receiverJwt, REJECTABLE_STATUSES)),
                 FriendRequestResponseDto.class
         );
     }
@@ -137,5 +119,28 @@ public class FriendRequestController {
             throw new EventorException("You do not have such permission");
         }
         return foundRequest.get();
+    }
+
+    private FriendRequestResponseDto createValidatedRequest(FriendRequestCreateDto friendRequestCreateDto) {
+        if (userService.findByLogin(friendRequestCreateDto.getReceiverLogin()).isEmpty()) {
+            throw new EventorException("Invalid receiver");
+        }
+
+        if (findAllOutgoing(friendRequestCreateDto.getSenderJwt())
+                .stream()
+                .anyMatch(friendRequestResponseDto ->
+                        friendRequestResponseDto.getReceiverLogin()
+                                .equals(friendRequestCreateDto.getReceiverLogin()))
+        ) {
+            throw new EventorException("You have already sent a friend request to user "
+                    + friendRequestCreateDto.getReceiverLogin());
+        }
+
+        return conversionService.convert(
+                friendRequestService.create(conversionService.convert(
+                        friendRequestCreateDto, FriendRequest.class
+                )),
+                FriendRequestResponseDto.class
+        );
     }
 }
