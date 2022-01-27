@@ -22,12 +22,6 @@ public class InviteController {
     private final EventService eventService;
     private final ConversionService conversionService;
 
-    @RequestMapping("/findById")
-    public Invite findById(@RequestParam Long id) {
-        return inviteService.findById(id)
-                .orElseThrow(() -> new EventorException("Invite with provided id does not exist"));
-    }
-
     @PostMapping("/create")
     public Invite create(@RequestBody @Valid InviteCreateDto inviteCreateDto) {
         if (userService.findById(inviteCreateDto.getReceiverId()).isEmpty() ||
@@ -35,6 +29,12 @@ public class InviteController {
             throw new EventorException("Invalid receiver id or event id");
         }
         return inviteService.create(conversionService.convert(inviteCreateDto, Invite.class));
+    }
+
+    @RequestMapping("/findById")
+    public Invite findById(@RequestParam Long id) {
+        return inviteService.findById(id)
+                .orElseThrow(() -> new EventorException("Invite with provided id does not exist"));
     }
 
     @GetMapping("/findAllIncoming")
