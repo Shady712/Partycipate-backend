@@ -15,4 +15,6 @@ public class InviteCreateDto {
     private Long eventId;
     @Size(max = 600)
     private String message;
+    @NotNull
+    private String jwt;
 }

@@ -24,9 +24,17 @@ public class InviteController {
 
     @PostMapping("/create")
     public Invite create(@RequestBody @Valid InviteCreateDto inviteCreateDto) {
+        var foundEvent = eventService.findById(inviteCreateDto.getEventId());
+        var foundCreator = userService.findByJwt(inviteCreateDto.getJwt());
         if (userService.findById(inviteCreateDto.getReceiverId()).isEmpty() ||
-                eventService.findById(inviteCreateDto.getEventId()).isEmpty()) {
+                foundEvent.isEmpty()) {
             throw new EventorException("Invalid receiver id or event id");
+        }
+        if (foundCreator.isEmpty()
+                || foundCreator.get().getId().equals(inviteCreateDto.getReceiverId())
+                || !foundEvent.get().getCreator().equals(foundCreator.get())
+        ) {
+            throw new EventorException("You do not have such permission");
         }
         return inviteService.create(conversionService.convert(inviteCreateDto, Invite.class));
     }
@@ -62,12 +70,14 @@ public class InviteController {
 
     @DeleteMapping("/delete")
     public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
-        if (userService.findByJwt(jwt).isEmpty()
-                || !(findById(id).getEvent().getCreator().getId().equals(userService.findByJwt(jwt).get().getId())
-                || findById(id).getReceiver().getId().equals(userService.findByJwt(jwt).get().getId()))) {
+        var foundUser = userService.findByJwt(jwt);
+        var foundInvite = inviteService.findById(id);
+        if (foundUser.isEmpty()
+                || foundInvite.isEmpty()
+                || !(foundInvite.get().getEvent().getCreator().equals(foundUser.get()))
+        ) {
             throw new EventorException("You have no permission");
         } else {
-            findById(id);
             inviteService.deleteById(id);
         }
     }
