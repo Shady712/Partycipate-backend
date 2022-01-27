@@ -1,10 +1,12 @@
 package com.sasd.eventor.event;
 
 import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.daos.EventRepository;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.model.entities.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Random;
@@ -15,7 +17,7 @@ import static com.sasd.eventor.utils.UserUtils.*;
 public class EventFindTest extends EventTest {
 
     @Test
-    public void findExistingEvent() {
+    public void findExistingEvent(@Autowired EventRepository eventRepository) {
         var event = new Event();
         event.setName(VALID_NAME);
         event.setDate(VALID_DATE);

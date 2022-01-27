@@ -2,7 +2,6 @@ package com.sasd.eventor.user;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.FriendRequestCreateDto;
-import com.sasd.eventor.model.dtos.UserResponseDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,7 @@ public class UserFindTest extends UserTest {
 
     @Test
     public void findExistingUserById() {
-        var expectedUser = registerValidUser();
+        var expectedUser = registerUser();
         var foundUser = userController.findById(expectedUser.getId());
         assert expectedUser.getLogin().equals(foundUser.getLogin());
         assert expectedUser.getName().equals(foundUser.getName());
@@ -22,7 +21,7 @@ public class UserFindTest extends UserTest {
 
     @Test
     public void findExistingUserByLogin() {
-        var expectedUser = registerValidUser();
+        var expectedUser = registerUser();
         var foundUser = userController.findByLogin(expectedUser.getLogin());
         assert expectedUser.getLogin().equals(foundUser.getLogin());
         assert expectedUser.getName().equals(foundUser.getName());
@@ -87,19 +86,15 @@ public class UserFindTest extends UserTest {
                         secondFriend.getLogin()
                 ).map(login -> userController.findByLogin(login)).toList()
                 .equals(friends);
-        assert !friends.contains(registerValidUser());
+        assert !friends.contains(registerUser());
     }
 
     @Test
     public void ensureBadRequestOnFindAllFriendsByInvalidLogin() {
-        registerValidUser();
+        registerUser();
         Assertions.assertThrows(
                 EventorException.class,
                 () -> userController.findAllFriends(validUserLogin())
         );
-    }
-
-    private UserResponseDto registerValidUser() {
-        return userController.register(validUserRegisterDto());
     }
 }

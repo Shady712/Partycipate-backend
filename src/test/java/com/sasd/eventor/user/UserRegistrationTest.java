@@ -1,15 +1,17 @@
 package com.sasd.eventor.user;
 
 import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.daos.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.sasd.eventor.utils.UserUtils.*;
 
 public class UserRegistrationTest extends UserTest {
 
     @Test
-    public void registerValidUser() {
+    public void registerValidUser(@Autowired UserRepository userRepository) {
         var userRegisterDto = validUserRegisterDto();
         userController.register(userRegisterDto);
         var foundUser = userRepository
