@@ -1,39 +1,57 @@
 package com.sasd.eventor.invite;
 
 import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.entities.Invite;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static com.sasd.eventor.utils.EventUtils.validEventCreateDtoWithoutJwt;
 import static com.sasd.eventor.utils.InviteUtils.validInviteCreateDto;
 
 public class InviteDeleteTest extends InviteTest {
 
     @Test
     public void ensureBadRequestForPermissionDenied() {
-        var jwt = validJwt();
-        var createdEvent = createEvent(jwt);
-        var createdInvite = inviteController.create(validInviteCreateDto(
-                jwtService.decodeJwtToId(jwt), createdEvent.getId()));
-        Assertions.assertThrows(EventorException.class, () -> inviteController.deleteById(createdInvite.getId(), validJwt()));
+        var createdInviteData = new createdInviteData();
+        Assertions.assertThrows(EventorException.class,
+                () -> inviteController.deleteById(createdInviteData.getCreatedInvite().getId(), validJwt()));
     }
 
     @Test
     public void ensureBadRequestForFindingDeletedInvite() {
-        var jwt = validJwt();
-        var createdEvent = createEvent(jwt);
-        var createdInvite = inviteController.create(validInviteCreateDto(
-                jwtService.decodeJwtToId(jwt), createdEvent.getId()));
-        inviteController.deleteById(createdInvite.getId(), jwt);
-        Assertions.assertThrows(EventorException.class, () -> inviteController.findById(createdInvite.getId()));
+        var createdInviteData = new createdInviteData();
+        inviteController.deleteById(createdInviteData.getCreatedInvite().getId(), createdInviteData.getCreatorJwt());
+        Assertions.assertThrows(EventorException.class,
+                () -> inviteController.findById(createdInviteData.getCreatedInvite().getId()));
     }
 
     @Test
     public void ensureBadRequestForDeletingUncreatedInvite() {
-        var jwt = validJwt();
-        var createdEvent = createEvent(jwt);
-        var createdInvite = inviteController.create(validInviteCreateDto(
-                jwtService.decodeJwtToId(jwt), createdEvent.getId()));
+        var createdInviteData = new createdInviteData();
         Assertions.assertThrows(EventorException.class,
-                () -> inviteController.deleteById(createdInvite.getId() + 100, jwt));
+                () -> inviteController.deleteById(createdInviteData.getCreatedInvite().getId() + 100,
+                        createdInviteData.getCreatorJwt()));
+    }
+
+    protected class createdInviteData {
+        private final Invite createdInvite;
+        private final String creatorJwt;
+
+        private createdInviteData() {
+            var eventCreateDto = validEventCreateDtoWithoutJwt();
+            creatorJwt = validJwt();
+            eventCreateDto.setJwt(creatorJwt);
+            var createdEvent = createEvent(validJwt());
+            createdInvite = inviteController.create(validInviteCreateDto(
+                    jwtService.decodeJwtToId(validJwt()), createdEvent.getId(), creatorJwt));
+        }
+
+        private String getCreatorJwt() {
+            return creatorJwt;
+        }
+
+        public Invite getCreatedInvite() {
+            return createdInvite;
+        }
     }
 }

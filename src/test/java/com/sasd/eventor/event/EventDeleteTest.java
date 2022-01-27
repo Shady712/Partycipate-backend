@@ -1,6 +1,7 @@
 package com.sasd.eventor.event;
 
 import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.dtos.EventResponseDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,30 +11,44 @@ public class EventDeleteTest extends EventTest {
 
     @Test
     public void ensureBadRequestForDeniedPermission() {
-        var eventCreateDto = validEventCreateDtoWithoutJwt();
-        var jwt = validJwt();
-        eventCreateDto.setJwt(jwt);
-        var createdEvent = eventController.create(eventCreateDto);
-        Assertions.assertThrows(EventorException.class, () -> eventController.deleteById(createdEvent.getId(), validJwt()));
+        var createdEventData = new createdEventData();
+        Assertions.assertThrows(EventorException.class,
+                () -> eventController.deleteById(createdEventData.getCreatedEvent().getId(), validJwt()));
     }
 
     @Test
     public void ensureBadRequestForFindingDeletedEvent() {
-        var eventCreateDto = validEventCreateDtoWithoutJwt();
-        var jwt = validJwt();
-        eventCreateDto.setJwt(jwt);
-        var createdEvent = eventController.create(eventCreateDto);
-        eventController.deleteById(createdEvent.getId(), jwt);
-        Assertions.assertThrows(EventorException.class, () -> eventController.findById(createdEvent.getId()));
+        var createdEventData = new createdEventData();
+        eventController.deleteById(createdEventData.getCreatedEvent().getId(), createdEventData.getCreatorJwt());
+        Assertions.assertThrows(EventorException.class,
+                () -> eventController.findById(createdEventData.getCreatedEvent().getId()));
     }
 
     @Test
     public void ensureBadRequestForDeletingUncreatedEvent() {
-        var eventCreateDto = validEventCreateDtoWithoutJwt();
-        var jwt = validJwt();
-        eventCreateDto.setJwt(jwt);
-        var createdEvent = eventController.create(eventCreateDto);
+        var createdEventData = new createdEventData();
         Assertions.assertThrows(EventorException.class,
-                () -> eventController.deleteById(createdEvent.getId() + 100, jwt));
+                () -> eventController.deleteById(createdEventData.getCreatedEvent().getId() + 100,
+                        createdEventData.getCreatorJwt()));
+    }
+
+    private class createdEventData {
+        private final EventResponseDto createdEvent;
+        private final String creatorJwt;
+
+        private createdEventData() {
+            var eventCreateDto = validEventCreateDtoWithoutJwt();
+            creatorJwt = validJwt();
+            eventCreateDto.setJwt(creatorJwt);
+            createdEvent = eventController.create(eventCreateDto);
+        }
+
+        public EventResponseDto getCreatedEvent() {
+            return createdEvent;
+        }
+
+        public String getCreatorJwt() {
+            return creatorJwt;
+        }
     }
 }
