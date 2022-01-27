@@ -2,6 +2,7 @@ package com.sasd.eventor.user;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserResponseDto;
+import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,46 +11,39 @@ import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 public class UserDeleteTest extends UserTest {
 
     @Test
-    public void ensureBadRequestForDeniedPermission() {
-        var firstUserData = new registeredUserData();
-        var secondUserData = new registeredUserData();
+    public void successfulDeleting() {
+        var userDtoWithJwt = new UserDtoWithJwt();
+        userController.deleteById(userDtoWithJwt.getRegisteredUser().getId(), userDtoWithJwt.getRegisteredUserJwt());
         Assertions.assertThrows(EventorException.class,
-                () -> userController.deleteById(firstUserData.getRegisteredUser().getId(),
-                        secondUserData.getRegisteredUserJwt()));
+                () -> userController.findById(userDtoWithJwt.getRegisteredUser().getId()));
     }
 
     @Test
-    public void ensureBadRequestForFindingDeletedUser() {
-        var registeredUserData = new registeredUserData();
-        userController.deleteById(registeredUserData.getRegisteredUser().getId(), registeredUserData.getRegisteredUserJwt());
+    public void ensureBadRequestForDeniedPermission() {
+        var firstUserDtoWithJwt = new UserDtoWithJwt();
+        var secondUserDtoWithJwt = new UserDtoWithJwt();
         Assertions.assertThrows(EventorException.class,
-                () -> userController.findById(registeredUserData.getRegisteredUser().getId()));
+                () -> userController.deleteById(firstUserDtoWithJwt.getRegisteredUser().getId(),
+                        secondUserDtoWithJwt.getRegisteredUserJwt()));
     }
 
     @Test
     public void ensureBadRequestForDeletingUnregisteredUser() {
-        var registeredUserData = new registeredUserData();
+        var userDtoWithJwt = new UserDtoWithJwt();
         Assertions.assertThrows(EventorException.class,
-                () -> userController.deleteById(registeredUserData.getRegisteredUser().getId() + 100,
-                        registeredUserData.getRegisteredUserJwt()));
+                () -> userController.deleteById(userDtoWithJwt.getRegisteredUser().getId() + 100,
+                        userDtoWithJwt.getRegisteredUserJwt()));
     }
 
-    private class registeredUserData {
+    @Getter
+    private class UserDtoWithJwt {
         private final UserResponseDto registeredUser;
         private final String registeredUserJwt;
 
-        private registeredUserData() {
+        private UserDtoWithJwt() {
             var userRegisterDto = validUserRegisterDto();
             registeredUser = userController.register(userRegisterDto);
             registeredUserJwt = userController.createJwt(userRegisterDto.getLogin(), userRegisterDto.getPassword());
-        }
-
-        public UserResponseDto getRegisteredUser() {
-            return registeredUser;
-        }
-
-        public String getRegisteredUserJwt() {
-            return registeredUserJwt;
         }
     }
 }
