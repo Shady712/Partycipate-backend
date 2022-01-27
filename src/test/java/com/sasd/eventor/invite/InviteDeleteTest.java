@@ -5,7 +5,6 @@ import com.sasd.eventor.model.entities.Invite;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static com.sasd.eventor.utils.EventUtils.validEventCreateDtoWithoutJwt;
 import static com.sasd.eventor.utils.InviteUtils.validInviteCreateDto;
 
 public class InviteDeleteTest extends InviteTest {
