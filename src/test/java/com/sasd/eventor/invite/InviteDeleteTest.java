@@ -33,20 +33,18 @@ public class InviteDeleteTest extends InviteTest {
                         createdInviteData.getCreatorJwt()));
     }
 
-    protected class createdInviteData {
+    private class createdInviteData {
         private final Invite createdInvite;
         private final String creatorJwt;
 
         private createdInviteData() {
-            var eventCreateDto = validEventCreateDtoWithoutJwt();
             creatorJwt = validJwt();
-            eventCreateDto.setJwt(creatorJwt);
-            var createdEvent = createEvent(validJwt());
+            var createdEvent = createEvent(creatorJwt);
             createdInvite = inviteController.create(validInviteCreateDto(
                     jwtService.decodeJwtToId(validJwt()), createdEvent.getId(), creatorJwt));
         }
 
-        private String getCreatorJwt() {
+        public String getCreatorJwt() {
             return creatorJwt;
         }
 
