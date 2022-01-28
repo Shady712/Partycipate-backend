@@ -1,6 +1,7 @@
 package com.sasd.eventor;
 
 import com.sasd.eventor.controllers.UserController;
+import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.dtos.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +14,16 @@ public abstract class AbstractTest {
     @Autowired
     protected UserController userController;
 
-    protected String getJwt() {
-        return getJwt(validUserRegisterDto());
+    protected UserResponseDto registerUser(UserRegisterDto dto) {
+        try {
+            return userController.findByLogin(dto.getLogin());
+        } catch (EventorException e) {
+            return userController.register(dto);
+        }
     }
 
-    protected UserResponseDto registerUser(UserRegisterDto dto) {
-        if (userController.isLoginVacant(dto.getLogin())) {
-            return userController.register(dto);
-        } else {
-            return userController.findByLogin(dto.getLogin());
-        }
+    protected String getJwt() {
+        return getJwt(validUserRegisterDto());
     }
 
     protected String getJwt(UserRegisterDto dto) {
