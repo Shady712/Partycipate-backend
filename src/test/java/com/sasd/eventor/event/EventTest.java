@@ -8,6 +8,7 @@ import com.sasd.eventor.model.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -29,22 +30,35 @@ public abstract class EventTest extends AbstractTest {
     }
 
     protected EventCreateDto validEventCreateDto(String name) {
-        return validEventCreateDto(name, VALID_DATE, VALID_DESCRIPTION, VALID_LOCATION, VALID_PRICE);
+        return validEventCreateDto(
+                name,
+                VALID_DATE,
+                VALID_DESCRIPTION,
+                VALID_LOCATION,
+                VALID_PRICE,
+                VALID_LATITUDE,
+                VALID_LONGITUDE
+        );
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected EventCreateDto validEventCreateDto(
             String name,
             LocalDateTime date,
             String description,
             String location,
-            Integer price
+            Integer price,
+            BigDecimal latitude,
+            BigDecimal longitude
     ) {
         var dto = validEventCreateDtoWithoutJwt(
                 name,
                 date,
                 description,
                 location,
-                price
+                price,
+                latitude,
+                longitude
         );
         dto.setJwt(getJwt());
         return dto;

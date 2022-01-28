@@ -30,6 +30,8 @@ public class EventEntityToEventResponseDtoConverter implements Converter<Event, 
                         .map(User::getLogin)
                         .toList()
         );
+        record.setLatitude(source.getLatitude());
+        record.setLongitude(source.getLongitude());
         return record;
     }
 }
