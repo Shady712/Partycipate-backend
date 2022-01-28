@@ -18,8 +18,8 @@ public abstract class FriendRequestTest extends AbstractTest {
 
     protected FriendRequestCreateDto validFriendRequestCreateDto(UserRegisterDto senderDto, UserRegisterDto receiverDto) {
         var dto = new FriendRequestCreateDto();
-        ensureUserRegistration(senderDto);
-        ensureUserRegistration(receiverDto);
+        registerUser(senderDto);
+        registerUser(receiverDto);
         dto.setSenderJwt(userController.createJwt(senderDto.getLogin(), senderDto.getPassword()));
         dto.setReceiverLogin(receiverDto.getLogin());
         return dto;

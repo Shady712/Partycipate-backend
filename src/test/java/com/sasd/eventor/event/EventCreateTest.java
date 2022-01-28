@@ -11,7 +11,7 @@ public class EventCreateTest extends EventTest {
     @Test
     public void createValidEvent() {
         var eventCreateDto = validEventCreateDtoWithoutJwt();
-        eventCreateDto.setJwt(validJwt());
+        eventCreateDto.setJwt(getJwt());
         var event = eventController.create(eventCreateDto);
         var creator = event.getCreator();
         assert creator.equals(userController.enterByJwt(eventCreateDto.getJwt()));

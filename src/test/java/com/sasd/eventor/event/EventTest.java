@@ -27,6 +27,7 @@ public abstract class EventTest extends AbstractTest {
         Objects.requireNonNull(user).setId(userResponseDto.getId());
         return user;
     }
+
     protected EventCreateDto validEventCreateDto(String name) {
         return validEventCreateDto(name, VALID_DATE, VALID_DESCRIPTION, VALID_LOCATION, VALID_PRICE);
     }
@@ -45,7 +46,7 @@ public abstract class EventTest extends AbstractTest {
                 location,
                 price
         );
-        dto.setJwt(validJwt());
+        dto.setJwt(getJwt());
         return dto;
     }
 }

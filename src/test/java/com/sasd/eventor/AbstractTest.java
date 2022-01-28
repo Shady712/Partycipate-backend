@@ -13,31 +13,24 @@ public abstract class AbstractTest {
     @Autowired
     protected UserController userController;
 
-    protected String validJwt() {
-        return validJwt(validUserRegisterDto());
+    protected String getJwt() {
+        return getJwt(validUserRegisterDto());
     }
 
-    protected String validJwt(UserRegisterDto dto) {
-        userController.register(dto);
-        return userController.createJwt(dto.getLogin(), dto.getPassword());
-    }
-
-    protected void ensureUserRegistration(UserRegisterDto dto) {
+    protected UserResponseDto registerUser(UserRegisterDto dto) {
         if (userController.isLoginVacant(dto.getLogin())) {
-            userController.register(dto);
+            return userController.register(dto);
+        } else {
+            return userController.findByLogin(dto.getLogin());
         }
     }
 
     protected String getJwt(UserRegisterDto dto) {
-        ensureUserRegistration(dto);
+        registerUser(dto);
         return userController.createJwt(dto.getLogin(), dto.getPassword());
     }
 
     protected UserResponseDto registerUser() {
         return registerUser(validUserRegisterDto());
-    }
-
-    protected UserResponseDto registerUser(UserRegisterDto dto) {
-        return userController.register(dto);
     }
 }
