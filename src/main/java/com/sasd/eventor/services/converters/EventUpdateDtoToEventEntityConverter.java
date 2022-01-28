@@ -22,6 +22,8 @@ public class EventUpdateDtoToEventEntityConverter implements Converter<EventUpda
         record.setDescription(source.getDescription());
         record.setLocation(source.getLocation());
         record.setPrice(source.getPrice());
+        record.setLatitude(source.getLatitude());
+        record.setLongitude(source.getLongitude());
         return record;
     }
 }

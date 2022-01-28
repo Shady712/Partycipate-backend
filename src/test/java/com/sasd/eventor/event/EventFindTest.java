@@ -58,7 +58,9 @@ public class EventFindTest extends EventTest {
                 VALID_DATE,
                 VALID_DESCRIPTION + " Second",
                 VALID_LOCATION + " Second",
-                VALID_PRICE + 2
+                VALID_PRICE + 2,
+                VALID_LATITUDE,
+                VALID_LONGITUDE
         );
         eventCreateDtoSecond.setJwt(eventCreateDto.getJwt());
         var eventSecond = eventController.create(eventCreateDtoSecond);

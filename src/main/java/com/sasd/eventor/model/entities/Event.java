@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +32,8 @@ public class Event {
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
     private List<User> guests;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 
     @Override
     public boolean equals(Object o) {

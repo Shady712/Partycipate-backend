@@ -26,6 +26,8 @@ public class EventCreateDtoToEventEntityConverter implements Converter<EventCrea
         // noinspection OptionalGetWithoutIsPresent
         record.setCreator(userService.findByJwt(source.getJwt()).get());
         record.setGuests(Collections.emptyList());
+        record.setLatitude(source.getLatitude());
+        record.setLongitude(source.getLongitude());
         return record;
     }
 }
