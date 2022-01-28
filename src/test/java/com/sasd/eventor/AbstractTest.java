@@ -17,7 +17,7 @@ public abstract class AbstractTest {
     protected UserResponseDto registerUser(UserRegisterDto dto) {
         try {
             return userController.findByLogin(dto.getLogin());
-        } catch (EventorException e) {
+        } catch (EventorException ignored) {
             return userController.register(dto);
         }
     }
