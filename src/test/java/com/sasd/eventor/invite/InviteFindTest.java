@@ -21,20 +21,19 @@ public class InviteFindTest extends InviteTest {
         createInvite();
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findById(Long.MAX_VALUE)
+                () -> inviteController.findById(0L)
         );
     }
 
     @Test
     public void findAllIncoming() {
         var userRegisterDto = validUserRegisterDto();
-        var userResponseDto = registerUser(userRegisterDto);
         assert Stream.of(
                 createValidEvent(),
                 createValidEvent(),
                 createValidEvent()
         )
-                .map(eventResponseDto -> validInviteCreateDto(eventResponseDto, userResponseDto))
+                .map(eventResponseDto -> validInviteCreateDto(eventResponseDto, registerUser(userRegisterDto)))
                 .map(this::createInvite)
                 .toList()
                 .equals(inviteController.findAllIncoming(getJwt(userRegisterDto)));
@@ -67,10 +66,9 @@ public class InviteFindTest extends InviteTest {
 
     @Test
     public void ensureBadRequestForInvalidCreatorJwt() {
-        var invite = createInvite();
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findAllByEventId(invite.getEvent().getId(), "invalid jwt")
+                () -> inviteController.findAllByEventId(createInvite().getEvent().getId(), "invalid jwt")
         );
     }
 
@@ -80,16 +78,15 @@ public class InviteFindTest extends InviteTest {
         createInvite(validInviteCreateDto(createValidEvent(), registerUser(userRegisterDto)));
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findAllByEventId(Long.MAX_VALUE, getJwt(userRegisterDto))
+                () -> inviteController.findAllByEventId(0L, getJwt(userRegisterDto))
         );
     }
 
     @Test
     public void ensureBadRequestForInvalidCreator() {
-        var invite = createInvite();
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findAllByEventId(invite.getEvent().getId(), validJwt())
+                () -> inviteController.findAllByEventId(createInvite().getEvent().getId(), validJwt())
         );
     }
 }
