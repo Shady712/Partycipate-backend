@@ -23,14 +23,14 @@ public class InviteCreateTest extends InviteTest {
     @Test
     public void ensureBadRequestForInvalidEventId() {
         var dto = validInviteCreateDto();
-        dto.setEventId(Long.MAX_VALUE);
+        dto.setEventId(0L);
         assertThrowOnCreation(dto);
     }
 
     @Test
     public void ensureBadRequestForInvalidReceiverId() {
         var dto = validInviteCreateDto();
-        dto.setReceiverId(Long.MAX_VALUE);
+        dto.setReceiverId(0L);
         assertThrowOnCreation(dto);
     }
 
