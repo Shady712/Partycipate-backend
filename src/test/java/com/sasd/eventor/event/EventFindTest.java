@@ -49,7 +49,7 @@ public class EventFindTest extends EventTest {
     @Test
     public void findAllEventsByOneCreator() {
         var eventCreateDto = validEventCreateDtoWithoutJwt();
-        eventCreateDto.setJwt(validJwt());
+        eventCreateDto.setJwt(getJwt());
         var event = eventController.create(eventCreateDto);
         var creator = event.getCreator();
 
@@ -65,7 +65,7 @@ public class EventFindTest extends EventTest {
         var creatorSecond = eventSecond.getCreator();
 
         var eventCreateDtoThird = validEventCreateDtoWithoutJwt();
-        eventCreateDtoThird.setJwt(validJwt(validUserRegisterDto()));
+        eventCreateDtoThird.setJwt(getJwt(validUserRegisterDto()));
         var eventThird = eventController.create(eventCreateDtoThird);
         var creatorThird = eventThird.getCreator();
         var firstList = eventController.findAllByCreator(creator.getLogin());

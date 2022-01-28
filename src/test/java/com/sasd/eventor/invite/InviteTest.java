@@ -27,7 +27,7 @@ public abstract class InviteTest extends AbstractTest {
 
     protected EventResponseDto createValidEvent(UserRegisterDto userRegisterDto) {
         var eventCreateDto = validEventCreateDtoWithoutJwt();
-        eventCreateDto.setJwt(validJwt(userRegisterDto));
+        eventCreateDto.setJwt(getJwt(userRegisterDto));
         return eventController.create(eventCreateDto);
     }
 
