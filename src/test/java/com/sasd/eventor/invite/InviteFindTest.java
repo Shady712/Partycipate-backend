@@ -21,7 +21,7 @@ public class InviteFindTest extends InviteTest {
         createInvite();
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findById(0L)
+                () -> inviteController.findById(Long.MAX_VALUE)
         );
     }
 
@@ -78,7 +78,7 @@ public class InviteFindTest extends InviteTest {
         createInvite(validInviteCreateDto(createValidEvent(), registerUser(userRegisterDto)));
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findAllByEventId(0L, getJwt(userRegisterDto))
+                () -> inviteController.findAllByEventId(Long.MAX_VALUE, getJwt(userRegisterDto))
         );
     }
 
