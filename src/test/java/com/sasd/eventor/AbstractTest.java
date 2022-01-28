@@ -14,14 +14,6 @@ public abstract class AbstractTest {
     @Autowired
     protected UserController userController;
 
-    protected UserResponseDto registerUser(UserRegisterDto dto) {
-        try {
-            return userController.findByLogin(dto.getLogin());
-        } catch (EventorException ignored) {
-            return userController.register(dto);
-        }
-    }
-
     protected String getJwt() {
         return getJwt(validUserRegisterDto());
     }
@@ -29,6 +21,14 @@ public abstract class AbstractTest {
     protected String getJwt(UserRegisterDto dto) {
         registerUser(dto);
         return userController.createJwt(dto.getLogin(), dto.getPassword());
+    }
+
+    protected UserResponseDto registerUser(UserRegisterDto dto) {
+        try {
+            return userController.findByLogin(dto.getLogin());
+        } catch (EventorException ignored) {
+            return userController.register(dto);
+        }
     }
 
     protected UserResponseDto registerUser() {
