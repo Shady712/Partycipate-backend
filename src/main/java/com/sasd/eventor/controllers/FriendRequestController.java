@@ -33,22 +33,20 @@ public class FriendRequestController {
     @Transactional
     @PostMapping("/create")
     public FriendRequestResponseDto createRequest(@RequestBody @Valid FriendRequestCreateDto friendRequestCreateDto) {
-        var ref = new Object() {
-            FriendRequestResponseDto response;
-        };
+        final FriendRequestResponseDto[] response = new FriendRequestResponseDto[1];
         findAllIncoming(friendRequestCreateDto.getSenderJwt()).stream()
                 .filter(friendRequestResponseDto ->
                         friendRequestResponseDto.getSender().getLogin()
                                 .equals(friendRequestCreateDto.getReceiverLogin()))
                 .findFirst()
                 .ifPresentOrElse(
-                        reverseRequest -> ref.response = acceptRequest(
+                        reverseRequest -> response[0] = acceptRequest(
                                 reverseRequest.getId(),
                                 friendRequestCreateDto.getSenderJwt()
                         ),
-                        () -> ref.response = createValidatedRequest(friendRequestCreateDto)
+                        () -> response[0] = createValidatedRequest(friendRequestCreateDto)
                 );
-        return ref.response;
+        return response[0];
     }
 
     @GetMapping("/findById")
