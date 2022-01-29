@@ -106,10 +106,10 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
                 requestHandler,
                 ACCEPTED
         );
-        assert userController.findAllFriends(request.getSenderLogin()).stream()
-                .anyMatch(userResponseDto -> userResponseDto.getLogin().equals(request.getReceiverLogin()));
-        assert userController.findAllFriends(request.getReceiverLogin()).stream()
-                .anyMatch(userResponseDto -> userResponseDto.getLogin().equals(request.getSenderLogin()));
+        assert userController.findAllFriends(request.getSender().getLogin()).stream()
+                .anyMatch(userResponseDto -> userResponseDto.equals(request.getReceiver()));
+        assert userController.findAllFriends(request.getReceiver().getLogin()).stream()
+                .anyMatch(userResponseDto -> userResponseDto.equals(request.getSender()));
     }
 
     private FriendRequestResponseDto abstractHappyPathTest(RequestHandler requestHandler, RequestStatus status) {
@@ -120,8 +120,8 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
         var updatedRequest = requestHandler.handleRequest(request.getId(), getJwt(receiverDto));
 
         assert request.getId().equals(updatedRequest.getId());
-        assert request.getSenderLogin().equals(updatedRequest.getSenderLogin());
-        assert request.getReceiverLogin().equals(updatedRequest.getReceiverLogin());
+        assert request.getSender().equals(updatedRequest.getSender());
+        assert request.getReceiver().equals(updatedRequest.getReceiver());
         assert updatedRequest.getStatus().equals(status);
 
         return updatedRequest;

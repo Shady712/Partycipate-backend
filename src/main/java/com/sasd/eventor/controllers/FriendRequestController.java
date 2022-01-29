@@ -38,7 +38,8 @@ public class FriendRequestController {
         };
         findAllIncoming(friendRequestCreateDto.getSenderJwt()).stream()
                 .filter(friendRequestResponseDto ->
-                        friendRequestResponseDto.getSenderLogin().equals(friendRequestCreateDto.getReceiverLogin()))
+                        friendRequestResponseDto.getSender().getLogin()
+                                .equals(friendRequestCreateDto.getReceiverLogin()))
                 .findFirst()
                 .ifPresentOrElse(
                         reverseRequest -> ref.response = acceptRequest(
@@ -129,7 +130,7 @@ public class FriendRequestController {
         if (findAllOutgoing(friendRequestCreateDto.getSenderJwt())
                 .stream()
                 .anyMatch(friendRequestResponseDto ->
-                        friendRequestResponseDto.getReceiverLogin()
+                        friendRequestResponseDto.getReceiver().getLogin()
                                 .equals(friendRequestCreateDto.getReceiverLogin()))
         ) {
             throw new EventorException("You have already sent a friend request to user "

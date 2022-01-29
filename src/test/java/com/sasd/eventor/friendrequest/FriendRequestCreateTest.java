@@ -16,8 +16,8 @@ public class FriendRequestCreateTest extends FriendRequestTest {
         var request = friendRequestController.createRequest(
                 validFriendRequestCreateDto(senderDto, receiverDto)
         );
-        assert request.getSenderLogin().equals(senderDto.getLogin());
-        assert request.getReceiverLogin().equals(receiverDto.getLogin());
+        assert request.getSender().getLogin().equals(senderDto.getLogin());
+        assert request.getReceiver().getLogin().equals(receiverDto.getLogin());
     }
 
     @Test
@@ -55,7 +55,8 @@ public class FriendRequestCreateTest extends FriendRequestTest {
         var senderDto = validUserRegisterDto();
         var receiverDto = validUserRegisterDto();
         friendRequestController.createRequest(validFriendRequestCreateDto(senderDto, receiverDto));
-        Assertions.assertThrows(EventorException.class,
+        Assertions.assertThrows(
+                EventorException.class,
                 () -> friendRequestController.createRequest(validFriendRequestCreateDto(senderDto, receiverDto))
         );
     }

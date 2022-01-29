@@ -10,8 +10,8 @@ import java.util.Objects;
 @Setter
 public class FriendRequestResponseDto {
     private Long id;
-    private String senderLogin;
-    private String receiverLogin;
+    private UserResponseDto sender;
+    private UserResponseDto receiver;
     private RequestStatus status;
 
     @Override
@@ -20,13 +20,13 @@ public class FriendRequestResponseDto {
         if (o == null || getClass() != o.getClass()) return false;
         FriendRequestResponseDto that = (FriendRequestResponseDto) o;
         return Objects.equals(id, that.id)
-                && Objects.equals(senderLogin, that.senderLogin)
-                && Objects.equals(receiverLogin, that.receiverLogin)
+                && Objects.equals(sender, that.sender)
+                && Objects.equals(receiver, that.receiver)
                 && Objects.equals(status, that.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, senderLogin, receiverLogin, status);
+        return Objects.hash(id, sender, receiver, status);
     }
 }
