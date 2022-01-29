@@ -13,7 +13,7 @@ public class UserDeleteTest extends UserTest {
     @Test
     public void successfulDeleting() {
         var userDtoWithJwt = new UserDtoWithJwt();
-        userController.deleteById(userDtoWithJwt.getRegisteredUser().getId(), userDtoWithJwt.getRegisteredUserJwt());
+        userController.delete(userDtoWithJwt.getRegisteredUser().getId(), userDtoWithJwt.getRegisteredUserJwt());
         Assertions.assertThrows(EventorException.class,
                 () -> userController.findById(userDtoWithJwt.getRegisteredUser().getId()));
     }
@@ -23,7 +23,7 @@ public class UserDeleteTest extends UserTest {
         var firstUserDtoWithJwt = new UserDtoWithJwt();
         var secondUserDtoWithJwt = new UserDtoWithJwt();
         Assertions.assertThrows(EventorException.class,
-                () -> userController.deleteById(firstUserDtoWithJwt.getRegisteredUser().getId(),
+                () -> userController.delete(firstUserDtoWithJwt.getRegisteredUser().getId(),
                         secondUserDtoWithJwt.getRegisteredUserJwt()));
     }
 
@@ -31,7 +31,7 @@ public class UserDeleteTest extends UserTest {
     public void ensureBadRequestForDeletingUnregisteredUser() {
         var userDtoWithJwt = new UserDtoWithJwt();
         Assertions.assertThrows(EventorException.class,
-                () -> userController.deleteById(userDtoWithJwt.getRegisteredUser().getId() + 100,
+                () -> userController.delete(userDtoWithJwt.getRegisteredUser().getId() + 100,
                         userDtoWithJwt.getRegisteredUserJwt()));
     }
 

@@ -101,12 +101,12 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
+    public void delete(@RequestParam Long id, @RequestParam String jwt) {
         var foundUser = userService.findByJwt(jwt);
         if (foundUser.isEmpty() || !(foundUser.get().getId().equals(id))) {
             throw new EventorException("You have no permission");
         } else {
-            userService.deleteById(id);
+            userService.delete(foundUser.get());
         }
     }
 }

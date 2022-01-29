@@ -65,7 +65,7 @@ public class UserService {
         return userRepository.findByLogin(login).get().getFriends();
     }
 
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public void delete(User user) {
+        userRepository.delete(user);
     }
 }

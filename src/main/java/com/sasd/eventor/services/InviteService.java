@@ -30,8 +30,4 @@ public class InviteService {
     public List<Invite> findAllByEventId(Event event) {
         return inviteRepository.findAllByEvent(event);
     }
-
-    public void deleteById(Long id) {
-        inviteRepository.deleteById(id);
-    }
 }
