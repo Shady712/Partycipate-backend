@@ -13,9 +13,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.sasd.eventor.model.enums.RequestStatus.ACCEPTED;
+import static com.sasd.eventor.model.enums.RequestStatus.REJECTED;
+
 @Service
 @AllArgsConstructor
 public class InviteService {
+    private final EventService eventService;
     private final InviteRepository inviteRepository;
     private final MailService mailService;
     private final Logger logger = LoggerFactory.getLogger(InviteService.class);
@@ -48,6 +52,21 @@ public class InviteService {
                 event.getName(), event.getId()
         );
         return inviteRepository.findAllByEvent(event);
+    }
+
+    public Invite acceptInvite(Invite invite) {
+        invite.setStatus(ACCEPTED);
+        eventService.addGuest(invite.getEvent(), invite.getReceiver());
+        return inviteRepository.save(invite);
+    }
+
+    public Invite rejectInvite(Invite invite) {
+        invite.setStatus(REJECTED);
+        return inviteRepository.save(invite);
+    }
+
+    public void deleteInvite(Invite invite) {
+        inviteRepository.delete(invite);
     }
 
     public void delete(Invite invite) {
