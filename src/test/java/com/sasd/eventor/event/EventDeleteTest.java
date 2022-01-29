@@ -13,7 +13,7 @@ public class EventDeleteTest extends EventTest {
     @Test
     public void successfulDeleting() {
         var eventDtoWithJwt = new EventDtoWithJwt();
-        eventController.deleteById(eventDtoWithJwt.getCreatedEvent().getId(), eventDtoWithJwt.getCreatorJwt());
+        eventController.delete(eventDtoWithJwt.getCreatedEvent().getId(), eventDtoWithJwt.getCreatorJwt());
         Assertions.assertThrows(EventorException.class,
                 () -> eventController.findById(eventDtoWithJwt.getCreatedEvent().getId()));
     }
@@ -22,14 +22,14 @@ public class EventDeleteTest extends EventTest {
     public void ensureBadRequestForDeniedPermission() {
         var eventDtoWithJwt = new EventDtoWithJwt();
         Assertions.assertThrows(EventorException.class,
-                () -> eventController.deleteById(eventDtoWithJwt.getCreatedEvent().getId(), validJwt()));
+                () -> eventController.delete(eventDtoWithJwt.getCreatedEvent().getId(), getJwt()));
     }
 
     @Test
     public void ensureBadRequestForDeletingUncreatedEvent() {
         var eventDtoWithJwt = new EventDtoWithJwt();
         Assertions.assertThrows(EventorException.class,
-                () -> eventController.deleteById(eventDtoWithJwt.getCreatedEvent().getId() + 100,
+                () -> eventController.delete(eventDtoWithJwt.getCreatedEvent().getId() + 100,
                         eventDtoWithJwt.getCreatorJwt()));
     }
 
@@ -40,7 +40,7 @@ public class EventDeleteTest extends EventTest {
 
         private EventDtoWithJwt() {
             var eventCreateDto = validEventCreateDtoWithoutJwt();
-            creatorJwt = validJwt();
+            creatorJwt = getJwt();
             eventCreateDto.setJwt(creatorJwt);
             createdEvent = eventController.create(eventCreateDto);
         }

@@ -34,7 +34,7 @@ public class EventService {
         return eventRepository.findByNameStartingWith(prefix);
     }
 
-    public void deleteById(Long id) {
-        eventRepository.deleteById(id);
+    public void delete(Event event) {
+        eventRepository.delete(event);
     }
 }
