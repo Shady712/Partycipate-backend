@@ -82,7 +82,7 @@ public class EventController {
                 .getCreator().equals(userService.findByJwt(jwt)
                         .orElseThrow(() -> new EventorException("You are not authorized")))
         ) {
-            throw new EventorException("You have no permission");
+            throw new EventorException("You do not have such permission");
         } else {
             eventService.delete(foundEvent.get());
         }
