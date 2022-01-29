@@ -10,8 +10,8 @@ import java.util.Objects;
 @Setter
 public class InviteResponseDto {
     private Long id;
-    private String ReceiverLogin;
-    private Long EventId;
+    private UserResponseDto receiver;
+    private EventResponseDto event;
     private String message;
     private RequestStatus status;
 
@@ -22,13 +22,13 @@ public class InviteResponseDto {
         InviteResponseDto that = (InviteResponseDto) o;
         return Objects.equals(id, that.id)
                 && Objects.equals(message, that.message)
-                && Objects.equals(ReceiverLogin, that.ReceiverLogin)
-                && Objects.equals(EventId, that.EventId)
+                && Objects.equals(receiver, that.receiver)
+                && Objects.equals(event, that.event)
                 && status == that.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, message, ReceiverLogin, EventId, status);
+        return Objects.hash(id, message, receiver, event, status);
     }
 }

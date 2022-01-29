@@ -47,7 +47,8 @@ public class InviteController {
         return inviteService.create(Objects.requireNonNull(conversionService.convert(inviteCreateDto, Invite.class)));
         return conversionService.convert(
                 inviteService.create(conversionService.convert(inviteCreateDto, Invite.class)),
-                InviteResponseDto.class);
+                InviteResponseDto.class
+        );
     }
 
     @GetMapping("/findById")
@@ -67,7 +68,8 @@ public class InviteController {
     public List<InviteResponseDto> findAllIncoming(@RequestParam String jwt) {
         return inviteService.findAllIncoming(
                         userService.findByJwt(jwt)
-                                .orElseThrow(() -> new EventorException("You are not Authorized")))
+                                .orElseThrow(() -> new EventorException("You are not Authorized"))
+                )
                 .stream()
                 .map(invite -> conversionService.convert(invite, InviteResponseDto.class))
                 .toList();
@@ -75,23 +77,23 @@ public class InviteController {
 
     @GetMapping("/findAllByEventId")
     public List<InviteResponseDto> findAllByEventId(@RequestParam Long eventId, @RequestParam String creatorJwt) {
-        var event = eventService.findById(eventId);
+        var foundEvent = eventService.findById(eventId);
         if (!userService.findByJwt(creatorJwt)
                 .orElseThrow(() -> new EventorException("You are not authorized"))
-                .equals(event
+                .equals(foundEvent
                         .orElseThrow(() -> new EventorException("Event with provided id does not exist"))
                         .getCreator()
                 )
         ) {
             throw new EventorException("You do not have such permission");
         }
-        return inviteService.findAllByEventId(event.get())
+        return inviteService.findAllByEventId(foundEvent.get())
                 .stream()
                 .map(invite -> conversionService.convert(invite, InviteResponseDto.class))
                 .toList();
     }
 
-    @Transactional
+    //TODO check necessity of @Transactional
     @PutMapping("/accept")
     public InviteResponseDto acceptInvite(@RequestParam Long id, @RequestParam String receiverJwt) {
         return conversionService.convert(
@@ -100,7 +102,7 @@ public class InviteController {
         );
     }
 
-    @Transactional
+    //TODO check necessity of @Transactional
     @PutMapping("/reject")
     public InviteResponseDto rejectInvite(@RequestParam Long id, @RequestParam String receiverJwt) {
         return conversionService.convert(
@@ -121,10 +123,10 @@ public class InviteController {
         inviteService.deleteInvite(foundInvite.get());
     }
 
-    private Invite getValidatedInvite(Long id, String recievevrJwt, Set<RequestStatus> statuses) {
+    private Invite getValidatedInvite(Long id, String receivevrJwt, Set<RequestStatus> statuses) {
         var foundInvite = inviteService.findById(id);
         if (!foundInvite.orElseThrow(() -> new EventorException("Invite with provided id does not exist"))
-                .getReceiver().equals(userService.findByJwt(recievevrJwt)
+                .getReceiver().equals(userService.findByJwt(receivevrJwt)
                         .orElseThrow(() -> new EventorException("You are not Authorized")))
                 || !statuses.contains(foundInvite.get().getStatus())
         ) {
