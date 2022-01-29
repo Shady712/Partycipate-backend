@@ -77,7 +77,6 @@ public class FriendRequestFindTest extends FriendRequestTest {
                 .map(friendRequestCreateDto -> friendRequestController.createRequest(friendRequestCreateDto))
                 .toList()
                 .equals(jwtHandler.handleJwt());
-        //noinspection AssertWithSideEffects
         assert !jwtHandler.handleJwt().contains(friendRequestController.createRequest(validFriendRequestCreateDto()));
     }
 
