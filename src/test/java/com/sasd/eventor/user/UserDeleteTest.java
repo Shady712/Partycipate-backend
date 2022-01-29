@@ -4,12 +4,12 @@ import com.sasd.eventor.controllers.EventController;
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.dtos.FriendRequestCreateDto;
-import com.sasd.eventor.utils.EventUtils;
 import lombok.Getter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.sasd.eventor.utils.EventUtils.validEventCreateDtoWithoutJwt;
 import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
 public class UserDeleteTest extends UserTest {
@@ -17,48 +17,34 @@ public class UserDeleteTest extends UserTest {
     private EventController eventController;
 
     @Test
-    public void successfulDeletingWithExistingIncomingAndOutcomingFriendRequests() {
+    public void successfulDeletingWithExistingIncomingAndOutgoingFriendRequests() {
         var userDtoWithJwt = new UserDtoWithJwt();
-        createOutcomingFriendRequest(userDtoWithJwt.getRegisteredUserJwt());
+        createOutgoingFriendRequest(userDtoWithJwt.getRegisteredUserJwt());
         createIncomingFriendRequest(userDtoWithJwt.getRegisteredUser().getLogin());
-        userController.delete(userDtoWithJwt.getRegisteredUser().getId(), userDtoWithJwt.getRegisteredUserJwt());
-        Assertions.assertThrows(EventorException.class,
-                () -> userController.findById(userDtoWithJwt.getRegisteredUser().getId()));
-    }
-
-    @Test
-    public void ensureBadRequestForDeniedPermission() {
-        var firstUserDtoWithJwt = new UserDtoWithJwt();
-        var secondUserDtoWithJwt = new UserDtoWithJwt();
-        Assertions.assertThrows(EventorException.class,
-                () -> userController.delete(firstUserDtoWithJwt.getRegisteredUser().getId(),
-                        secondUserDtoWithJwt.getRegisteredUserJwt()));
-    }
-
-    @Test
-    public void ensureBadRequestForDeletingUnregisteredUser() {
-        var userDtoWithJwt = new UserDtoWithJwt();
-        Assertions.assertThrows(EventorException.class,
-                () -> userController.delete(userDtoWithJwt.getRegisteredUser().getId() + 100,
-                        userDtoWithJwt.getRegisteredUserJwt()));
+        userController.delete(userDtoWithJwt.getRegisteredUserJwt());
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> userController.findById(userDtoWithJwt.getRegisteredUser().getId())
+        );
     }
 
     @Test
     public void ensureBadRequestForDeletingWithOpenEvent() {
         var userDtoWithJwt = new UserDtoWithJwt();
         createValidEvent(userDtoWithJwt.getRegisteredUserJwt());
-        Assertions.assertThrows(EventorException.class,
-                () -> userController.delete(userDtoWithJwt.getRegisteredUser().getId() + 100,
-                        userDtoWithJwt.getRegisteredUserJwt()));
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> userController.delete(userDtoWithJwt.getRegisteredUserJwt())
+        );
     }
 
     private void createValidEvent(String creatorJwt) {
-        var eventDto = EventUtils.validEventCreateDtoWithoutJwt();
+        var eventDto = validEventCreateDtoWithoutJwt();
         eventDto.setJwt(creatorJwt);
         eventController.create(eventDto);
     }
 
-    private void createOutcomingFriendRequest(String senderJwt) {
+    private void createOutgoingFriendRequest(String senderJwt) {
         createFriendRequest(userController.register(validUserRegisterDto()).getLogin(), senderJwt);
     }
 

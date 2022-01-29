@@ -106,20 +106,15 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam Long id, @RequestParam String jwt) {
-        var foundUser = userService.findByJwt(jwt);
-        if (!foundUser.orElseThrow(() -> new EventorException("You are not authorized")).getId().equals(id)) {
-            throw new EventorException("You do not have such permission");
-        }
-        if (!eventService.findAllByCreator(foundUser.get()).isEmpty()) {
+    public void delete(@RequestParam String jwt) {
+        var foundUser = userService.findByJwt(jwt).orElseThrow(() -> new EventorException("You are not authorized"));
+        if (!eventService.findAllByCreator(foundUser).isEmpty()) {
             throw new EventorException("You need to finish all the events first");
         }
-        for (FriendRequest friendRequest : friendRequestService.findAllOutgoing(foundUser.get())) {
-            friendRequestService.deleteRequest(friendRequest);
-        }
-        for (FriendRequest friendRequest : friendRequestService.findAllIncoming(foundUser.get())) {
-            friendRequestService.deleteRequest(friendRequest);
-        }
-        userService.delete(foundUser.get());
+        friendRequestService.findAllOutgoing(foundUser)
+                .forEach(friendRequestService::deleteRequest);
+        friendRequestService.findAllIncoming(foundUser)
+                .forEach(friendRequestService::deleteRequest);
+        userService.delete(foundUser);
     }
 }
