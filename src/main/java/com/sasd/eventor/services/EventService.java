@@ -52,6 +52,11 @@ public class EventService {
         return eventRepository.findByNameStartingWith(prefix);
     }
 
+    public void addGuest(Event event, User receiver) {
+        event.getGuests().add(receiver);
+        eventRepository.save(event);
+    }
+
     public void delete(Event event) {
         logger.info("Deleting event '{}', id is '{}', creator is '{}'",
                 event.getName(), event.getId(), event.getCreator().getLogin()
