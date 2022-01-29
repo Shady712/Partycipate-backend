@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -27,12 +26,5 @@ public class EventUpdateDto {
     private Integer price;
     @NotNull
     private String jwt;
-    @Digits(integer = 2, fraction = 12)
-    @DecimalMin("-90")
-    @DecimalMax("+90")
-    private BigDecimal latitude;
-    @Digits(integer = 3, fraction = 12)
-    @DecimalMin("-180")
-    @DecimalMax("+180")
-    private BigDecimal longitude;
+    private EventCoordinates coordinates = new EventCoordinates();
 }

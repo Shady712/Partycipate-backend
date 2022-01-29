@@ -32,8 +32,8 @@ public class Event {
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
     private List<User> guests;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    private BigDecimal lat;
+    private BigDecimal lng;
 
     @Override
     public boolean equals(Object o) {

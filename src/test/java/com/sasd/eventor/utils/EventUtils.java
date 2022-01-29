@@ -33,8 +33,8 @@ public class EventUtils {
             String description,
             String location,
             Integer price,
-            BigDecimal latitude,
-            BigDecimal longitude
+            BigDecimal lat,
+            BigDecimal lng
     ) {
         var dto = new EventCreateDto();
         dto.setName(name);
@@ -42,8 +42,8 @@ public class EventUtils {
         dto.setDescription(description);
         dto.setLocation(location);
         dto.setPrice(price);
-        dto.setLatitude(latitude);
-        dto.setLongitude(longitude);
+        dto.getCoordinates().setLat(lat);
+        dto.getCoordinates().setLng(lng);
         return dto;
     }
 
