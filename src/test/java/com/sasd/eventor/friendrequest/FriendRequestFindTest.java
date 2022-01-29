@@ -18,8 +18,8 @@ public class FriendRequestFindTest extends FriendRequestTest {
     public void findExistingRequestById() {
         var expectedRequest = friendRequestController.createRequest(validFriendRequestCreateDto());
         var foundRequest = friendRequestController.findById(expectedRequest.getId());
-        assert expectedRequest.getSenderLogin().equals(foundRequest.getSenderLogin());
-        assert expectedRequest.getReceiverLogin().equals(foundRequest.getReceiverLogin());
+        assert expectedRequest.getSender().equals(foundRequest.getSender());
+        assert expectedRequest.getReceiver().equals(foundRequest.getReceiver());
     }
 
     @Test
@@ -77,6 +77,7 @@ public class FriendRequestFindTest extends FriendRequestTest {
                 .map(friendRequestCreateDto -> friendRequestController.createRequest(friendRequestCreateDto))
                 .toList()
                 .equals(jwtHandler.handleJwt());
+        //noinspection AssertWithSideEffects
         assert !jwtHandler.handleJwt().contains(friendRequestController.createRequest(validFriendRequestCreateDto()));
     }
 
