@@ -3,7 +3,6 @@ package com.sasd.eventor.model.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -19,8 +18,7 @@ public class EventResponseDto {
     private Integer price;
     private UserResponseDto creator;
     private List<String> guests;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    private EventCoordinates coordinates = new EventCoordinates();
 
     @Override
     public boolean equals(Object o) {

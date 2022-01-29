@@ -2,7 +2,6 @@ package com.sasd.eventor.services.converters;
 
 import com.sasd.eventor.model.dtos.EventCreateDto;
 import com.sasd.eventor.model.entities.Event;
-import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
@@ -26,8 +25,8 @@ public class EventCreateDtoToEventEntityConverter implements Converter<EventCrea
         // noinspection OptionalGetWithoutIsPresent
         record.setCreator(userService.findByJwt(source.getJwt()).get());
         record.setGuests(Collections.emptyList());
-        record.setLatitude(source.getLatitude());
-        record.setLongitude(source.getLongitude());
+        record.setLat(source.getCoordinates().getLat());
+        record.setLng(source.getCoordinates().getLng());
         return record;
     }
 }
