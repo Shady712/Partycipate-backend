@@ -4,7 +4,10 @@ import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.dtos.UserUpdateDto;
+import com.sasd.eventor.model.entities.FriendRequest;
 import com.sasd.eventor.model.entities.User;
+import com.sasd.eventor.services.EventService;
+import com.sasd.eventor.services.FriendRequestService;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -20,6 +23,8 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final ConversionService conversionService;
+    private final EventService eventService;
+    private final FriendRequestService friendRequestService;
 
     @PostMapping("/register")
     public UserResponseDto register(@RequestBody @Valid UserRegisterDto userRegisterDto) {
@@ -103,10 +108,18 @@ public class UserController {
     @DeleteMapping("/delete")
     public void delete(@RequestParam Long id, @RequestParam String jwt) {
         var foundUser = userService.findByJwt(jwt);
-        if (foundUser.isEmpty() || !(foundUser.get().getId().equals(id))) {
-            throw new EventorException("You have no permission");
-        } else {
-            userService.delete(foundUser.get());
+        if (!foundUser.orElseThrow(() -> new EventorException("You are not authorized")).getId().equals(id)) {
+            throw new EventorException("You do not have such permission");
         }
+        if (!eventService.findAllByCreator(foundUser.get()).isEmpty()) {
+            throw new EventorException("You need to finish all the events first");
+        }
+        for (FriendRequest friendRequest : friendRequestService.findAllOutgoing(foundUser.get())) {
+            friendRequestService.deleteRequest(friendRequest);
+        }
+        for (FriendRequest friendRequest : friendRequestService.findAllIncoming(foundUser.get())) {
+            friendRequestService.deleteRequest(friendRequest);
+        }
+        userService.delete(foundUser.get());
     }
 }

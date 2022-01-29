@@ -59,17 +59,4 @@ public class InviteController {
         }
         return inviteService.findAllByEventId(event.get());
     }
-
-    @DeleteMapping("/delete")
-    public void deleteById(@RequestParam Long id, @RequestParam String jwt) {
-        var foundInvite = inviteService.findById(id);
-        if (!foundInvite.orElseThrow(() -> new EventorException("Event with provided id does not exist"))
-                .getEvent().getCreator().equals(userService.findByJwt(jwt)
-                        .orElseThrow(() -> new EventorException("You are not authorized")))
-        ) {
-            throw new EventorException("You have no permission");
-        } else {
-            inviteService.delete(foundInvite.get());
-        }
-    }
 }
