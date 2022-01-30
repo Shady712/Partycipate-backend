@@ -4,6 +4,7 @@ import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.utils.JwtService;
+import com.sasd.eventor.services.utils.MailService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,10 @@ import java.util.Optional;
 public class UserService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final MailService mailService;
 
     public User register(User user) {
+        mailService.sendEmail("frostmorn712@gmail.com", "test", "test message");
         return userRepository.save(user);
     }
 

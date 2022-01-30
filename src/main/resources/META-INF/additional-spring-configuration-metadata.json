@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "mail.sending.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable email sending."
+    }
+  ]
+}
