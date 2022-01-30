@@ -14,12 +14,12 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
 
     @Test
     public void acceptValidRequest() {
-        abstractAcceptInviteTest((id, receiverJwt) -> friendRequestController.acceptRequest(id, receiverJwt));
+        abstractAcceptRequestTest((id, receiverJwt) -> friendRequestController.acceptRequest(id, receiverJwt));
     }
 
     @Test
     public void acceptRejectedRequest() {
-        abstractAcceptInviteTest((id, receiverJwt) -> {
+        abstractAcceptRequestTest((id, receiverJwt) -> {
             friendRequestController.rejectRequest(id, receiverJwt);
             return friendRequestController.acceptRequest(id, receiverJwt);
         });
@@ -101,7 +101,7 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
         );
     }
 
-    private void abstractAcceptInviteTest(RequestHandler requestHandler) {
+    private void abstractAcceptRequestTest(RequestHandler requestHandler) {
         var request = abstractHappyPathTest(
                 requestHandler,
                 ACCEPTED
