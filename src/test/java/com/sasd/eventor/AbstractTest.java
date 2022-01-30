@@ -6,10 +6,12 @@ import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.dtos.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public abstract class AbstractTest {
     @Autowired
     protected UserController userController;
