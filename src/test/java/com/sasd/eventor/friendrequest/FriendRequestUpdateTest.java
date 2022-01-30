@@ -14,12 +14,12 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
 
     @Test
     public void acceptValidRequest() {
-        abstractAcceptRequestTest((id, receiverJwt) -> friendRequestController.acceptRequest(id, receiverJwt));
+        abstractAcceptInviteTest((id, receiverJwt) -> friendRequestController.acceptRequest(id, receiverJwt));
     }
 
     @Test
     public void acceptRejectedRequest() {
-        abstractAcceptRequestTest((id, receiverJwt) -> {
+        abstractAcceptInviteTest((id, receiverJwt) -> {
             friendRequestController.rejectRequest(id, receiverJwt);
             return friendRequestController.acceptRequest(id, receiverJwt);
         });
@@ -33,16 +33,16 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
     @Test
     public void ensureBadRequestForInvalidId() {
         var receiverDto = validUserRegisterDto();
-        var request = friendRequestController.createRequest(
+        friendRequestController.createRequest(
                 validFriendRequestCreateDto(validUserRegisterDto(), receiverDto)
         );
         Assertions.assertThrows(
                 EventorException.class,
-                () -> friendRequestController.acceptRequest(request.getId() + 100, getJwt(receiverDto))
+                () -> friendRequestController.acceptRequest(Long.MAX_VALUE, getJwt(receiverDto))
         );
         Assertions.assertThrows(
                 EventorException.class,
-                () -> friendRequestController.rejectRequest(request.getId() + 100, getJwt(receiverDto))
+                () -> friendRequestController.rejectRequest(Long.MAX_VALUE, getJwt(receiverDto))
         );
     }
 
@@ -101,7 +101,7 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
         );
     }
 
-    private void abstractAcceptRequestTest(RequestHandler requestHandler) {
+    private void abstractAcceptInviteTest(RequestHandler requestHandler) {
         var request = abstractHappyPathTest(
                 requestHandler,
                 ACCEPTED
@@ -119,9 +119,9 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
         );
         var updatedRequest = requestHandler.handleRequest(request.getId(), getJwt(receiverDto));
 
-        assert request.getId().equals(updatedRequest.getId());
-        assert request.getSender().equals(updatedRequest.getSender());
-        assert request.getReceiver().equals(updatedRequest.getReceiver());
+        assert updatedRequest.getId().equals(request.getId());
+        assert updatedRequest.getSender().equals(request.getSender());
+        assert updatedRequest.getReceiver().equals(request.getReceiver());
         assert updatedRequest.getStatus().equals(status);
 
         return updatedRequest;

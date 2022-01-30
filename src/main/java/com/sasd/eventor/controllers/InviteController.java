@@ -122,10 +122,10 @@ public class InviteController {
         inviteService.deleteInvite(foundInvite.get());
     }
 
-    private Invite getValidatedInvite(Long id, String receivevrJwt, Set<RequestStatus> statuses) {
+    private Invite getValidatedInvite(Long id, String receiverJwt, Set<RequestStatus> statuses) {
         var foundInvite = inviteService.findById(id);
         if (!foundInvite.orElseThrow(() -> new EventorException("Invite with provided id does not exist"))
-                .getReceiver().equals(userService.findByJwt(receivevrJwt)
+                .getReceiver().equals(userService.findByJwt(receiverJwt)
                         .orElseThrow(() -> new EventorException("You are not Authorized")))
                 || !statuses.contains(foundInvite.get().getStatus())
         ) {

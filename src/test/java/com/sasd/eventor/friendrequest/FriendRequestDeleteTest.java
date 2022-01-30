@@ -25,7 +25,7 @@ public class FriendRequestDeleteTest extends FriendRequestTest {
     public void ensureBadRequestOnDeleteNonExistingRequest() {
         Assertions.assertThrows(
                 EventorException.class,
-                () -> friendRequestController.deleteRequest(Long.MAX_VALUE, getJwt(validUserRegisterDto()))
+                () -> friendRequestController.deleteRequest(Long.MAX_VALUE, getJwt())
         );
     }
 

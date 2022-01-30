@@ -27,12 +27,11 @@ public class EventResponseDto {
         EventResponseDto that = (EventResponseDto) o;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(date, that.date)
                 && Objects.equals(location, that.location) && Objects.equals(description, that.description)
-                && Objects.equals(price, that.price) && Objects.equals(creator.getId(), that.creator.getId())
-                && Objects.equals(guests, that.guests);
+                && Objects.equals(price, that.price) && Objects.equals(creator.getId(), that.creator.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, date, location, description, price, creator.getId(), guests);
+        return Objects.hash(id, name, date, location, description, price, creator.getId());
     }
 }
