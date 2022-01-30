@@ -4,7 +4,6 @@ import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.dtos.UserUpdateDto;
-import com.sasd.eventor.model.entities.FriendRequest;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.EventService;
 import com.sasd.eventor.services.FriendRequestService;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @AllArgsConstructor
@@ -31,8 +31,11 @@ public class UserController {
         if (!userService.checkLoginVacancy(userRegisterDto.getLogin())) {
             throw new EventorException("Provided login is already in use");
         }
+        if (!userService.checkEmailVacancy(userRegisterDto.getEmail())) {
+            throw new EventorException("Provided email is already in use");
+        }
         return conversionService.convert(
-                userService.register(conversionService.convert(userRegisterDto, User.class)),
+                userService.register(Objects.requireNonNull(conversionService.convert(userRegisterDto, User.class))),
                 UserResponseDto.class
         );
     }

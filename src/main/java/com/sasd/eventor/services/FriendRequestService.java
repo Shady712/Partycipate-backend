@@ -4,6 +4,7 @@ import com.sasd.eventor.model.daos.FriendRequestRepository;
 import com.sasd.eventor.model.entities.FriendRequest;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.model.enums.RequestStatus;
+import com.sasd.eventor.services.utils.MailService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,15 @@ import static com.sasd.eventor.model.enums.RequestStatus.REJECTED;
 @AllArgsConstructor
 public class FriendRequestService {
     private final UserService userService;
+    private final MailService mailService;
     private final FriendRequestRepository friendRequestRepository;
 
     public FriendRequest create(FriendRequest request) {
+        mailService.sendEmail(
+                request.getReceiver().getEmail(),
+                "New friend request!",
+                "You received a friend request from '" + request.getSender().getName() + "'! Check it out!"
+        );
         return friendRequestRepository.save(request);
     }
 

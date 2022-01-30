@@ -15,11 +15,15 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final JwtService jwtService;
-    private final UserRepository userRepository;
     private final MailService mailService;
+    private final UserRepository userRepository;
 
     public User register(User user) {
-        mailService.sendEmail("frostmorn712@gmail.com", "test", "test message");
+        mailService.sendEmail(
+                user.getEmail(),
+                "Welcome to Partycipate!",
+                "You have been successfully registered! Time to PARTYcipate!"
+        );
         return userRepository.save(user);
     }
 
@@ -36,16 +40,11 @@ public class UserService {
     }
 
     public boolean checkLoginVacancy(String login) {
-        return userRepository.findByLogin(login).isEmpty();
-//        return checkUniqueConstraintVacancy(login, userRepository::findByLogin);
+        return checkUniqueConstraintVacancy(login, userRepository::findByLogin);
     }
 
     public Boolean checkEmailVacancy(String email) {
-        return userRepository.findByEmail(email).isEmpty();
-    }
-
-    private Boolean checkUniqueConstraintVacancy(String constraint, UniqueConstraintFinder finder) {
-        return finder.findByUniqueConstraint(constraint).isEmpty();
+        return checkUniqueConstraintVacancy(email, userRepository::findByEmail);
     }
 
     public Optional<User> findByLoginAndPassword(String login, String password) {
@@ -79,6 +78,10 @@ public class UserService {
 
     public void delete(User user) {
         userRepository.delete(user);
+    }
+
+    private Boolean checkUniqueConstraintVacancy(String constraint, UniqueConstraintFinder finder) {
+        return finder.findByUniqueConstraint(constraint).isEmpty();
     }
 
     private interface UniqueConstraintFinder {
