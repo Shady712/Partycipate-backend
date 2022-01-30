@@ -14,6 +14,7 @@ public class UserRegisterDtoToUserEntityConverter implements Converter<UserRegis
         record.setLogin(source.getLogin());
         record.setName(source.getName());
         record.setPassword(source.getPassword());
+        record.setEmail(source.getEmail());
         return record;
     }
 }

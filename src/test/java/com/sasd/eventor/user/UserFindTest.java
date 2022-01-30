@@ -38,12 +38,14 @@ public class UserFindTest extends UserTest {
         var firstUser = userController.register(validUserRegisterDto(
                 login + 'a',
                 validUserName(),
-                validUserPassword()
+                validUserPassword(),
+                validUserEmail()
         ));
         var secondUser = userController.register(validUserRegisterDto(
                 login + 'b',
                 validUserName(),
-                validUserPassword()
+                validUserPassword(),
+                validUserEmail()
         ));
         var thirdUser = userController.register(validUserRegisterDto());
 

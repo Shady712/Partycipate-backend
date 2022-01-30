@@ -37,6 +37,15 @@ public class UserService {
 
     public boolean checkLoginVacancy(String login) {
         return userRepository.findByLogin(login).isEmpty();
+//        return checkUniqueConstraintVacancy(login, userRepository::findByLogin);
+    }
+
+    public Boolean checkEmailVacancy(String email) {
+        return userRepository.findByEmail(email).isEmpty();
+    }
+
+    private Boolean checkUniqueConstraintVacancy(String constraint, UniqueConstraintFinder finder) {
+        return finder.findByUniqueConstraint(constraint).isEmpty();
     }
 
     public Optional<User> findByLoginAndPassword(String login, String password) {
@@ -70,5 +79,9 @@ public class UserService {
 
     public void delete(User user) {
         userRepository.delete(user);
+    }
+
+    private interface UniqueConstraintFinder {
+        Optional<User> findByUniqueConstraint(String constraint);
     }
 }
