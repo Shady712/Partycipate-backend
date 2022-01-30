@@ -18,15 +18,20 @@ public class UserUtils {
         return randomAscii(8, 33);
     }
 
-    public static UserRegisterDto validUserRegisterDto() {
-        return validUserRegisterDto(validUserLogin(), validUserName(), validUserPassword());
+    public static String validUserEmail() {
+        return randomAlphabetic(2, 23) + "@gmail.com";
     }
 
-    public static UserRegisterDto validUserRegisterDto(String login, String name, String password) {
+    public static UserRegisterDto validUserRegisterDto() {
+        return validUserRegisterDto(validUserLogin(), validUserName(), validUserPassword(), validUserEmail());
+    }
+
+    public static UserRegisterDto validUserRegisterDto(String login, String name, String password, String email) {
         var dto = new UserRegisterDto();
         dto.setLogin(login);
         dto.setName(name);
         dto.setPassword(password);
+        dto.setEmail(email);
         return dto;
     }
 }

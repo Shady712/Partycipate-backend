@@ -14,6 +14,7 @@ public class UserEntityToUserResponseDtoConverter implements Converter<User, Use
         record.setId(source.getId());
         record.setLogin(source.getLogin());
         record.setName(source.getName());
+        record.setEmail(source.getEmail());
         return record;
     }
 }

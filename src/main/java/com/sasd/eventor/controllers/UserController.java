@@ -60,6 +60,11 @@ public class UserController {
         return userService.checkLoginVacancy(login);
     }
 
+    @GetMapping("/isEmailVacant")
+    public Boolean isEmailVacant(@RequestParam String email) {
+        return userService.checkEmailVacancy(email);
+    }
+
     @GetMapping("/enter")
     public UserResponseDto enterByJwt(@RequestParam String jwt) {
         return conversionService.convert(

@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -24,6 +25,10 @@ public class User {
     private String login;
     @NotNull
     private String password;
+    @Email
+    @NotNull
+    @Column(unique = true)
+    private String email;
     @NotNull
     @NotEmpty
     private String name;
