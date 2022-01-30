@@ -2,7 +2,6 @@ package com.sasd.eventor.event;
 
 import com.sasd.eventor.AbstractTest;
 import com.sasd.eventor.controllers.EventController;
-import com.sasd.eventor.controllers.InviteController;
 import com.sasd.eventor.model.dtos.EventCreateDto;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
