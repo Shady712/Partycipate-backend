@@ -34,12 +34,13 @@ public class InviteController {
 
     @PostMapping("/create")
     public InviteResponseDto createInvite(@RequestBody @Valid InviteCreateDto inviteCreateDto) {
+        var event = eventService.findById(inviteCreateDto.getEventId())
+                .orElseThrow(() -> new EventorException("Invalid event id"));
         if (inviteService.findAllIncoming(userService.findById(inviteCreateDto.getReceiverId())
                         .orElseThrow(() -> new EventorException("Invalid receiver id")))
                 .stream()
                 .anyMatch(invite -> invite.getEvent()
-                        .equals(eventService.findById(inviteCreateDto.getEventId())
-                                .orElseThrow(() -> new EventorException("Invalid event id"))))
+                        .equals(event))
         ) {
             throw new EventorException("You have already sent an invite to user");
         }
@@ -92,7 +93,6 @@ public class InviteController {
                 .toList();
     }
 
-    //TODO check necessity of @Transactional
     @PutMapping("/accept")
     public InviteResponseDto acceptInvite(@RequestParam Long id, @RequestParam String receiverJwt) {
         return conversionService.convert(
@@ -101,7 +101,6 @@ public class InviteController {
         );
     }
 
-    //TODO check necessity of @Transactional
     @PutMapping("/reject")
     public InviteResponseDto rejectInvite(@RequestParam Long id, @RequestParam String receiverJwt) {
         return conversionService.convert(

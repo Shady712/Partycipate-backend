@@ -31,7 +31,7 @@ public class InviteUpdateTest extends InviteTest {
     }
 
     @Test
-    public void ensureBadInviteForInvalidId() {
+    public void ensureBadRequestForInvalidId() {
         var receiver = validUserRegisterDto();
         inviteController.createInvite(
                 validInviteCreateDto(createValidEvent(), registerUser(receiver))
@@ -47,7 +47,7 @@ public class InviteUpdateTest extends InviteTest {
     }
 
     @Test
-    public void ensureBadInviteForInvalidJwt() {
+    public void ensureBadRequestForInvalidJwt() {
         var invite = inviteController.createInvite(
                 validInviteCreateDto(createValidEvent(), registerUser(validUserRegisterDto()))
         );
@@ -62,7 +62,7 @@ public class InviteUpdateTest extends InviteTest {
     }
 
     @Test
-    public void ensureBadInviteForInvalidReceiver() {
+    public void ensureBadRequestForInvalidReceiver() {
         var invite = inviteController.createInvite(
                 validInviteCreateDto(createValidEvent(), registerUser(validUserRegisterDto()))
         );
