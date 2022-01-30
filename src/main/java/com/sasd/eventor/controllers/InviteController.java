@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +33,7 @@ public class InviteController {
     private static final Set<RequestStatus> REJECTABLE_STATUSES = Set.of(WAITING);
 
     @PostMapping("/create")
-    public InviteResponseDto create(@RequestBody @Valid InviteCreateDto inviteCreateDto) {
+    public InviteResponseDto createInvite(@RequestBody @Valid InviteCreateDto inviteCreateDto) {
         if (inviteService.findAllIncoming(userService.findById(inviteCreateDto.getReceiverId())
                         .orElseThrow(() -> new EventorException("Invalid receiver id")))
                 .stream()
@@ -87,7 +86,7 @@ public class InviteController {
         ) {
             throw new EventorException("You do not have such permission");
         }
-        return inviteService.findAllByEventId(foundEvent.get())
+        return inviteService.findAllByEvent(foundEvent.get())
                 .stream()
                 .map(invite -> conversionService.convert(invite, InviteResponseDto.class))
                 .toList();

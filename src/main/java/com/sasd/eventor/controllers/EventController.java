@@ -4,8 +4,10 @@ import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.dtos.EventCreateDto;
 import com.sasd.eventor.model.dtos.EventResponseDto;
 import com.sasd.eventor.model.dtos.EventUpdateDto;
+import com.sasd.eventor.model.dtos.UserResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.services.EventService;
+import com.sasd.eventor.services.InviteService;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -21,6 +23,7 @@ public class EventController {
     private final UserService userService;
     private final EventService eventService;
     private final ConversionService conversionService;
+    private final InviteService inviteService;
 
     @GetMapping("/findById")
     public EventResponseDto findById(@RequestParam Long id) {
@@ -75,16 +78,28 @@ public class EventController {
         );
     }
 
+    @GetMapping("/findAllGuests")
+    public List<UserResponseDto> findAllGuests(@RequestParam Long id) {
+        if (eventService.findById(id).isEmpty())
+            throw new EventorException("Event with provided id does not exist");
+        return eventService.findAllGuests(id)
+                .stream()
+                .map(user -> conversionService.convert(user, UserResponseDto.class))
+                .toList();
+    }
+
     @DeleteMapping("/delete")
     public void delete(@RequestParam Long id, @RequestParam String jwt) {
-        var foundEvent = eventService.findById(id);
-        if (!foundEvent.orElseThrow(() -> new EventorException("Event with provided id does not exist"))
+        var foundEvent = eventService
+                .findById(id).orElseThrow(() -> new EventorException("Event with provided id does not exist"));
+        if (!foundEvent
                 .getCreator().equals(userService.findByJwt(jwt)
                         .orElseThrow(() -> new EventorException("You are not authorized")))
         ) {
             throw new EventorException("You do not have such permission");
-        } else {
-            eventService.delete(foundEvent.get());
         }
+        inviteService.findAllByEvent(foundEvent)
+                        .forEach(inviteService::deleteInvite);
+        eventService.deleteEvent(foundEvent);
     }
 }
