@@ -3,7 +3,6 @@ package com.sasd.eventor.event;
 import com.sasd.eventor.AbstractTest;
 import com.sasd.eventor.controllers.EventController;
 import com.sasd.eventor.controllers.InviteController;
-import com.sasd.eventor.invite.InviteTest;
 import com.sasd.eventor.model.dtos.EventCreateDto;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
@@ -22,8 +21,6 @@ public abstract class EventTest extends AbstractTest {
     protected EventController eventController;
     @Autowired
     protected ConversionService conversionService;
-    @Autowired
-    protected InviteController inviteController;
 
     protected User validUser() {
         UserRegisterDto userRegisterDto = validUserRegisterDto();
