@@ -7,6 +7,7 @@ import com.sasd.eventor.model.dtos.UserUpdateDto;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.EventService;
 import com.sasd.eventor.services.FriendRequestService;
+import com.sasd.eventor.services.InviteService;
 import com.sasd.eventor.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -23,6 +24,7 @@ import java.util.Objects;
 public class UserController {
     private final UserService userService;
     private final EventService eventService;
+    private final InviteService inviteService;
     private final ConversionService conversionService;
     private final FriendRequestService friendRequestService;
 
@@ -125,6 +127,8 @@ public class UserController {
         if (!eventService.findAllByCreator(foundUser).isEmpty()) {
             throw new EventorException("You need to finish all the events first");
         }
+        inviteService.findAllIncoming(foundUser)
+                .forEach(inviteService::deleteInvite);
         friendRequestService.findAllOutgoing(foundUser)
                 .forEach(friendRequestService::deleteRequest);
         friendRequestService.findAllIncoming(foundUser)

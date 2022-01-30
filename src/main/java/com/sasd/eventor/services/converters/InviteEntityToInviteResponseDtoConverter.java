@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class InviteEntityToInviteResponseDtoConverter implements Converter<Invite, InviteResponseDto> {
     private final UserEntityToUserResponseDtoConverter userEntityToUserResponseDtoConverter;
     private final EventEntityToEventResponseDtoConverter eventEntityToEventResponseDtoConverter;
+
     @Override
     public InviteResponseDto convert(Invite source) {
         var record = new InviteResponseDto();

@@ -37,7 +37,7 @@ public class EventController {
     @PostMapping("/create")
     public EventResponseDto create(@RequestBody @Valid EventCreateDto eventCreateDto) {
         if (userService.findByJwt(eventCreateDto.getJwt()).isEmpty()) {
-            throw new EventorException("Creator does not exist");
+            throw new EventorException("You are not authorized");
         }
         return conversionService.convert(
                 eventService.createEvent(conversionService.convert(eventCreateDto, Event.class)),

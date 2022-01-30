@@ -1,13 +1,13 @@
 package com.sasd.eventor.model.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Data
 @Entity
@@ -31,23 +31,8 @@ public class Event {
             joinColumns = { @JoinColumn(name = "event_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
+    @EqualsAndHashCode.Exclude
     private List<User> guests;
     private BigDecimal lat;
     private BigDecimal lng;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return Objects.equals(id, event.id) && Objects.equals(name, event.name) && Objects.equals(date, event.date) &&
-                Objects.equals(location, event.location) && Objects.equals(description, event.description) &&
-                Objects.equals(price, event.price);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, date, location, description, price);
-    }
 }
-
