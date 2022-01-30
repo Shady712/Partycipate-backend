@@ -22,8 +22,8 @@ import java.util.Objects;
 @RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
-    private final ConversionService conversionService;
     private final EventService eventService;
+    private final ConversionService conversionService;
     private final FriendRequestService friendRequestService;
 
     @PostMapping("/register")
@@ -120,7 +120,8 @@ public class UserController {
 
     @DeleteMapping("/delete")
     public void delete(@RequestParam String jwt) {
-        var foundUser = userService.findByJwt(jwt).orElseThrow(() -> new EventorException("You are not authorized"));
+        var foundUser = userService
+                .findByJwt(jwt).orElseThrow(() -> new EventorException("You are not authorized"));
         if (!eventService.findAllByCreator(foundUser).isEmpty()) {
             throw new EventorException("You need to finish all the events first");
         }

@@ -12,7 +12,7 @@ public class InviteCreateTest extends InviteTest {
     @Test
     public void createValidInvite() {
         var dto = validInviteCreateDto();
-        var invite = inviteController.create(dto);
+        var invite = inviteController.createInvite(dto);
 
         assert invite.getEvent().getId().equals(dto.getEventId());
         assert invite.getStatus().equals(WAITING);
@@ -37,7 +37,7 @@ public class InviteCreateTest extends InviteTest {
     private void assertThrowOnCreation(InviteCreateDto dto) {
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.create(dto)
+                () -> inviteController.createInvite(dto)
         );
     }
 }

@@ -14,12 +14,12 @@ public class FriendRequestUpdateTest extends FriendRequestTest {
 
     @Test
     public void acceptValidRequest() {
-        abstractAcceptRequestTest(((id, receiverJwt) -> friendRequestController.acceptRequest(id, receiverJwt)));
+        abstractAcceptRequestTest((id, receiverJwt) -> friendRequestController.acceptRequest(id, receiverJwt));
     }
 
     @Test
     public void acceptRejectedRequest() {
-        abstractAcceptRequestTest((id, receiverJwt) ->  {
+        abstractAcceptRequestTest((id, receiverJwt) -> {
             friendRequestController.rejectRequest(id, receiverJwt);
             return friendRequestController.acceptRequest(id, receiverJwt);
         });

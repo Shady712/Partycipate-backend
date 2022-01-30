@@ -52,6 +52,10 @@ public class EventService {
         return eventRepository.findByNameStartingWith(prefix);
     }
 
+    public List<User> findAllGuests(Long id) {
+        return eventRepository.findById(id).get().getGuests();
+    }
+
     public void addGuest(Event event, User receiver) {
         event.getGuests().add(receiver);
         eventRepository.save(event);
