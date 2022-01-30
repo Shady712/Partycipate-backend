@@ -2,6 +2,7 @@ package com.sasd.eventor.user;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.daos.UserRepository;
+import com.sasd.eventor.services.utils.SaltService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static com.sasd.eventor.utils.UserUtils.*;
 
 public class UserRegistrationTest extends UserTest {
+
 
     @Test
     public void registerValidUser(@Autowired UserRepository userRepository) {
@@ -23,7 +25,6 @@ public class UserRegistrationTest extends UserTest {
         var user = foundUser.get();
         assert user.getLogin().equals(userRegisterDto.getLogin());
         assert user.getName().equals(userRegisterDto.getName());
-        assert user.getPassword().equals(userRegisterDto.getPassword());
     }
 
     @Test

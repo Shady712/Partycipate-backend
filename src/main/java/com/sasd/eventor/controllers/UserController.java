@@ -79,7 +79,12 @@ public class UserController {
 
     @GetMapping("/createJwt")
     public String createJwt(@RequestParam String login, @RequestParam String password) {
-        return userService.createJwtToken(login, password);
+        var foundUser = userService.findByLogin(login)
+                .orElseThrow(() -> new EventorException("Invalid login or password"));
+        if (!userService.checkPassword(foundUser, password)) {
+            throw new EventorException("Invalid login or password");
+        }
+        return userService.createJwtToken(foundUser);
     }
 
     @PutMapping("/update")

@@ -4,6 +4,7 @@ import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.utils.JwtService;
+import com.sasd.eventor.services.utils.SaltService;
 import com.sasd.eventor.services.utils.MailService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class UserService {
     private final JwtService jwtService;
     private final MailService mailService;
     private final UserRepository userRepository;
+    private final SaltService saltService;
 
     public User register(User user) {
         mailService.sendEmail(
@@ -47,17 +49,16 @@ public class UserService {
         return checkUniqueConstraintVacancy(email, userRepository::findByEmail);
     }
 
-    public Optional<User> findByLoginAndPassword(String login, String password) {
-        return userRepository.findByLoginAndPassword(login, password);
-    }
-
-    public String createJwtToken(String login, String password) {
-        return jwtService.createJwtToken(findByLoginAndPassword(login, password)
-                .orElseThrow(() -> new EventorException("Invalid login or password")));
+    public String createJwtToken(User user) {
+        return jwtService.createJwtToken(user);
     }
 
     public User update(User user) {
         return userRepository.save(user);
+    }
+
+    public boolean checkPassword(User user, String password) {
+        return saltService.checkPassword(password, user);
     }
 
     public List<User> findAllByLoginPrefix(String prefix) {
