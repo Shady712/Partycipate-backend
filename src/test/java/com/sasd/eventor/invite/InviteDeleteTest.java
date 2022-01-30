@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 import static com.sasd.eventor.utils.EventUtils.validEventCreateDtoWithoutJwt;
 
-public class InviteDeleteTest extends InviteTest{
+public class InviteDeleteTest extends InviteTest {
 
     @Test
     public void deleteExistingInvite() {
@@ -18,7 +18,7 @@ public class InviteDeleteTest extends InviteTest{
         eventDto.setJwt(creatorJwt);
         var invite = inviteController.createInvite(
                 validInviteCreateDto(eventController.create(eventDto), registerUser(validUserRegisterDto())
-        ));
+                ));
         inviteController.deleteInvite(invite.getId(), creatorJwt);
         Assertions.assertThrows(
                 EventorException.class,
