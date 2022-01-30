@@ -90,8 +90,8 @@ public class EventController {
 
     @DeleteMapping("/delete")
     public void delete(@RequestParam Long id, @RequestParam String jwt) {
-        var foundEvent = eventService
-                .findById(id).orElseThrow(() -> new EventorException("Event with provided id does not exist"));
+        var foundEvent = eventService.findById(id)
+                .orElseThrow(() -> new EventorException("Event with provided id does not exist"));
         if (!foundEvent
                 .getCreator().equals(userService.findByJwt(jwt)
                         .orElseThrow(() -> new EventorException("You are not authorized")))
