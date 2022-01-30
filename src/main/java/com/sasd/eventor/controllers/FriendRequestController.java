@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.sasd.eventor.model.enums.RequestStatus.REJECTED;
@@ -35,9 +36,9 @@ public class FriendRequestController {
     public FriendRequestResponseDto createRequest(@RequestBody @Valid FriendRequestCreateDto friendRequestCreateDto) {
         final FriendRequestResponseDto[] response = new FriendRequestResponseDto[1];
         findAllIncoming(friendRequestCreateDto.getSenderJwt()).stream()
-                .filter(friendRequestResponseDto ->
-                        friendRequestResponseDto.getSender().getLogin()
-                                .equals(friendRequestCreateDto.getReceiverLogin()))
+                .filter(friendRequestResponseDto -> friendRequestResponseDto.getSender().getLogin()
+                        .equals(friendRequestCreateDto.getReceiverLogin())
+                )
                 .findFirst()
                 .ifPresentOrElse(
                         reverseRequest -> response[0] = acceptRequest(
@@ -136,9 +137,10 @@ public class FriendRequestController {
         }
 
         return conversionService.convert(
-                friendRequestService.create(conversionService.convert(
-                        friendRequestCreateDto, FriendRequest.class
-                )),
+                friendRequestService.create(
+                        Objects.requireNonNull(conversionService.convert(
+                                friendRequestCreateDto, FriendRequest.class
+                        ))),
                 FriendRequestResponseDto.class
         );
     }
