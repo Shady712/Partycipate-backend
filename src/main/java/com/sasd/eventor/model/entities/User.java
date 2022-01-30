@@ -24,11 +24,8 @@ public class User {
     @Column(unique = true)
     private String login;
     @NotNull
-    private String password;
-    @Email
-    @NotNull
-    @Column(unique = true)
-    private String email;
+    private String passwordHash;
+    private String salt;
     @NotNull
     @NotEmpty
     private String name;
