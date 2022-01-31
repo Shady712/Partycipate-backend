@@ -3,7 +3,6 @@ package com.sasd.eventor.services;
 import com.sasd.eventor.model.daos.FriendRequestRepository;
 import com.sasd.eventor.model.entities.FriendRequest;
 import com.sasd.eventor.model.entities.User;
-import com.sasd.eventor.model.enums.RequestStatus;
 import com.sasd.eventor.services.utils.MailService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
