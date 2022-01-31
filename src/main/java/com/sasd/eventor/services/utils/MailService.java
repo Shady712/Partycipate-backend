@@ -1,5 +1,7 @@
 package com.sasd.eventor.services.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,8 +16,10 @@ public class MailService {
     private String senderUsername;
     @Value("${mail.sending.enabled}")
     private Boolean sendingEnabled;
+    private final Logger logger = LoggerFactory.getLogger(MailService.class);
 
     public void sendEmail(String receiverEmail, String subject, String text) {
+        logger.info("Sending email to '{}', subject of message is '{}'", receiverEmail, subject);
         if (!sendingEnabled) {
             return;
         }
