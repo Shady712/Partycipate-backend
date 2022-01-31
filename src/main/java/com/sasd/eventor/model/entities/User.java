@@ -26,6 +26,10 @@ public class User {
     @NotNull
     private String passwordHash;
     private String salt;
+    @Email
+    @NotNull
+    @Column(unique = true)
+    private String email;
     @NotNull
     @NotEmpty
     private String name;
