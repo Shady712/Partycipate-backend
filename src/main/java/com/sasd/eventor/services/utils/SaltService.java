@@ -16,8 +16,30 @@ import javax.crypto.spec.SecretKeySpec;
 @Service
 @AllArgsConstructor
 public class SaltService {
-    private static final String SECRET = "OdinDlyaLudeiDrugoiDlyMonstrov";
+    private static final String SECRET = "OdinDlyaLudeiDrugoiDlyaChudovish";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+    private static final int HMAC_LENGTH = 128;
+
+    public boolean checkPassword(String password, User user) {
+        return user.getPasswordHash().equals(createHash(password, extractSalt(user)));
+    }
+
+    public String createHash(String password) {
+        SecureRandom random = new SecureRandom();
+        byte[] s = new byte[16];
+        random.nextBytes(s);
+        String salt = bytesToHex(s);
+        return createHash(password, salt);
+    }
+
+    private String createHash(String password, String salt) {
+        String hmacSHA512Algorithm = "HmacSHA512";
+        try {
+            return hmac(hmacSHA512Algorithm, password + salt) + salt;
+        } catch (Throwable exception) {
+            throw new EventorException("Hash creation failed due to '" + exception + "'");
+        }
+    }
 
     private String hmac(String algorithm, String data)
             throws NoSuchAlgorithmException, InvalidKeyException {
@@ -27,30 +49,8 @@ public class SaltService {
         return bytesToHex(mac.doFinal(data.getBytes()));
     }
 
-    public String createHash(String password) {
-        SecureRandom random = new SecureRandom();
-        byte[] s = new byte[16];
-        random.nextBytes(s);
-        String salt = bytesToHex(s);
-        String hmacSHA512Algorithm = "HmacSHA512";
-        try {
-            return hmac(hmacSHA512Algorithm, password + salt) + salt;
-        } catch (Throwable exception) {
-            throw new EventorException("Hash creation failed due to '" + exception + "'");
-        }
-    }
-
-    public String createHash(String password, String salt) {
-        String hmacSHA512Algorithm = "HmacSHA512";
-        try {
-            return hmac(hmacSHA512Algorithm, password + salt) + salt;
-        } catch (Throwable exception) {
-            throw new EventorException("Hash creation failed due to '" + exception + "'");
-        }
-    }
-
-    public boolean checkPassword(String password, User user) {
-        return user.getPasswordHash().equals(createHash(password, user.getSalt()));
+    private String extractSalt(User user) {
+        return user.getPasswordHash().substring(HMAC_LENGTH);
     }
 
     private static String bytesToHex(byte[] bytes) {
