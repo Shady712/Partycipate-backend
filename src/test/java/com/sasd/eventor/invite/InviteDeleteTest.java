@@ -11,18 +11,16 @@ public class InviteDeleteTest extends InviteTest {
 
     @Test
     public void deleteExistingInvite() {
-        var creatorDto = validUserRegisterDto();
-        var creatorJwt = getJwt(creatorDto);
-        registerUser(creatorDto);
+        var creatorJwt = getJwt(validUserRegisterDto());
         var eventDto = validEventCreateDtoWithoutJwt();
         eventDto.setJwt(creatorJwt);
-        var invite = inviteController.createInvite(
-                validInviteCreateDto(eventController.create(eventDto), registerUser(validUserRegisterDto())
-                ));
-        inviteController.deleteInvite(invite.getId(), creatorJwt);
+        var inviteId = inviteController.createInvite(
+                        validInviteCreateDto(eventController.create(eventDto), registerUser(validUserRegisterDto())))
+                .getId();
+        inviteController.deleteInvite(inviteId, creatorJwt);
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findById(invite.getId())
+                () -> inviteController.findById(inviteId)
         );
     }
 
