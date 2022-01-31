@@ -42,8 +42,4 @@ public class User {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<User> friends;
-
-    public String getSalt() {
-        return passwordHash.substring(128);
-    }
 }
