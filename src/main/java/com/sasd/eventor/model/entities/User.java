@@ -25,7 +25,6 @@ public class User {
     private String login;
     @NotNull
     private String passwordHash;
-    private String salt;
     @Email
     @NotNull
     @Column(unique = true)
@@ -37,10 +36,14 @@ public class User {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "friends",
-            joinColumns = { @JoinColumn(name = "first_user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "second_user_id") }
+            joinColumns = {@JoinColumn(name = "first_user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "second_user_id")}
     )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<User> friends;
+
+    public String getSalt() {
+        return passwordHash.substring(128);
+    }
 }

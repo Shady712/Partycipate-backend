@@ -80,7 +80,7 @@ public class UserController {
     @GetMapping("/createJwt")
     public String createJwt(@RequestParam String login, @RequestParam String password) {
         var foundUser = userService.findByLogin(login)
-                .orElseThrow(() -> new EventorException("Invalid login or password"));
+                .orElseThrow(() -> new EventorException("Invalid login"));
         if (!userService.checkPassword(foundUser, password)) {
             throw new EventorException("Invalid login or password");
         }
