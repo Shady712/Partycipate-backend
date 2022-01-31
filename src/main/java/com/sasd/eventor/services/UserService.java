@@ -1,6 +1,5 @@
 package com.sasd.eventor.services;
 
-import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.entities.User;
 import com.sasd.eventor.services.utils.JwtService;

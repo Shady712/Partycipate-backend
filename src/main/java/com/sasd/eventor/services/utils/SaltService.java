@@ -4,7 +4,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-import com.auth0.jwt.algorithms.Algorithm;
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.entities.User;
 import lombok.AllArgsConstructor;
@@ -13,17 +12,14 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import static com.auth0.jwt.algorithms.Algorithm.HMAC256;
-import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
 @Service
 @AllArgsConstructor
 public class SaltService {
-    private final int SALT_LENGTH = 16;
     private static final String SECRET = "OdinDlyaLudeiDrugoiDlyMonstrov";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
-    private static String hmac(String algorithm, String data)
+    private String hmac(String algorithm, String data)
             throws NoSuchAlgorithmException, InvalidKeyException {
         SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET.getBytes(), algorithm);
         Mac mac = Mac.getInstance(algorithm);
@@ -31,20 +27,26 @@ public class SaltService {
         return bytesToHex(mac.doFinal(data.getBytes()));
     }
 
-    public String createHash(String password, String salt) {
-        String hmacSHA256Algorithm = "HmacSHA512";
+    public String createHash(String password) {
+        SecureRandom random = new SecureRandom();
+        byte[] s = new byte[16];
+        random.nextBytes(s);
+        String salt = bytesToHex(s);
+        String hmacSHA512Algorithm = "HmacSHA512";
         try {
-            return hmac(hmacSHA256Algorithm, password + salt);
+            return hmac(hmacSHA512Algorithm, password + salt) + salt;
         } catch (Throwable exception) {
             throw new EventorException("Hash creation failed due to '" + exception + "'");
         }
     }
 
-    public String createSalt() {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[SALT_LENGTH];
-        random.nextBytes(salt);
-        return bytesToHex(salt);
+    public String createHash(String password, String salt) {
+        String hmacSHA512Algorithm = "HmacSHA512";
+        try {
+            return hmac(hmacSHA512Algorithm, password + salt) + salt;
+        } catch (Throwable exception) {
+            throw new EventorException("Hash creation failed due to '" + exception + "'");
+        }
     }
 
     public boolean checkPassword(String password, User user) {
@@ -60,25 +62,4 @@ public class SaltService {
         }
         return new String(hexChars);
     }
-//
-//    public String createHashs(String password) {
-//        // Generate a random salt
-//        SecureRandom random = new SecureRandom();
-//        byte[] salt = new byte[SALT_LENGTH];
-//        random.nextBytes(salt);
-//
-//        // Hash the password
-//        byte[] hash = pbkdf2(password, salt, PBKDF2_ITERATIONS, HASH_BYTE_SIZE);
-//        int hashSize = hash.length;
-//
-//        // format: algorithm:iterations:hashSize:salt:hash
-//        String parts = "sha1:" +
-//                PBKDF2_ITERATIONS +
-//                ":" + hashSize +
-//                ":" +
-//                toBase64(salt) +
-//                ":" +
-//                toBase64(hash);
-//        return parts;
-//    }
 }

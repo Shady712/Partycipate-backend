@@ -17,8 +17,7 @@ public class UserRegisterDtoToUserEntityConverter implements Converter<UserRegis
         var record = new User();
         record.setLogin(source.getLogin());
         record.setName(source.getName());
-        record.setSalt(saltService.createSalt());
-        record.setPasswordHash(saltService.createHash(source.getPassword(), record.getSalt()));
+        record.setPasswordHash(saltService.createHash(source.getPassword()));
         record.setEmail(source.getEmail());
         return record;
     }
