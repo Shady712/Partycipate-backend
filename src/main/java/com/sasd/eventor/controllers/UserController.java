@@ -93,7 +93,7 @@ public class UserController {
             throw new EventorException("You are not authorized");
         }
         return conversionService.convert(
-                userService.update(conversionService.convert(userUpdateDto, User.class)),
+                userService.update(Objects.requireNonNull(conversionService.convert(userUpdateDto, User.class))),
                 UserResponseDto.class
         );
     }
