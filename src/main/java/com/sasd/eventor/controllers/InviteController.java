@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @AllArgsConstructor
@@ -28,10 +29,10 @@ public class InviteController {
                 eventService.findById(inviteCreateDto.getEventId()).isEmpty()) {
             throw new EventorException("Invalid receiver id or event id");
         }
-        return inviteService.create(conversionService.convert(inviteCreateDto, Invite.class));
+        return inviteService.create(Objects.requireNonNull(conversionService.convert(inviteCreateDto, Invite.class)));
     }
 
-    @RequestMapping("/findById")
+    @GetMapping("/findById")
     public Invite findById(@RequestParam Long id) {
         return inviteService.findById(id)
                 .orElseThrow(() -> new EventorException("Invite with provided id does not exist"));
