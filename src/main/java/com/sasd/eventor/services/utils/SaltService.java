@@ -42,6 +42,7 @@ public class SaltService {
         try {
             return hmac(hmacSHA512Algorithm, password + salt) + salt;
         } catch (Throwable exception) {
+            logger.error("Something went wrong on salting passwords", exception);
             throw new EventorException("Hash creation failed due to '" + exception + "'");
         }
     }
