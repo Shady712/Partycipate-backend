@@ -7,6 +7,8 @@ import java.security.SecureRandom;
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.entities.User;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
@@ -19,12 +21,15 @@ public class SaltService {
     private static final String SECRET = "OdinDlyaLudeiDrugoiDlyaChudovish";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     private static final int HMAC_LENGTH = 128;
+    private final Logger logger = LoggerFactory.getLogger(SaltService.class);
 
-    public boolean checkPassword(String password, User user) {
+    public Boolean checkPassword(String password, User user) {
+        logger.trace("Checking password for user '{}'", user.getLogin());
         return user.getPasswordHash().equals(createHash(password, extractSalt(user)));
     }
 
     public String createHash(String password) {
+        logger.trace("Creating hash for password");
         SecureRandom random = new SecureRandom();
         byte[] s = new byte[16];
         random.nextBytes(s);

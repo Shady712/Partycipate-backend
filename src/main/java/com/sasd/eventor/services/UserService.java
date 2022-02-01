@@ -49,6 +49,11 @@ public class UserService {
         return findById(jwtService.decodeJwtToId(jwt));
     }
 
+    public String createJwtToken(User user) {
+        logger.debug("Creating jwt token for user '{}'", user.getLogin());
+        return jwtService.createJwtToken(user);
+    }
+
     public boolean checkLoginVacancy(String login) {
         logger.debug("Received request for checking login '{}' vacancy", login);
         return checkUniqueConstraintVacancy(login, userRepository::findByLogin);
@@ -59,23 +64,13 @@ public class UserService {
         return checkUniqueConstraintVacancy(email, userRepository::findByEmail);
     }
 
-    public Optional<User> findByLoginAndPassword(String login, String password) {
-        logger.debug("Received request for finding user by login '{}' and password '{}'", login, password);
-        return userRepository.findByLoginAndPassword(login, password);
-    }
-
-    public String createJwtToken(String login, String password) {
-        logger.debug("Creating jwt token for login '{}' and password '{}'", login, password);
-        return jwtService.createJwtToken(findByLoginAndPassword(login, password)
-                .orElseThrow(() -> new EventorException("Invalid login or password")));
-    }
-
     public User update(User user) {
         logger.info("Updating user '{}', id is '{}', email is '{}'", user.getLogin(), user.getId(), user.getEmail());
         return userRepository.save(user);
     }
 
-    public boolean checkPassword(User user, String password) {
+    public Boolean checkPassword(User user, String password) {
+        logger.debug("Checking password for user '{}'", user.getLogin());
         return saltService.checkPassword(password, user);
     }
 
