@@ -89,17 +89,6 @@ public class UserController {
         return userService.createJwtToken(foundUser);
     }
 
-    @PutMapping("/update")
-    public UserResponseDto update(@RequestBody @Valid UserUpdateDto userUpdateDto) {
-        if (userService.findByJwt(userUpdateDto.getJwt()).isEmpty()) {
-            throw new EventorException("You are not authorized");
-        }
-        return conversionService.convert(
-                userService.update(Objects.requireNonNull(conversionService.convert(userUpdateDto, User.class))),
-                UserResponseDto.class
-        );
-    }
-
     @GetMapping("/findAllByLoginPrefix")
     public List<UserResponseDto> findAllByLoginPrefix(@RequestParam String prefix) {
         return userService.findAllByLoginPrefix(prefix)
@@ -126,7 +115,7 @@ public class UserController {
             throw new EventorException("You are not authorized");
         }
         return conversionService.convert(
-                userService.update(conversionService.convert(userUpdateDto, User.class)),
+                userService.update(Objects.requireNonNull(conversionService.convert(userUpdateDto, User.class))),
                 UserResponseDto.class
         );
     }

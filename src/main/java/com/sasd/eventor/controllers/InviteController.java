@@ -49,17 +49,12 @@ public class InviteController {
         ) {
             throw new EventorException("You have already sent an invite to this user");
         }
-        return inviteService.create(Objects.requireNonNull(conversionService.convert(inviteCreateDto, Invite.class)));
         return conversionService.convert(
                 inviteService.create(Objects.requireNonNull(conversionService.convert(inviteCreateDto, Invite.class))),
                 InviteResponseDto.class
         );
     }
 
-    @GetMapping("/findById")
-    public Invite findById(@RequestParam Long id) {
-        return inviteService.findById(id)
-                .orElseThrow(() -> new EventorException("Invite with provided id does not exist"));
     @RequestMapping("/findById")
     public InviteResponseDto findById(@RequestParam Long id, @RequestParam String userJwt) {
         var invite = inviteService.findById(id)

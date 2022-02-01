@@ -52,6 +52,7 @@ public class EventService {
         return eventRepository.findByNameStartingWith(prefix);
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public List<User> findAllGuests(Event event) {
         logger.debug("Received request for finding all guests of eventId '{}'", event.getId());
         return eventRepository.findById(event.getId()).get().getGuests();
@@ -63,7 +64,7 @@ public class EventService {
         eventRepository.save(event);
     }
 
-    public void delete(Event event) {
+    public void deleteEvent(Event event) {
         logger.info("Deleting event '{}', id is '{}', creator is '{}'",
                 event.getName(), event.getId(), event.getCreator().getLogin()
         );

@@ -47,7 +47,7 @@ public class InviteService {
         return inviteRepository.findAllByReceiver(receiver);
     }
 
-    public List<Invite> findAllByEventId(Event event) {
+    public List<Invite> findAllByEvent(Event event) {
         logger.debug("Received request for finding all invites on event '{}', event id is '{}",
                 event.getName(), event.getId()
         );
@@ -68,10 +68,6 @@ public class InviteService {
     }
 
     public void deleteInvite(Invite invite) {
-        inviteRepository.delete(invite);
-    }
-
-    public void delete(Invite invite) {
         logger.info("Deleting invite with id '{}' on event '{}', event id is '{}', sender is '{}', receiver is '{}",
                 invite.getId(), invite.getEvent().getName(), invite.getEvent().getId(),
                 invite.getEvent().getCreator().getLogin(), invite.getReceiver().getLogin()
