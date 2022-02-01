@@ -55,12 +55,14 @@ public class InviteService {
     }
 
     public Invite acceptInvite(Invite invite) {
+        logger. info("Accepted invite '{}'", invite.getId());
         invite.setStatus(ACCEPTED);
         eventService.addGuest(invite.getEvent(), invite.getReceiver());
         return inviteRepository.save(invite);
     }
 
     public Invite rejectInvite(Invite invite) {
+        logger. info("Rejected invite '{}'", invite.getId());
         invite.setStatus(REJECTED);
         return inviteRepository.save(invite);
     }

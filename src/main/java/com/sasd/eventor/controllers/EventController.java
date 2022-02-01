@@ -84,7 +84,7 @@ public class EventController {
             throw new EventorException("You do not have such permission");
         }
         return conversionService.convert(
-                eventService.update(conversionService.convert(eventUpdateDto, Event.class)),
+                eventService.update(Objects.requireNonNull(conversionService.convert(eventUpdateDto, Event.class))),
                 EventResponseDto.class
         );
     }

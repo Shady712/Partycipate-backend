@@ -53,10 +53,12 @@ public class EventService {
     }
 
     public List<User> findAllGuests(Event event) {
+        logger.debug("Received request for finding all guests of eventId '{}'", event.getId());
         return eventRepository.findById(event.getId()).get().getGuests();
     }
 
     public void addGuest(Event event, User receiver) {
+        logger.info("Adding new guest '{}', to event with '{}' id", receiver.getLogin(), event.getId());
         event.getGuests().add(receiver);
         eventRepository.save(event);
     }
