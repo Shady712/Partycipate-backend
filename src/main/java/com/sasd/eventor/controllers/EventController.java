@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @AllArgsConstructor
@@ -25,22 +26,22 @@ public class EventController {
     private final ConversionService conversionService;
     private final InviteService inviteService;
 
-    @GetMapping("/findById")
-    public EventResponseDto findById(@RequestParam Long id) {
-        return conversionService.convert(
-                eventService.findById(id)
-                        .orElseThrow(() -> new EventorException("Event with provided id does not exist")),
-                EventResponseDto.class
-        );
-    }
-
     @PostMapping("/create")
     public EventResponseDto create(@RequestBody @Valid EventCreateDto eventCreateDto) {
         if (userService.findByJwt(eventCreateDto.getJwt()).isEmpty()) {
             throw new EventorException("You are not authorized");
         }
         return conversionService.convert(
-                eventService.createEvent(conversionService.convert(eventCreateDto, Event.class)),
+                eventService.createEvent(Objects.requireNonNull(conversionService.convert(eventCreateDto, Event.class))),
+                EventResponseDto.class
+        );
+    }
+
+    @GetMapping("/findById")
+    public EventResponseDto findById(@RequestParam Long id) {
+        return conversionService.convert(
+                eventService.findById(id)
+                        .orElseThrow(() -> new EventorException("Event with provided id does not exist")),
                 EventResponseDto.class
         );
     }
@@ -63,6 +64,16 @@ public class EventController {
                 .toList();
     }
 
+    @GetMapping("/findAllGuests")
+    public List<UserResponseDto> findAllGuests(@RequestParam Long id) {
+        return eventService.findAllGuests(eventService.findById(id)
+                        .orElseThrow(() -> new EventorException("Event with provided id does not exist"))
+                )
+                .stream()
+                .map(user -> conversionService.convert(user, UserResponseDto.class))
+                .toList();
+    }
+
     @PutMapping("/update")
     public EventResponseDto update(@RequestBody @Valid EventUpdateDto eventUpdateDto) {
         if (!userService.findByJwt(eventUpdateDto.getJwt())
@@ -78,28 +89,16 @@ public class EventController {
         );
     }
 
-    @GetMapping("/findAllGuests")
-    public List<UserResponseDto> findAllGuests(@RequestParam Long id) {
-        if (eventService.findById(id).isEmpty())
-            throw new EventorException("Event with provided id does not exist");
-        return eventService.findAllGuests(id)
-                .stream()
-                .map(user -> conversionService.convert(user, UserResponseDto.class))
-                .toList();
-    }
-
     @DeleteMapping("/delete")
     public void delete(@RequestParam Long id, @RequestParam String jwt) {
-        var foundEvent = eventService.findById(id)
+        var event = eventService.findById(id)
                 .orElseThrow(() -> new EventorException("Event with provided id does not exist"));
-        if (!foundEvent
-                .getCreator().equals(userService.findByJwt(jwt)
+        if (!event.getCreator().equals(userService.findByJwt(jwt)
                         .orElseThrow(() -> new EventorException("You are not authorized")))
         ) {
             throw new EventorException("You do not have such permission");
         }
-        inviteService.findAllByEvent(foundEvent)
-                        .forEach(inviteService::deleteInvite);
-        eventService.deleteEvent(foundEvent);
+        inviteService.findAllByEvent(event).forEach(inviteService::deleteInvite);
+        eventService.deleteEvent(event);
     }
 }

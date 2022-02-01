@@ -120,6 +120,17 @@ public class UserController {
                 .toList();
     }
 
+    @PutMapping("/update")
+    public UserResponseDto update(@RequestBody @Valid UserUpdateDto userUpdateDto) {
+        if (userService.findByJwt(userUpdateDto.getJwt()).isEmpty()) {
+            throw new EventorException("You are not authorized");
+        }
+        return conversionService.convert(
+                userService.update(conversionService.convert(userUpdateDto, User.class)),
+                UserResponseDto.class
+        );
+    }
+
     @DeleteMapping("/delete")
     public void delete(@RequestParam String jwt) {
         var foundUser = userService

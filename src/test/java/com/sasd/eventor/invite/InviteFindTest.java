@@ -12,16 +12,35 @@ public class InviteFindTest extends InviteTest {
 
     @Test
     public void findExistingInviteById() {
-        var invite = createInvite();
-        assert invite.equals(inviteController.findById(invite.getId()));
+        var creator = validUserRegisterDto();
+        var receiver = validUserRegisterDto();
+        var invite = createInvite(validInviteCreateDto(
+                createValidEvent(creator),
+                registerUser(receiver)
+        ));
+        assert invite.equals(inviteController.findById(invite.getId(), getJwt(creator)));
+        assert invite.equals(inviteController.findById(invite.getId(), getJwt(receiver)));
     }
 
     @Test
     public void ensureBadRequestForInvalidId() {
-        createInvite();
+        var creator = validUserRegisterDto();
+        var receiver = validUserRegisterDto();
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findById(Long.MAX_VALUE)
+                () -> inviteController.findById(Long.MAX_VALUE, getJwt(creator))
+        );
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> inviteController.findById(Long.MAX_VALUE, getJwt(receiver))
+        );
+    }
+
+    @Test
+    public void ensureBadRequestForInvalidJwt() {
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> inviteController.findById(createInvite().getId(), "InvalidJwt")
         );
     }
 
