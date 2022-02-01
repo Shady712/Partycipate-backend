@@ -105,25 +105,16 @@ public class EventFindTest extends EventTest {
 
     @Test
     public void findAllGuests() {
-        var eventId = eventController.create(validEventCreateDto(VALID_NAME)).getId();
-        var acceptedGuestDto = validUserRegisterDto();
-        var acceptedGuest = registerUser(acceptedGuestDto);
-        inviteController.acceptInvite(
-                inviteController.createInvite(validInviteCreateDto(
-                        acceptedGuest.getId(),
-                        eventId
-                )).getId(),
-                userController.createJwt(acceptedGuestDto.getLogin(), acceptedGuestDto.getPassword())
-                );
-        var invitedGuest = registerUser();
-        inviteController.createInvite(validInviteCreateDto(
-                invitedGuest.getId(),
-                eventId
-        ));
-        var guests = eventController.findAllGuests(eventId);
-
-        assert guests.contains(acceptedGuest);
-        assert !guests.contains(invitedGuest);
-        assert !guests.contains(registerUser());
+        var event = eventController.create(validEventCreateDto(VALID_NAME));
+        assert Stream.of(
+                validUserRegisterDto(),
+                validUserRegisterDto(),
+                validUserRegisterDto()
+        ).map(dto -> inviteController.acceptInvite(
+                        inviteController.createInvite(validInviteCreateDto(registerUser(dto).getId(), event.getId())).getId(),
+                        userController.createJwt(dto.getLogin(), dto.getPassword())
+                )
+        ).map(InviteResponseDto::getReceiver).toList().equals(eventController.findAllGuests(event.getId()));
+        assert !eventController.findAllGuests(event.getId()).contains(registerUser());
     }
 }
