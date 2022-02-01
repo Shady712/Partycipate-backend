@@ -32,9 +32,10 @@ public class InviteUpdateTest extends InviteTest {
 
     @Test
     public void ensureBadRequestForInvalidId() {
+        var creator = validUserRegisterDto();
         var receiver = validUserRegisterDto();
         inviteController.createInvite(
-                validInviteCreateDto(createValidEvent(), registerUser(receiver))
+                validInviteCreateDto(createValidEvent(creator), registerUser(receiver), getJwt(creator))
         );
         Assertions.assertThrows(
                 EventorException.class,
@@ -48,9 +49,12 @@ public class InviteUpdateTest extends InviteTest {
 
     @Test
     public void ensureBadRequestForInvalidJwt() {
-        var inviteId = inviteController.createInvite(
-                        validInviteCreateDto(createValidEvent(), registerUser(validUserRegisterDto())))
-                .getId();
+        var creator = validUserRegisterDto();
+        var inviteId = inviteController.createInvite(validInviteCreateDto(
+                createValidEvent(creator),
+                registerUser(validUserRegisterDto()),
+                getJwt(creator)
+        )).getId();
         Assertions.assertThrows(
                 EventorException.class,
                 () -> inviteController.acceptInvite(inviteId, "InvalidJwt")
@@ -63,10 +67,13 @@ public class InviteUpdateTest extends InviteTest {
 
     @Test
     public void ensureBadRequestForInvalidReceiver() {
-        var inviteId = inviteController.createInvite(
-                        validInviteCreateDto(createValidEvent(), registerUser(validUserRegisterDto())))
-                .getId();
-        var invalidJwt = getJwt(validUserRegisterDto());
+        var creator = validUserRegisterDto();
+        var inviteId = inviteController.createInvite(validInviteCreateDto(
+                createValidEvent(creator),
+                registerUser(validUserRegisterDto()),
+                getJwt(creator)
+        )).getId();
+        var invalidJwt = getJwt();
         Assertions.assertThrows(
                 EventorException.class,
                 () -> inviteController.acceptInvite(inviteId, invalidJwt)
@@ -80,11 +87,13 @@ public class InviteUpdateTest extends InviteTest {
     @Test
     public void ensureBadRequestForInvalidStatus() {
         var receiver = validUserRegisterDto();
+        var creator = validUserRegisterDto();
         var inviteId = inviteController.createInvite(
-                        validInviteCreateDto(createValidEvent(), registerUser(receiver)))
+                        validInviteCreateDto(createValidEvent(creator), registerUser(receiver), getJwt(creator)))
                 .getId();
+        creator = validUserRegisterDto();
         var rejectedInviteId = inviteController.createInvite(
-                        validInviteCreateDto(createValidEvent(), registerUser(receiver)))
+                        validInviteCreateDto(createValidEvent(creator), registerUser(receiver), getJwt(creator)))
                 .getId();
         var receiverJwt = getJwt(receiver);
 
@@ -117,8 +126,9 @@ public class InviteUpdateTest extends InviteTest {
 
     private InviteResponseDto abstractHappyPathTest(InviteHandler inviteHandler, RequestStatus status) {
         var receiver = validUserRegisterDto();
+        var creator = validUserRegisterDto();
         var invite = inviteController.createInvite(
-                validInviteCreateDto(createValidEvent(), registerUser(receiver))
+                validInviteCreateDto(createValidEvent(creator), registerUser(receiver), getJwt(creator))
         );
         var updatedInvite = inviteHandler.handleInvite(invite.getId(), getJwt(receiver));
 

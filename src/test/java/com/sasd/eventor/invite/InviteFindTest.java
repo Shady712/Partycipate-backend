@@ -16,7 +16,8 @@ public class InviteFindTest extends InviteTest {
         var receiver = validUserRegisterDto();
         var invite = createInvite(validInviteCreateDto(
                 createValidEvent(creator),
-                registerUser(receiver)
+                registerUser(receiver),
+                getJwt(creator)
         ));
         assert invite.equals(inviteController.findById(invite.getId(), getJwt(creator)));
         assert invite.equals(inviteController.findById(invite.getId(), getJwt(receiver)));
@@ -48,12 +49,13 @@ public class InviteFindTest extends InviteTest {
     public void findAllIncoming() {
         var userRegisterDto = validUserRegisterDto();
         var userResponseDto = registerUser(userRegisterDto);
+
         assert Stream.of(
-                createValidEvent(),
-                createValidEvent(),
-                createValidEvent()
-        )
-                .map(eventResponseDto -> validInviteCreateDto(eventResponseDto, userResponseDto))
+                        validUserRegisterDto(),
+                        validUserRegisterDto(),
+                        validUserRegisterDto()
+                )
+                .map(dto -> validInviteCreateDto(createValidEvent(dto), userResponseDto, getJwt(dto)))
                 .map(this::createInvite)
                 .toList()
                 .equals(inviteController.findAllIncoming(getJwt(userRegisterDto)));
@@ -74,11 +76,11 @@ public class InviteFindTest extends InviteTest {
         var userRegisterDto = validUserRegisterDto();
         var event = createValidEvent(userRegisterDto);
         assert Stream.of(
-                registerUser(),
-                registerUser(),
-                registerUser()
-        )
-                .map(receiver -> createInvite(validInviteCreateDto(event, receiver)))
+                        registerUser(),
+                        registerUser(),
+                        registerUser()
+                )
+                .map(receiver -> createInvite(validInviteCreateDto(event, receiver, getJwt(userRegisterDto))))
                 .toList()
                 .equals(inviteController.findAllByEventId(event.getId(), getJwt(userRegisterDto)));
         assert !inviteController.findAllByEventId(event.getId(), getJwt(userRegisterDto)).contains(createInvite());
@@ -96,7 +98,8 @@ public class InviteFindTest extends InviteTest {
     @Test
     public void ensureBadRequestForInvalidEventId() {
         var userRegisterDto = validUserRegisterDto();
-        createInvite(validInviteCreateDto(createValidEvent(), registerUser(userRegisterDto)));
+        var creator = validUserRegisterDto();
+        createInvite(validInviteCreateDto(createValidEvent(creator), registerUser(userRegisterDto), getJwt(creator)));
         Assertions.assertThrows(
                 EventorException.class,
                 () -> inviteController.findAllByEventId(Long.MAX_VALUE, getJwt(userRegisterDto))

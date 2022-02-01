@@ -28,18 +28,24 @@ public abstract class InviteTest extends AbstractTest {
     }
 
     protected InviteCreateDto validInviteCreateDto() {
-        return validInviteCreateDto(createValidEvent());
+        var eventCreateDto = validEventCreateDtoWithoutJwt();
+        eventCreateDto.setJwt(getJwt());
+        return validInviteCreateDto(eventController.create(eventCreateDto), eventCreateDto.getJwt());
     }
 
-    protected InviteCreateDto validInviteCreateDto(EventResponseDto eventResponseDto) {
-        return validInviteCreateDto(eventResponseDto, registerUser());
+    protected InviteCreateDto validInviteCreateDto(EventResponseDto eventResponseDto, String creatorJwt) {
+        return validInviteCreateDto(eventResponseDto, registerUser(), creatorJwt);
     }
 
-    protected InviteCreateDto validInviteCreateDto(EventResponseDto eventResponseDto, UserResponseDto userResponseDto) {
+    protected InviteCreateDto validInviteCreateDto(
+            EventResponseDto eventResponseDto,
+            UserResponseDto userResponseDto,
+            String creatorJwt) {
         var dto = new InviteCreateDto();
         dto.setEventId(eventResponseDto.getId());
         dto.setReceiverId(userResponseDto.getId());
         dto.setMessage(MESSAGE);
+        dto.setCreatorJwt(creatorJwt);
         return dto;
     }
 

@@ -36,6 +36,11 @@ public class InviteController {
     public InviteResponseDto createInvite(@RequestBody @Valid InviteCreateDto inviteCreateDto) {
         var event = eventService.findById(inviteCreateDto.getEventId())
                 .orElseThrow(() -> new EventorException("Invalid event id"));
+        if (!event.getCreator().equals(userService.findByJwt(inviteCreateDto.getCreatorJwt())
+                .orElseThrow(() -> new EventorException("You are not authorized"))
+        )) {
+            throw new EventorException("You do not have such permission");
+        }
         if (inviteService.findAllIncoming(userService.findById(inviteCreateDto.getReceiverId())
                         .orElseThrow(() -> new EventorException("Invalid receiver id")))
                 .stream()

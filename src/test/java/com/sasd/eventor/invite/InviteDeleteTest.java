@@ -15,8 +15,8 @@ public class InviteDeleteTest extends InviteTest {
         var eventDto = validEventCreateDtoWithoutJwt();
         eventDto.setJwt(creatorJwt);
         var inviteId = inviteController.createInvite(
-                        validInviteCreateDto(eventController.create(eventDto), registerUser(validUserRegisterDto())))
-                .getId();
+                validInviteCreateDto(eventController.create(eventDto), registerUser(validUserRegisterDto()), eventDto.getJwt())
+        ).getId();
         inviteController.deleteInvite(inviteId, creatorJwt);
         Assertions.assertThrows(
                 EventorException.class,
