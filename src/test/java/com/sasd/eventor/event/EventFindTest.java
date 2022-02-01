@@ -2,6 +2,7 @@ package com.sasd.eventor.event;
 
 import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.daos.EventRepository;
+import com.sasd.eventor.model.dtos.InviteResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.model.entities.User;
 import org.junit.jupiter.api.Assertions;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import static com.sasd.eventor.utils.EventUtils.*;
 import static com.sasd.eventor.utils.UserUtils.*;
@@ -105,16 +107,29 @@ public class EventFindTest extends EventTest {
 
     @Test
     public void findAllGuests() {
-        var event = eventController.create(validEventCreateDto(VALID_NAME));
+        var eventDto = validEventCreateDtoWithoutJwt();
+        eventDto.setJwt(getJwt());
+        var eventId = eventController.create(eventDto).getId();
         assert Stream.of(
                 validUserRegisterDto(),
                 validUserRegisterDto(),
                 validUserRegisterDto()
         ).map(dto -> inviteController.acceptInvite(
-                        inviteController.createInvite(validInviteCreateDto(registerUser(dto).getId(), event.getId())).getId(),
+                        inviteController.createInvite(validInviteCreateDto(
+                                registerUser(dto).getId(),
+                                eventId,
+                                eventDto.getJwt()
+                        )).getId(),
                         userController.createJwt(dto.getLogin(), dto.getPassword())
                 )
-        ).map(InviteResponseDto::getReceiver).toList().equals(eventController.findAllGuests(event.getId()));
-        assert !eventController.findAllGuests(event.getId()).contains(registerUser());
+        ).map(InviteResponseDto::getReceiver).toList().equals(eventController.findAllGuests(eventId));
+        var invitedGuest = registerUser();
+        inviteController.createInvite(validInviteCreateDto(
+                invitedGuest.getId(),
+                eventId,
+                eventDto.getJwt()
+        ));
+        assert !eventController.findAllGuests(eventId).contains(invitedGuest);
+        assert !eventController.findAllGuests(eventId).contains(registerUser());
     }
 }

@@ -133,17 +133,17 @@ public class UserController {
 
     @DeleteMapping("/delete")
     public void delete(@RequestParam String jwt) {
-        var foundUser = userService
+        var user = userService
                 .findByJwt(jwt).orElseThrow(() -> new EventorException("You are not authorized"));
-        if (!eventService.findAllByCreator(foundUser).isEmpty()) {
+        if (!eventService.findAllByCreator(user).isEmpty()) {
             throw new EventorException("You need to finish all the events first");
         }
-        inviteService.findAllIncoming(foundUser)
+        inviteService.findAllIncoming(user)
                 .forEach(inviteService::deleteInvite);
-        friendRequestService.findAllOutgoing(foundUser)
+        friendRequestService.findAllOutgoing(user)
                 .forEach(friendRequestService::deleteRequest);
-        friendRequestService.findAllIncoming(foundUser)
+        friendRequestService.findAllIncoming(user)
                 .forEach(friendRequestService::deleteRequest);
-        userService.delete(foundUser);
+        userService.delete(user);
     }
 }

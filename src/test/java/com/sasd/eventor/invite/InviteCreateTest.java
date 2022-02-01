@@ -21,6 +21,16 @@ public class InviteCreateTest extends InviteTest {
     }
 
     @Test
+    public void ensureBadRequestForInvalidCreatorJwt() {
+        var dto = validInviteCreateDto();
+        dto.setCreatorJwt("invalidJwt");
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> inviteController.createInvite(dto)
+        );
+    }
+
+    @Test
     public void ensureBadRequestForRecreatingExistingInvite() {
         var dto = validInviteCreateDto();
         inviteController.createInvite(dto);

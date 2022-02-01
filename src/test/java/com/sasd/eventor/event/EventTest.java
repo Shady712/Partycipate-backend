@@ -68,11 +68,12 @@ public abstract class EventTest extends AbstractTest {
         return dto;
     }
 
-    protected InviteCreateDto validInviteCreateDto(Long receiverId, Long EventId){
+    protected InviteCreateDto validInviteCreateDto(Long receiverId, Long EventId, String creatorJwt){
         var dto = new InviteCreateDto();
         dto.setEventId(EventId);
         dto.setReceiverId(receiverId);
         dto.setMessage("Message");
+        dto.setCreatorJwt(creatorJwt);
         return dto;
     }
 }
