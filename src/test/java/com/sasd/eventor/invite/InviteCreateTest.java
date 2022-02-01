@@ -21,6 +21,16 @@ public class InviteCreateTest extends InviteTest {
     }
 
     @Test
+    public void ensureBadRequestForRecreatingExistingInvite() {
+        var dto = validInviteCreateDto();
+        inviteController.createInvite(dto);
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> inviteController.createInvite(dto)
+        );
+    }
+
+    @Test
     public void ensureBadRequestForInvalidEventId() {
         var dto = validInviteCreateDto();
         dto.setEventId(Long.MAX_VALUE);

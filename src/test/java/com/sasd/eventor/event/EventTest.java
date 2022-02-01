@@ -2,7 +2,9 @@ package com.sasd.eventor.event;
 
 import com.sasd.eventor.AbstractTest;
 import com.sasd.eventor.controllers.EventController;
+import com.sasd.eventor.controllers.InviteController;
 import com.sasd.eventor.model.dtos.EventCreateDto;
+import com.sasd.eventor.model.dtos.InviteCreateDto;
 import com.sasd.eventor.model.dtos.UserRegisterDto;
 import com.sasd.eventor.model.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 public abstract class EventTest extends AbstractTest {
     @Autowired
     protected EventController eventController;
+    @Autowired
+    protected InviteController inviteController;
     @Autowired
     protected ConversionService conversionService;
 
@@ -61,6 +65,14 @@ public abstract class EventTest extends AbstractTest {
                 longitude
         );
         dto.setJwt(getJwt());
+        return dto;
+    }
+
+    protected InviteCreateDto validInviteCreateDto(Long receiverId, Long EventId){
+        var dto = new InviteCreateDto();
+        dto.setEventId(EventId);
+        dto.setReceiverId(receiverId);
+        dto.setMessage("Message");
         return dto;
     }
 }

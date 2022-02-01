@@ -42,11 +42,11 @@ public class InviteController {
                 .anyMatch(invite -> invite.getEvent()
                         .equals(event))
         ) {
-            throw new EventorException("You have already sent an invite to user");
+            throw new EventorException("You have already sent an invite to this user");
         }
         return inviteService.create(Objects.requireNonNull(conversionService.convert(inviteCreateDto, Invite.class)));
         return conversionService.convert(
-                inviteService.create(conversionService.convert(inviteCreateDto, Invite.class)),
+                inviteService.create(Objects.requireNonNull(conversionService.convert(inviteCreateDto, Invite.class))),
                 InviteResponseDto.class
         );
     }
@@ -56,10 +56,15 @@ public class InviteController {
         return inviteService.findById(id)
                 .orElseThrow(() -> new EventorException("Invite with provided id does not exist"));
     @RequestMapping("/findById")
-    public InviteResponseDto findById(@RequestParam Long id) {
+    public InviteResponseDto findById(@RequestParam Long id, @RequestParam String userJwt) {
+        var invite = inviteService.findById(id)
+                .orElseThrow(() -> new EventorException("Invite with provided id does not exist"));
+        var user = userService.findByJwt(userJwt)
+                .orElseThrow(() -> new EventorException("You are not authorized"));
+        if (!user.equals(invite.getReceiver()) && !user.equals(invite.getEvent().getCreator()))
+            throw new EventorException("You do not have such permission");
         return conversionService.convert(
-                inviteService.findById(id)
-                        .orElseThrow(() -> new EventorException("Invite with provided id does not exist")),
+                invite,
                 InviteResponseDto.class
         );
     }
@@ -68,7 +73,7 @@ public class InviteController {
     public List<InviteResponseDto> findAllIncoming(@RequestParam String jwt) {
         return inviteService.findAllIncoming(
                         userService.findByJwt(jwt)
-                                .orElseThrow(() -> new EventorException("You are not Authorized"))
+                                .orElseThrow(() -> new EventorException("You are not authorized"))
                 )
                 .stream()
                 .map(invite -> conversionService.convert(invite, InviteResponseDto.class))

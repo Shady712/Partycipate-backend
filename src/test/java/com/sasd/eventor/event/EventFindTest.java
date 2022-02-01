@@ -102,4 +102,28 @@ public class EventFindTest extends EventTest {
         assert !thirdList.contains(secondEvent);
         assert !thirdList.contains(thirdEvent);
     }
+
+    @Test
+    public void findAllGuests() {
+        var eventId = eventController.create(validEventCreateDto(VALID_NAME)).getId();
+        var acceptedGuestDto = validUserRegisterDto();
+        var acceptedGuest = registerUser(acceptedGuestDto);
+        inviteController.acceptInvite(
+                inviteController.createInvite(validInviteCreateDto(
+                        acceptedGuest.getId(),
+                        eventId
+                )).getId(),
+                userController.createJwt(acceptedGuestDto.getLogin(), acceptedGuestDto.getPassword())
+                );
+        var invitedGuest = registerUser();
+        inviteController.createInvite(validInviteCreateDto(
+                invitedGuest.getId(),
+                eventId
+        ));
+        var guests = eventController.findAllGuests(eventId);
+
+        assert guests.contains(acceptedGuest);
+        assert !guests.contains(invitedGuest);
+        assert !guests.contains(registerUser());
+    }
 }

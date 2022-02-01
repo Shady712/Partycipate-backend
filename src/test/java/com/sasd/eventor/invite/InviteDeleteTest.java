@@ -20,7 +20,7 @@ public class InviteDeleteTest extends InviteTest {
         inviteController.deleteInvite(inviteId, creatorJwt);
         Assertions.assertThrows(
                 EventorException.class,
-                () -> inviteController.findById(inviteId)
+                () -> inviteController.findById(inviteId, creatorJwt)
         );
     }
 
@@ -49,7 +49,7 @@ public class InviteDeleteTest extends InviteTest {
                 EventorException.class,
                 () -> inviteController.deleteInvite(
                         inviteController.createInvite(validInviteCreateDto()).getId(),
-                        getJwt(validUserRegisterDto())
+                        getJwt()
                 )
         );
     }
