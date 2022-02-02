@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,4 +36,5 @@ public class Event {
     private List<User> guests;
     private BigDecimal lat;
     private BigDecimal lng;
+    private URL telegramUrl;
 }
