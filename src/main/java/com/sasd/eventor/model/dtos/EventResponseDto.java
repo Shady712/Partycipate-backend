@@ -3,6 +3,7 @@ package com.sasd.eventor.model.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +20,7 @@ public class EventResponseDto {
     private UserResponseDto creator;
     private List<String> guests;
     private EventCoordinates coordinates = new EventCoordinates();
+    private URL telegramUrl;
 
     @Override
     public boolean equals(Object o) {

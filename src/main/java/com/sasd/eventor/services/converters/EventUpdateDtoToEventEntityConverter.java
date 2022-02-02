@@ -24,6 +24,7 @@ public class EventUpdateDtoToEventEntityConverter implements Converter<EventUpda
         record.setPrice(source.getPrice());
         record.setLat(source.getCoordinates().getLat());
         record.setLng(source.getCoordinates().getLng());
+        record.setTelegramUrl(source.getTelegramUrl());
         return record;
     }
 }

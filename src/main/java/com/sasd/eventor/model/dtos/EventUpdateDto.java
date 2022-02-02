@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.net.URL;
 import java.time.LocalDateTime;
 
 @Getter
@@ -27,4 +28,5 @@ public class EventUpdateDto {
     @NotNull
     private String jwt;
     private EventCoordinates coordinates = new EventCoordinates();
+    private URL telegramUrl;
 }
