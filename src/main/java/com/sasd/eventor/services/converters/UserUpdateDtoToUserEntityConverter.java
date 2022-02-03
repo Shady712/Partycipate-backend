@@ -18,6 +18,7 @@ public class UserUpdateDtoToUserEntityConverter implements Converter<UserUpdateD
         var record = userService.findByJwt(source.getJwt()).get();
         record.setLogin(source.getLogin());
         record.setName(source.getName());
+        record.setTelegramUrl(source.getTelegramUrl());
         return record;
     }
 }

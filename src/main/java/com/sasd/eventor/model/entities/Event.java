@@ -2,11 +2,12 @@ package com.sasd.eventor.model.entities;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,5 +37,7 @@ public class Event {
     private List<User> guests;
     private BigDecimal lat;
     private BigDecimal lng;
-    private URL telegramUrl;
+    @URL
+    @Pattern(regexp = "^https://t.me/joinchat/[^/]+")
+    private String telegramUrl;
 }

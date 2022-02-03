@@ -2,10 +2,10 @@ package com.sasd.eventor.model.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.net.URL;
 import java.time.LocalDateTime;
 
 @Getter
@@ -28,5 +28,7 @@ public class EventUpdateDto {
     @NotNull
     private String jwt;
     private EventCoordinates coordinates = new EventCoordinates();
-    private URL telegramUrl;
+    @URL
+    @Pattern(regexp = "^https://t.me/joinchat/[^/]+")
+    private String telegramUrl;
 }

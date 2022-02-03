@@ -19,6 +19,7 @@ public class UserRegisterDtoToUserEntityConverter implements Converter<UserRegis
         record.setName(source.getName());
         record.setPasswordHash(saltService.createHash(source.getPassword()));
         record.setEmail(source.getEmail());
+        record.setTelegramUrl(source.getTelegramUrl());
         return record;
     }
 }
