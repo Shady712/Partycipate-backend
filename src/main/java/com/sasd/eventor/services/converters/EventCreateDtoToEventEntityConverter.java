@@ -27,7 +27,6 @@ public class EventCreateDtoToEventEntityConverter implements Converter<EventCrea
         record.setGuests(Collections.emptyList());
         record.setLat(source.getCoordinates().getLat());
         record.setLng(source.getCoordinates().getLng());
-        record.setTelegramUrl(source.getTelegramUrl());
         return record;
     }
 }

@@ -15,6 +15,7 @@ public class UserEntityToUserResponseDtoConverter implements Converter<User, Use
         record.setLogin(source.getLogin());
         record.setName(source.getName());
         record.setEmail(source.getEmail());
+        record.setTelegramUrl(source.getTelegramUrl());
         return record;
     }
 }

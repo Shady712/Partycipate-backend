@@ -12,6 +12,7 @@ public class UserResponseDto {
     private String login;
     private String name;
     private String email;
+    private String telegramUrl;
 
     @Override
     public boolean equals(Object o) {

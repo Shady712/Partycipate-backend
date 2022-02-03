@@ -2,6 +2,7 @@ package com.sasd.eventor.model.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -23,4 +24,7 @@ public class UserUpdateDto {
     @Size(min = 2, max = 32)
     @Pattern(regexp = "[a-zA-Z ]*")
     private String name;
+    @URL
+    @Pattern(regexp = "^https://t.me/[^/]+")
+    private String telegramUrl;
 }

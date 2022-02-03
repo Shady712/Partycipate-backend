@@ -2,6 +2,7 @@ package com.sasd.eventor.model.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.*;
 
@@ -24,4 +25,7 @@ public class UserRegisterDto {
     @NotNull
     @Size(min = 8, max = 32)
     private String password;
+    @URL
+    @Pattern(regexp = "^https://t.me/[^/]+")
+    private String telegramUrl;
 }

@@ -26,5 +26,4 @@ public class EventCreateDto {
     private EventCoordinates coordinates = new EventCoordinates();
     @NotNull
     private String jwt;
-    private URL telegramUrl;
 }
