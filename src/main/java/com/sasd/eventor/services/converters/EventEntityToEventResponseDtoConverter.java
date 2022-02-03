@@ -4,7 +4,6 @@ import com.sasd.eventor.model.dtos.EventResponseDto;
 import com.sasd.eventor.model.entities.Event;
 import com.sasd.eventor.model.entities.User;
 import lombok.AllArgsConstructor;
-import org.springframework.core.ReactiveAdapter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
