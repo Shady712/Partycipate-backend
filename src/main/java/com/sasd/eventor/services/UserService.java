@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.sasd.eventor.services.utils.LinkUtilsService.*;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -30,7 +32,12 @@ public class UserService {
                 user.getEmail(),
                 "Welcome to Partycipate!",
                 "You have been successfully registered! Time to PARTYcipate!\n" +
-                        "Please, verify your email address by following this link <link>"
+                        "Please, verify your email address by following this link " +
+                        createLinkWithLoginAndPasswordHashAsParams(
+                                EMAIL_VERIFICATION_LINK,
+                                user.getLogin(),
+                                user.getPasswordHash()
+                        )
         );
         return userRepository.save(user);
     }
@@ -70,10 +77,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User verifyEmail(User user) {
+    public void verifyEmail(User user) {
         logger.info("User '{}' has verified his email address '{}'", user.getLogin(), user.getEmail());
         user.setEmailVerified(true);
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public Boolean checkPassword(User user, String password) {
@@ -107,7 +114,12 @@ public class UserService {
         mailService.sendEmail(
                 user.getEmail(),
                 "Partycipate password change",
-                "If you want to change your password, follow this link: <link>\n Otherwise, ignore this message"
+                "If you want to change your password, follow this link: " +
+                        createLinkWithLoginAndPasswordHashAsParams(
+                                REQUEST_PASSWORD_CHANGE_LINK,
+                                user.getLogin(),
+                                user.getPasswordHash()
+                        ) + "\nOtherwise, ignore this message"
         );
     }
 
