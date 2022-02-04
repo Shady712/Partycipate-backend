@@ -1,6 +1,5 @@
 package com.sasd.eventor.user;
 
-import com.sasd.eventor.exception.EventorException;
 import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.dtos.UserUpdateDto;
 import org.junit.jupiter.api.Test;
