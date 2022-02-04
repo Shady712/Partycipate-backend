@@ -29,7 +29,8 @@ public class UserService {
         mailService.sendEmail(
                 user.getEmail(),
                 "Welcome to Partycipate!",
-                "You have been successfully registered! Time to PARTYcipate!"
+                "You have been successfully registered! Time to PARTYcipate!\n" +
+                        "Please, verify your email address by following this link <link>"
         );
         return userRepository.save(user);
     }
@@ -66,6 +67,12 @@ public class UserService {
 
     public User update(User user) {
         logger.info("Updating user '{}', id is '{}', email is '{}'", user.getLogin(), user.getId(), user.getEmail());
+        return userRepository.save(user);
+    }
+
+    public User verifyEmail(User user) {
+        logger.info("User '{}' has verified his email address '{}'", user.getLogin(), user.getEmail());
+        user.setEmailVerified(true);
         return userRepository.save(user);
     }
 

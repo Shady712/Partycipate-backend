@@ -47,5 +47,6 @@ public class User {
     @URL
     @Pattern(regexp = "^https://t.me/[^/]+")
     private String telegramUrl;
+    private Boolean emailVerified = false;
 }
 
