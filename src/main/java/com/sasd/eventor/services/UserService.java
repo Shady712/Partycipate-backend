@@ -79,6 +79,31 @@ public class UserService {
         return userRepository.findByLoginStartingWith(prefix);
     }
 
+    public Optional<User> findByEmail(String email) {
+        logger.debug("Received request for finding user by email '{}'", email);
+        return userRepository.findByEmail(email);
+    }
+
+    public Optional<User> findByLoginAndPasswordHash(String login, String passwordHash) {
+        logger.debug("Received request for finding user by login '{}' and password hash", login);
+        return userRepository.findByLoginAndPasswordHash(login, passwordHash);
+    }
+
+    public User changePassword(User user, String newPassword) {
+        logger.info("Changing user's '{}' password", user.getLogin());
+        user.setPasswordHash(saltService.createHash(newPassword));
+        return userRepository.save(user);
+    }
+
+    public void requestPasswordChange(User user) {
+        logger.info("Sending email for password change to user '{}'", user.getLogin());
+        mailService.sendEmail(
+                user.getEmail(),
+                "Partycipate password change",
+                "If you want to change your password, follow this link: <link>\n Otherwise, ignore this message"
+        );
+    }
+
     public void befriend(User first, User second) {
         logger.info("Befriending users: first login is '{}', id is '{}', second login is '{}', id is '{}'",
                 first.getLogin(), first.getId(), second.getLogin(), second.getId()

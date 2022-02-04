@@ -1,7 +1,10 @@
 package com.sasd.eventor.user;
 
+import com.sasd.eventor.exception.EventorException;
+import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.dtos.UserUpdateDto;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
@@ -38,6 +41,20 @@ public class UserUpdateTest extends UserTest {
         var updatedUser = userController.update(updateDto);
         assert updatedUser.getLogin().equals(dto.getLogin());
         assert updatedUser.getName().equals(dto.getName());
+    }
+
+    @Test
+    public void changePassword(@Autowired UserRepository userRepository) {
+        var user = userRepository.findById(registerUser().getId()).orElseThrow();
+        var response = userController.changePassword(
+                user.getLogin(),
+                user.getPasswordHash(),
+                "new password"
+        );
+        assert user.getLogin().equals(response.getLogin());
+        assert user.getName().equals(response.getName());
+        assert user.getEmail().equals(response.getEmail());
+        assert !user.getPasswordHash().equals(userRepository.findById(user.getId()).orElseThrow().getPasswordHash());
     }
 
     private UserUpdateDto userUpdateDto(String jwt, String newLogin, String newName) {

@@ -120,6 +120,30 @@ public class UserController {
         );
     }
 
+    @GetMapping("/requestPasswordChange")
+    public void requestPasswordChange(@RequestParam String loginOrEmail) {
+        userService.requestPasswordChange(
+                userService.findByLogin(loginOrEmail).orElse(userService.findByEmail(loginOrEmail)
+                        .orElseThrow(() -> new EventorException("Invalid login or email")))
+        );
+    }
+
+    @PutMapping("/changePassword")
+    public UserResponseDto changePassword(
+            @RequestParam String login,
+            @RequestParam String passwordHash,
+            @RequestParam String newPassword
+    ) {
+        return conversionService.convert(
+                userService.changePassword(
+                        userService.findByLoginAndPasswordHash(login, passwordHash)
+                                .orElseThrow(() -> new EventorException("Authorization failed")),
+                        newPassword
+                ),
+                UserResponseDto.class
+        );
+    }
+
     @DeleteMapping("/delete")
     public void delete(@RequestParam String jwt) {
         var user = userService
