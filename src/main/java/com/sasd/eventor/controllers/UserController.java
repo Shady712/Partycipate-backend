@@ -86,6 +86,9 @@ public class UserController {
         if (!userService.checkPassword(foundUser, password)) {
             throw new EventorException("Invalid login or password");
         }
+        if (!foundUser.getEmailVerified()) {
+            throw new EventorException("You must verify your email address first");
+        }
         return userService.createJwtToken(foundUser);
     }
 
@@ -120,12 +123,26 @@ public class UserController {
         );
     }
 
+    // Get потому что браузер отправляет только GET запросы
+    @GetMapping("/verifyEmail")
+    public String verifyEmail(@RequestParam String login, @RequestParam String passwordHash) {
+        var user = userService.findByLoginAndPasswordHash(login, passwordHash)
+                .orElseThrow(() -> new EventorException("Authorization failed"));
+        if (user.getEmailVerified()) {
+            throw new EventorException("Your email is already verified");
+        }
+        userService.verifyEmail(user);
+        return "Your email is verified. You may close this page.";
+    }
+
     @GetMapping("/requestPasswordChange")
     public void requestPasswordChange(@RequestParam String loginOrEmail) {
-        userService.requestPasswordChange(
-                userService.findByLogin(loginOrEmail).orElse(userService.findByEmail(loginOrEmail)
-                        .orElseThrow(() -> new EventorException("Invalid login or email")))
-        );
+        var user = userService.findByLogin(loginOrEmail).orElseGet(() -> userService.findByEmail(loginOrEmail)
+                .orElseThrow(() -> new EventorException("Invalid login or email")));
+        if (!user.getEmailVerified()) {
+            throw new EventorException("You must verify your email address first");
+        }
+        userService.requestPasswordChange(user);
     }
 
     @PutMapping("/changePassword")

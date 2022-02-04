@@ -45,6 +45,7 @@ public class UserUpdateTest extends UserTest {
     @Test
     public void changePassword(@Autowired UserRepository userRepository) {
         var user = userRepository.findById(registerUser().getId()).orElseThrow();
+        userController.requestPasswordChange(user.getLogin());
         var response = userController.changePassword(
                 user.getLogin(),
                 user.getPasswordHash(),
@@ -54,6 +55,14 @@ public class UserUpdateTest extends UserTest {
         assert user.getName().equals(response.getName());
         assert user.getEmail().equals(response.getEmail());
         assert !user.getPasswordHash().equals(userRepository.findById(user.getId()).orElseThrow().getPasswordHash());
+    }
+
+    @Test
+    public void verifyEmail(@Autowired UserRepository userRepository) {
+        var user = userRepository.findById(userController.register(validUserRegisterDto()).getId()).orElseThrow();
+        userController.verifyEmail(user.getLogin(), user.getPasswordHash());
+        assert !user.getEmailVerified();
+        assert userRepository.findById(user.getId()).orElseThrow().getEmailVerified();
     }
 
     private UserUpdateDto userUpdateDto(String jwt, String newLogin, String newName) {
