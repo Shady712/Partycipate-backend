@@ -50,7 +50,7 @@ public class UserDeleteTest extends UserTest {
 
     private void createIncomingFriendRequest(String receiverLogin) {
         var sender = validUserRegisterDto();
-        userController.register(sender);
+        registerUser(sender);
         createFriendRequest(receiverLogin, userController.createJwt(sender.getLogin(), sender.getPassword()));
     }
 
@@ -68,7 +68,7 @@ public class UserDeleteTest extends UserTest {
 
         private UserDtoWithJwt() {
             var userRegisterDto = validUserRegisterDto();
-            registeredUser = userController.register(userRegisterDto);
+            registeredUser = registerUser(userRegisterDto);
             registeredUserJwt = userController.createJwt(userRegisterDto.getLogin(), userRegisterDto.getPassword());
         }
     }

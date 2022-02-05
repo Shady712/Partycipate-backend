@@ -69,11 +69,11 @@ public class UserFindTest extends UserTest {
         var sender = validUserRegisterDto();
         var firstFriend = validUserRegisterDto();
         var secondFriend = validUserRegisterDto();
-        userController.register(sender);
+        registerUser(sender);
         var friendRequestCreateDto = new FriendRequestCreateDto();
         friendRequestCreateDto.setSenderJwt(userController.createJwt(sender.getLogin(), sender.getPassword()));
         Stream.of(firstFriend, secondFriend).forEach(friend -> {
-            userController.register(friend);
+            registerUser(friend);
             friendRequestCreateDto.setReceiverLogin(friend.getLogin());
             friendRequestController.acceptRequest(
                     friendRequestController.createRequest(friendRequestCreateDto).getId(),

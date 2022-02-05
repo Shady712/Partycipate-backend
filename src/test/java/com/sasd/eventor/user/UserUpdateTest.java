@@ -12,7 +12,7 @@ public class UserUpdateTest extends UserTest {
     @Test
     public void updateWithChanges() {
         var dto = validUserRegisterDto();
-        userController.register(dto);
+        registerUser(dto);
         var updateDto = userUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
                 dto.getLogin() + 'q', dto.getName() + 'q');
         var updatedUser = userController.update(updateDto);
@@ -23,7 +23,7 @@ public class UserUpdateTest extends UserTest {
     @Test
     public void updateWithOneChange() {
         var dto = validUserRegisterDto();
-        userController.register(dto);
+        registerUser(dto);
         var updateDto = userUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
                 dto.getLogin() + 'q', dto.getName());
         var updatedUser = userController.update(updateDto);
@@ -34,7 +34,7 @@ public class UserUpdateTest extends UserTest {
     @Test
     public void updateWithoutChanges() {
         var dto = validUserRegisterDto();
-        userController.register(dto);
+        registerUser(dto);
         var updateDto = userUpdateDto(userController.createJwt(dto.getLogin(), dto.getPassword()),
                 dto.getLogin(), dto.getName());
         var updatedUser = userController.update(updateDto);
