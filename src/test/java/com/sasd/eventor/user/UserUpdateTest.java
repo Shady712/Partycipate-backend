@@ -2,6 +2,7 @@ package com.sasd.eventor.user;
 
 import com.sasd.eventor.model.daos.UserRepository;
 import com.sasd.eventor.model.dtos.UserUpdateDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,6 +56,7 @@ public class UserUpdateTest extends UserTest {
         assert user.getName().equals(response.getName());
         assert user.getEmail().equals(response.getEmail());
         assert !user.getPasswordHash().equals(userRepository.findById(user.getId()).orElseThrow().getPasswordHash());
+        Assertions.assertDoesNotThrow(() -> userController.createJwt(user.getLogin(), "new password"));
     }
 
     @Test
