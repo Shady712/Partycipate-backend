@@ -4,6 +4,8 @@ import com.sasd.eventor.exception.EventorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Stream;
+
 import static com.sasd.eventor.utils.UserUtils.validUserLogin;
 import static com.sasd.eventor.utils.UserUtils.validUserRegisterDto;
 
@@ -21,19 +23,20 @@ public class UserUtilsTest extends UserTest {
 
     @Test
     public void requestChangePassword() {
-        Assertions.assertDoesNotThrow(() -> userController.requestPasswordChange(registerUser().getLogin()));
-        Assertions.assertDoesNotThrow(() -> userController.requestPasswordChange(registerUser().getEmail()));
+        Stream.of(
+                registerUser().getLogin(),
+                registerUser().getEmail()
+        ).forEach(loginOrEmail -> Assertions.assertDoesNotThrow(() -> userController.requestPasswordChange(loginOrEmail)));
     }
 
     @Test
     public void ensureBadRequestForRequestPasswordChangeWithUnverifiedEmail() {
-        Assertions.assertThrows(
+        Stream.of(
+                userController.register(validUserRegisterDto()).getLogin(),
+                userController.register(validUserRegisterDto()).getEmail()
+        ).forEach(loginOrEmail -> Assertions.assertThrows(
                 EventorException.class,
-                () -> userController.requestPasswordChange(userController.register(validUserRegisterDto()).getLogin())
-        );
-        Assertions.assertThrows(
-                EventorException.class,
-                () -> userController.requestPasswordChange(userController.register(validUserRegisterDto()).getEmail())
-        );
+                () -> userController.requestPasswordChange(loginOrEmail)
+        ));
     }
 }
