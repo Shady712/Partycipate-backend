@@ -30,4 +30,14 @@ public class UserEnterTest extends UserTest {
     public void ensureBadRequestForInvalidJwtToken() {
         Assertions.assertThrows(EventorException.class, () -> userController.enterByJwt("invalid jwt"));
     }
+
+    @Test
+    public void ensureBadRequestForUnverifiedEmail() {
+        var dto = validUserRegisterDto();
+        userController.register(dto);
+        Assertions.assertThrows(
+                EventorException.class,
+                () -> userController.createJwt(dto.getLogin(), dto.getPassword())
+        );
+    }
 }
