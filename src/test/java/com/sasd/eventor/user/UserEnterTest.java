@@ -11,7 +11,7 @@ public class UserEnterTest extends UserTest {
     @Test
     public void enterByLoginAndPassword() {
         var dto = validUserRegisterDto();
-        userController.register(dto);
+        registerUser(dto);
         var jwt = userController.createJwt(dto.getLogin(), dto.getPassword());
         var enteredUser = userController.enterByJwt(jwt);
         assert dto.getLogin().equals(enteredUser.getLogin());

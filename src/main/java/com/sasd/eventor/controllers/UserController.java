@@ -81,15 +81,15 @@ public class UserController {
 
     @GetMapping("/createJwt")
     public String createJwt(@RequestParam String login, @RequestParam String password) {
-        var foundUser = userService.findByLogin(login)
+        var user = userService.findByLogin(login)
                 .orElseThrow(() -> new EventorException("Invalid login or password"));
-        if (!userService.checkPassword(foundUser, password)) {
+        if (!userService.checkPassword(user, password)) {
             throw new EventorException("Invalid login or password");
         }
-        if (!foundUser.getEmailVerified()) {
+        if (!user.getEmailVerified()) {
             throw new EventorException("You must verify your email address first");
         }
-        return userService.createJwtToken(foundUser);
+        return userService.createJwtToken(user);
     }
 
     @GetMapping("/findAllByLoginPrefix")
