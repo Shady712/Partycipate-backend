@@ -33,17 +33,19 @@ public abstract class AbstractTest {
     }
 
     protected UserResponseDto registerUser(UserRegisterDto dto) {
+        UserResponseDto response;
         try {
-            return userController.findByLogin(dto.getLogin());
+            response = userController.findByLogin(dto.getLogin());
         } catch (EventorException ignored) {
-            return mockVerifyEmail(userController.register(dto));
+            response = userController.register(dto);
+            mockVerifyEmail(response);
         }
+        return response;
     }
 
-    private UserResponseDto mockVerifyEmail(UserResponseDto dto) {
+    private void mockVerifyEmail(UserResponseDto dto) {
         var user = userRepository.findById(dto.getId()).orElseThrow();
         user.setEmailVerified(true);
         userRepository.save(user);
-        return dto;
     }
 }
