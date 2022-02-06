@@ -8,10 +8,10 @@
 		<version>2.5.9</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.sasd</groupId>
-	<artifactId>eventor</artifactId>
+	<groupId>com</groupId>
+	<artifactId>partycipate</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>eventor</name>
+	<name>partycipate</name>
 	<description>Event organizer project</description>
 	<properties>
 		<java.version>16</java.version>
