@@ -3,6 +3,7 @@ package com.partycipate.services;
 import com.partycipate.model.daos.UserRepository;
 import com.partycipate.model.entities.User;
 import com.partycipate.services.utils.JwtService;
+import com.partycipate.services.utils.LinkUtilsService;
 import com.partycipate.services.utils.SaltService;
 import com.partycipate.services.utils.MailService;
 import lombok.AllArgsConstructor;
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.partycipate.services.utils.LinkUtilsService.*;
-
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -22,6 +21,7 @@ public class UserService {
     private final MailService mailService;
     private final UserRepository userRepository;
     private final SaltService saltService;
+    private final LinkUtilsService linkUtilsService;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public User register(User user) {
@@ -33,8 +33,8 @@ public class UserService {
                 "Welcome to Partycipate!",
                 "You have been successfully registered! Time to PARTYcipate!\n" +
                         "Please, verify your email address by following this link " +
-                        createLinkWithLoginAndPasswordHashAsParams(
-                                EMAIL_VERIFICATION_LINK,
+                        linkUtilsService.createLinkWithLoginAndPasswordHashAsParams(
+                                linkUtilsService.EMAIL_VERIFICATION_LINK,
                                 user.getLogin(),
                                 user.getPasswordHash()
                         )
@@ -115,8 +115,8 @@ public class UserService {
                 user.getEmail(),
                 "Partycipate password change",
                 "If you want to change your password, follow this link: " +
-                        createLinkWithLoginAndPasswordHashAsParams(
-                                REQUEST_PASSWORD_CHANGE_LINK,
+                        linkUtilsService.createLinkWithLoginAndPasswordHashAsParams(
+                                linkUtilsService.REQUEST_PASSWORD_CHANGE_LINK,
                                 user.getLogin(),
                                 user.getPasswordHash()
                         ) + "\nOtherwise, ignore this message"

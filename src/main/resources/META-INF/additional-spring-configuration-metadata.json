@@ -4,6 +4,16 @@
       "name": "mail.sending.enabled",
       "type": "java.lang.Boolean",
       "description": "Enable email sending."
+    },
+    {
+      "name": "email.verify.link",
+      "type": "java.lang.String",
+      "description": "Email verify link."
+    },
+    {
+      "name": "password.change.link",
+      "type": "java.lang.String",
+      "description": "Password change link."
     }
   ]
 }
