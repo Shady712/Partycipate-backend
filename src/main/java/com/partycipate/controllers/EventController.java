@@ -20,6 +20,7 @@ import java.util.Objects;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/event")
+@CrossOrigin("https://partycipate.herokuapp.com")
 public class EventController {
     private final UserService userService;
     private final EventService eventService;

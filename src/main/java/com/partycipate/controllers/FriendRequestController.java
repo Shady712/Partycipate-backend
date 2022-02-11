@@ -23,6 +23,7 @@ import static com.partycipate.model.enums.RequestStatus.WAITING;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/friendRequest")
+@CrossOrigin("https://partycipate.herokuapp.com")
 public class FriendRequestController {
     private final UserService userService;
     private final FriendRequestService friendRequestService;

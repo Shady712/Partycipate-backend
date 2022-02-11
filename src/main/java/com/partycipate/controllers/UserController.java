@@ -21,6 +21,7 @@ import java.util.Objects;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/user")
+@CrossOrigin("https://partycipate.herokuapp.com")
 public class UserController {
     private final UserService userService;
     private final EventService eventService;
